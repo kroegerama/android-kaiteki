@@ -29,20 +29,20 @@ abstract class BaseFragment : Fragment() {
         if (container == null) {
             return null
         }
-        val view = inflater.inflate(layoutResource, container, false)
+        return inflater.inflate(layoutResource, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         setupGUI()
-        return view
+
+        savedInstanceState?.let {
+            loadState(it)
+        }
     }
 
     protected fun <T : BaseActivity> getBaseActivity(): T {
         return activity as T
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        savedInstanceState?.let {
-            loadState(it)
-        }
     }
 
     override fun onStart() {

@@ -33,8 +33,8 @@ abstract class BaseActivity : AppCompatActivity() {
         }
 
         runState = when (savedInstanceState) {
-            null -> RunState.RESUMED_START
-            else -> if (isFirstRun) RunState.FIRST_START else RunState.NORMAL_START
+            null -> if (isFirstRun) RunState.FIRST_START else RunState.NORMAL_START
+            else -> RunState.RESUMED_START
         }
 
         run(runState)

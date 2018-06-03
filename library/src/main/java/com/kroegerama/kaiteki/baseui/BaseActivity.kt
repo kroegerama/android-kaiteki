@@ -16,7 +16,7 @@ abstract class BaseActivity : AppCompatActivity() {
     }
 
     protected val isFirstRun: Boolean
-        get() = preferences.getBoolean(PREF_FIRST_RUN, true)
+        get() = getPreferences(Context.MODE_PRIVATE).getBoolean(PREF_FIRST_RUN, true)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

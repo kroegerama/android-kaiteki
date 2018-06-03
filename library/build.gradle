@@ -4,11 +4,15 @@ apply plugin: 'kotlin-android'
 android {
     compileSdkVersion 27
 
+    compileOptions {
+        kotlinOptions.freeCompilerArgs += ['-module-name', "android.kaiteki"]
+    }
+
     defaultConfig {
         minSdkVersion 17
         targetSdkVersion 27
         versionCode 1
-        versionName "1.1.4"
+        versionName "1.1.5"
     }
 
     buildTypes {

@@ -25,6 +25,7 @@ android {
 
 ext {
     supportVersion = "27.1.1"
+    lifecycleVersion = '1.1.1'
 }
 
 dependencies {
@@ -35,4 +36,6 @@ dependencies {
     implementation "com.android.support:appcompat-v7:$supportVersion"
     implementation "com.android.support:recyclerview-v7:$supportVersion"
     implementation "com.android.support:design:$supportVersion"
+
+    implementation "android.arch.lifecycle:livedata:$lifecycleVersion"
 }

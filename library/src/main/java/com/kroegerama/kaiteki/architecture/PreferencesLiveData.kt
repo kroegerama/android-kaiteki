@@ -1,4 +1,4 @@
-package com.kroegerama.kaiteki
+package com.kroegerama.kaiteki.architecture
 
 import android.arch.lifecycle.LiveData
 import android.content.SharedPreferences

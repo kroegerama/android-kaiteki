@@ -36,7 +36,7 @@ open class EventObserver<T>(private val eventHandler: (T) -> Unit) : Observer<Ev
 
 open class Event<out T>(private val payload: T) {
 
-    private val pending = AtomicBoolean(false)
+    private val pending = AtomicBoolean(true)
 
     fun pop(): T? {
         return if (pending.compareAndSet(true, false)) {

@@ -18,7 +18,7 @@ class FragmentHandler(private val manager: FragmentManager, private val provider
         @get:IdRes
         val fragmentContainer: Int
 
-        fun createFragment(index: Int): BaseFragment?
+        fun createFragment(index: Int): BaseFragment
 
         fun decorateFragmentTransaction(fromIndex: Int, toIndex: Int, fragment: BaseFragment, transaction: FragmentTransaction)
 
@@ -56,9 +56,6 @@ class FragmentHandler(private val manager: FragmentManager, private val provider
 
         if (fragment == null) {
             fragment = provider.createFragment(index)
-            if (fragment == null) {
-                return false
-            }
             transaction.add(provider.fragmentContainer, fragment, tag)
         }
         val state = states.get(index)
@@ -86,9 +83,7 @@ class FragmentHandler(private val manager: FragmentManager, private val provider
     }
 
     val selection: Int
-        get() {
-            return currentIndex
-        }
+        get() = currentIndex
 
     private fun getTagForIndex(index: Int): String {
         return "tag_$index"

@@ -18,11 +18,11 @@ class FragmentHandler(private val manager: FragmentManager, private val provider
         @get:IdRes
         val fragmentContainer: Int
 
-        fun createFragment(index: Int): BaseFragment
+        fun createFragment(index: Int): Fragment
 
-        fun decorateFragmentTransaction(fromIndex: Int, toIndex: Int, fragment: BaseFragment, transaction: FragmentTransaction)
+        fun decorateFragmentTransaction(fromIndex: Int, toIndex: Int, fragment: Fragment, transaction: FragmentTransaction)
 
-        fun onFragmentSelected(index: Int, fragment: BaseFragment)
+        fun onFragmentSelected(index: Int, fragment: Fragment)
     }
 
     private val states = SparseArray<Fragment.SavedState>()
@@ -40,11 +40,11 @@ class FragmentHandler(private val manager: FragmentManager, private val provider
 
         val tag = getTagForIndex(index)
         val oldFrag = getCurrentFragment()
-        var fragment: BaseFragment? = manager.findFragmentByTag(tag) as BaseFragment?
+        var fragment: Fragment? = manager.findFragmentByTag(tag)
 
         val transaction = manager.beginTransaction()
         if (oldFrag != null) {
-            oldFrag.decorateTransaction(transaction)
+            (oldFrag as? BaseFragment)?.decorateTransaction(transaction)
 
             val savedState = manager.saveFragmentInstanceState(oldFrag)
             states.put(currentIndex, savedState)
@@ -78,8 +78,8 @@ class FragmentHandler(private val manager: FragmentManager, private val provider
         return true
     }
 
-    fun getCurrentFragment(): BaseFragment? {
-        return manager.findFragmentByTag(getTagForIndex(currentIndex)) as BaseFragment?
+    fun getCurrentFragment(): Fragment? {
+        return manager.findFragmentByTag(getTagForIndex(currentIndex))
     }
 
     val selection: Int
@@ -90,7 +90,8 @@ class FragmentHandler(private val manager: FragmentManager, private val provider
     }
 
     fun handleBackPress(): Boolean {
-        return getCurrentFragment()?.handleBackPress() ?: false
+        val current = (getCurrentFragment() ?: return false) as? BaseFragment ?: return false
+        return current.handleBackPress()
     }
 
     @SuppressLint("DefaultLocale")

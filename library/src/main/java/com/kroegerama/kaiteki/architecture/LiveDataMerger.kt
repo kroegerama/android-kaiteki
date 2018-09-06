@@ -17,8 +17,8 @@ object LiveDataMerger {
                         merge: (A?, B?) -> T?): LiveData<T> {
         val mediator = MediatorLiveData<T>()
 
-        var emittedA = waitForAll
-        var emittedB = waitForAll
+        var emittedA = !waitForAll
+        var emittedB = !waitForAll
 
         val mergeInternal = { a: A?, b: B? ->
             if (emittedA && emittedB) {
@@ -49,9 +49,9 @@ object LiveDataMerger {
                            merge: (A?, B?, C?) -> T?): LiveData<T> {
         val mediator = MediatorLiveData<T>()
 
-        var emittedA = waitForAll
-        var emittedB = waitForAll
-        var emittedC = waitForAll
+        var emittedA = !waitForAll
+        var emittedB = !waitForAll
+        var emittedC = !waitForAll
 
         val mergeInternal = { a: A?, b: B?, c: C? ->
             if (emittedA && emittedB && emittedC) {

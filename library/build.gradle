@@ -2,7 +2,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
 android {
-    compileSdkVersion 27
+    compileSdkVersion 28
 
     compileOptions {
         kotlinOptions.freeCompilerArgs += ['-module-name', "android.kaiteki"]
@@ -11,7 +11,7 @@ android {
     defaultConfig {
         minSdkVersion 17
         versionCode 1
-        versionName "1.2.4"
+        versionName "1.2.5"
     }
 
     buildTypes {
@@ -23,7 +23,7 @@ android {
 }
 
 ext {
-    supportVersion = "27.1.1"
+    supportVersion = "28.0.0"
     lifecycleVersion = '1.1.1'
 }
 

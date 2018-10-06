@@ -16,12 +16,12 @@ class StateRecyclerView @JvmOverloads constructor(
     override fun onSaveInstanceState(): Parcelable? {
         val bundle = Bundle()
         bundle.putParcelable(STATE_SUPER, super.onSaveInstanceState())
-        bundle.putParcelable(STATE_LAYOUT, layoutManager.onSaveInstanceState())
+        bundle.putParcelable(STATE_LAYOUT, layoutManager?.onSaveInstanceState())
         return bundle
     }
 
     override fun onRestoreInstanceState(state: Parcelable) {
-        var superstate: Parcelable = state
+        var superstate: Parcelable? = state
         if (state is Bundle) {
             layoutManagerState = state.getParcelable(STATE_LAYOUT)
             superstate = state.getParcelable(STATE_SUPER)
@@ -31,12 +31,12 @@ class StateRecyclerView @JvmOverloads constructor(
 
     private fun restorePosition() {
         if (layoutManagerState != null) {
-            layoutManager.onRestoreInstanceState(layoutManagerState)
+            layoutManager?.onRestoreInstanceState(layoutManagerState)
             layoutManagerState = null
         }
     }
 
-    override fun setAdapter(adapter: RecyclerView.Adapter<*>) {
+    override fun setAdapter(adapter: RecyclerView.Adapter<*>?) {
         super.setAdapter(adapter)
         restorePosition()
     }

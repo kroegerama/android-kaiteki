@@ -18,7 +18,7 @@ class StaggeredGridLayoutSpaceItemDecoration(
 
         val lp = view.layoutParams as StaggeredGridLayoutManager.LayoutParams
 
-        val count = parent.adapter.itemCount
+        val count = parent.adapter?.itemCount ?: 0
         val pos = lp.viewLayoutPosition
 
         val spanCount = layoutManager.spanCount

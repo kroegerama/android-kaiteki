@@ -18,7 +18,7 @@ class FragmentHandler(private val manager: FragmentManager, private val provider
         @get:IdRes
         val fragmentContainer: Int
 
-        fun createFragment(index: Int): Fragment
+        fun createFragment(index: Int, payload: Any?): Fragment
 
         fun decorateFragmentTransaction(fromIndex: Int, toIndex: Int, fragment: Fragment, transaction: FragmentTransaction)
 
@@ -28,12 +28,8 @@ class FragmentHandler(private val manager: FragmentManager, private val provider
     private val states = SparseArray<Fragment.SavedState>()
     private var currentIndex = Integer.MIN_VALUE
 
-    fun showFragment(index: Int): Boolean {
-        return showFragment(index, false)
-    }
-
     @Synchronized
-    fun showFragment(index: Int, forceCreate: Boolean): Boolean {
+    fun showFragment(index: Int, forceCreate: Boolean = false, payload: Any? = null): Boolean {
         if (index == currentIndex) {
             return false
         }
@@ -55,7 +51,7 @@ class FragmentHandler(private val manager: FragmentManager, private val provider
         }
 
         if (fragment == null) {
-            fragment = provider.createFragment(index)
+            fragment = provider.createFragment(index, payload)
             transaction.add(provider.fragmentContainer, fragment, tag)
         }
         val state = states.get(index)

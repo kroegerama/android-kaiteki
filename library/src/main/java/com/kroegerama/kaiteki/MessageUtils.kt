@@ -1,5 +1,6 @@
 package com.kroegerama.kaiteki
 
+import android.app.AlertDialog
 import android.content.Context
 import android.os.SystemClock
 import android.support.annotation.StringRes
@@ -7,6 +8,8 @@ import android.support.design.widget.Snackbar
 import android.util.SparseArray
 import android.view.View
 import android.widget.Toast
+import com.kroegerama.kaiteki.baseui.BaseActivity
+import com.kroegerama.kaiteki.baseui.BaseFragment
 
 inline fun View.snackBar(message: CharSequence, duration: Int = Snackbar.LENGTH_SHORT, block: Snackbar.() -> Unit = {}) {
     val sb = Snackbar.make(this, message, duration)
@@ -20,12 +23,52 @@ inline fun View.snackBar(@StringRes message: Int, duration: Int = Snackbar.LENGT
     sb.show()
 }
 
+fun BaseActivity.snackBar(@StringRes message: Int, duration: Int = Snackbar.LENGTH_SHORT, block: Snackbar.() -> Unit = {}) {
+    findViewById<View>(android.R.id.content)?.snackBar(message, duration, block)
+}
+
+fun BaseActivity.snackBar(
+        message: CharSequence,
+        duration: Int = Snackbar.LENGTH_SHORT,
+        block: Snackbar.() -> Unit = {}
+) {
+    findViewById<View>(android.R.id.content)?.snackBar(message, duration, block)
+}
+
+fun BaseFragment.snackBar(@StringRes message: Int, duration: Int = Snackbar.LENGTH_SHORT, block: Snackbar.() -> Unit = {}) {
+    view?.snackBar(message, duration, block)
+}
+
+fun BaseFragment.snackBar(
+        message: CharSequence,
+        duration: Int = Snackbar.LENGTH_SHORT,
+        block: Snackbar.() -> Unit = {}
+) {
+    view?.snackBar(message, duration, block)
+}
+
 fun Context.toast(message: CharSequence, duration: Int = Toast.LENGTH_SHORT) {
     Toast.makeText(this, message, duration).show()
 }
 
 fun Context.toast(@StringRes message: Int, duration: Int = Toast.LENGTH_SHORT) {
     Toast.makeText(this, message, duration).show()
+}
+
+fun Context.showYesNoDialog(
+        @StringRes messageRes: Int,
+        @StringRes titleRes: Int = 0,
+        onNo: (() -> Unit)? = null,
+        onYes: () -> Unit
+) {
+    AlertDialog.Builder(this).apply {
+        setMessage(messageRes)
+        if (titleRes != 0) {
+            setTitle(titleRes)
+        }
+        setPositiveButton(android.R.string.yes) { _, _ -> onYes.invoke() }
+        setNegativeButton(android.R.string.no) { _, _ -> onNo?.invoke() }
+    }.show()
 }
 
 fun Context.toastDebounced(message: CharSequence, duration: Int = Toast.LENGTH_SHORT) {

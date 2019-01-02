@@ -3,11 +3,11 @@ package com.kroegerama.kaiteki
 import android.app.AlertDialog
 import android.content.Context
 import android.os.SystemClock
-import android.support.annotation.StringRes
-import android.support.design.widget.Snackbar
 import android.util.SparseArray
 import android.view.View
 import android.widget.Toast
+import androidx.annotation.StringRes
+import com.google.android.material.snackbar.Snackbar
 import com.kroegerama.kaiteki.baseui.BaseActivity
 import com.kroegerama.kaiteki.baseui.BaseFragment
 

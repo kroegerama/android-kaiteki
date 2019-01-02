@@ -3,8 +3,8 @@ package com.kroegerama.kaiteki.recyclerview
 import android.content.Context
 import android.os.Bundle
 import android.os.Parcelable
-import android.support.v7.widget.RecyclerView
 import android.util.AttributeSet
+import androidx.recyclerview.widget.RecyclerView
 
 
 class StateRecyclerView @JvmOverloads constructor(

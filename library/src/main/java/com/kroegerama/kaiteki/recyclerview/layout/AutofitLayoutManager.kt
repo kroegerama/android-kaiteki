@@ -1,16 +1,16 @@
 package com.kroegerama.kaiteki.recyclerview.layout
 
 import android.content.Context
-import android.support.annotation.DimenRes
-import android.support.v7.widget.GridLayoutManager
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
+import androidx.annotation.DimenRes
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.kroegerama.kaiteki.dpToPx
 
 class AutofitLayoutManager(
         context: Context,
         @DimenRes colWidthRes: Int,
-        @RecyclerView.Orientation orientation: Int = LinearLayoutManager.VERTICAL,
+        @RecyclerView.Orientation orientation: Int = RecyclerView.VERTICAL,
         reverseLayout: Boolean = false
 ) : GridLayoutManager(context, 1, orientation, reverseLayout) {
 

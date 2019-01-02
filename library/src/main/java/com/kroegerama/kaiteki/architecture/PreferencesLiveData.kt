@@ -1,7 +1,7 @@
 package com.kroegerama.kaiteki.architecture
 
-import android.arch.lifecycle.LiveData
 import android.content.SharedPreferences
+import androidx.lifecycle.LiveData
 
 private class PreferencesLiveData<T>(
         private val preferences: SharedPreferences,

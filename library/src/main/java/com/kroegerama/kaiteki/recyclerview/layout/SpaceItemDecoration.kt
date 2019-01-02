@@ -2,12 +2,12 @@ package com.kroegerama.kaiteki.recyclerview.layout
 
 import android.content.Context
 import android.graphics.Rect
-import android.support.annotation.DimenRes
-import android.support.annotation.Px
-import android.support.v7.widget.GridLayoutManager
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.view.View
+import androidx.annotation.DimenRes
+import androidx.annotation.Px
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 
 class SpaceItemDecoration(@Px private val spacing: Int) : RecyclerView.ItemDecoration() {
 

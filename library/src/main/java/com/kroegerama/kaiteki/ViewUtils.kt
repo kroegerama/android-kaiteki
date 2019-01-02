@@ -5,8 +5,8 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.os.Build
-import android.support.annotation.DrawableRes
 import android.view.View
+import androidx.annotation.DrawableRes
 
 fun View.createBitmap(): Bitmap {
     val ms = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)

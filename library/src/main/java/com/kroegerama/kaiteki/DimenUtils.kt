@@ -2,9 +2,9 @@ package com.kroegerama.kaiteki
 
 import android.content.Context
 import android.content.res.Resources
-import android.support.annotation.DimenRes
-import android.support.annotation.Px
 import android.util.TypedValue
+import androidx.annotation.DimenRes
+import androidx.annotation.Px
 import com.kroegerama.kaiteki.baseui.BaseFragment
 
 @Px

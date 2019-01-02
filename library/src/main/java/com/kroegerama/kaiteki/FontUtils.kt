@@ -2,9 +2,9 @@ package com.kroegerama.kaiteki
 
 import android.content.Context
 import android.graphics.Typeface
-import android.support.v4.content.res.ResourcesCompat
 import android.util.Log
 import android.util.TypedValue
+import androidx.core.content.res.ResourcesCompat
 
 enum class TypefaceStyle(val value: Int) {
     NORMAL(Typeface.NORMAL),

@@ -1,10 +1,10 @@
 package com.kroegerama.kaiteki.recyclerview.layout
 
 import android.graphics.Rect
-import android.support.annotation.Px
-import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.View
+import androidx.annotation.Px
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 
 class StaggeredGridLayoutSpaceItemDecoration(
         @Px private val spacing: Int

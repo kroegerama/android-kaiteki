@@ -11,7 +11,7 @@ android {
     defaultConfig {
         minSdkVersion 17
         versionCode 1
-        versionName "1.2.7"
+        versionName "2.0.0"
     }
 
     buildTypes {
@@ -22,19 +22,14 @@ android {
     }
 }
 
-ext {
-    supportVersion = "28.0.0"
-    lifecycleVersion = '1.1.1'
-}
-
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
-    implementation "com.android.support:appcompat-v7:$supportVersion"
-    implementation "com.android.support:recyclerview-v7:$supportVersion"
-    implementation "com.android.support:design:$supportVersion"
+    implementation 'androidx.appcompat:appcompat:1.0.2'
+    implementation 'com.google.android.material:material:1.0.0'
+    implementation 'androidx.recyclerview:recyclerview:1.0.0'
 
-    implementation "android.arch.lifecycle:livedata:$lifecycleVersion"
+    implementation 'androidx.lifecycle:lifecycle-livedata:2.0.0'
 }

@@ -36,3 +36,15 @@ val Context.selectableItemBackgroundBorderless
             recycle()
             backgroundResource
         }
+
+val View.isVisible get() = visibility == View.VISIBLE
+val View.isGone get () = visibility == View.GONE
+val View.isInvisible get() = visibility == View.INVISIBLE
+
+fun View.showIf(value: Boolean, goneIfFalse: Boolean = true) {
+    visibility = when {
+        value -> View.VISIBLE
+        goneIfFalse -> View.GONE
+        else -> View.INVISIBLE
+    }
+}

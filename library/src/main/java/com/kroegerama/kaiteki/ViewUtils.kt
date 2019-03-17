@@ -8,16 +8,6 @@ import android.os.Build
 import android.view.View
 import androidx.annotation.DrawableRes
 
-fun View.createBitmap(): Bitmap {
-    val ms = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
-    measure(ms, ms)
-    layout(0, 0, measuredWidth, measuredHeight)
-    return Bitmap.createBitmap(measuredWidth, measuredHeight, Bitmap.Config.ARGB_8888).also {
-        draw(Canvas(it))
-        this.forceLayout()
-    }
-}
-
 val Context.selectableItemBackground
     @DrawableRes
     get() =
@@ -36,10 +26,6 @@ val Context.selectableItemBackgroundBorderless
             recycle()
             backgroundResource
         }
-
-val View.isVisible get() = visibility == View.VISIBLE
-val View.isGone get () = visibility == View.GONE
-val View.isInvisible get() = visibility == View.INVISIBLE
 
 fun View.showIf(value: Boolean, goneIfFalse: Boolean = true) {
     visibility = when {

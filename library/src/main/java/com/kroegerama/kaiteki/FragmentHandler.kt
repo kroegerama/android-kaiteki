@@ -30,7 +30,7 @@ class FragmentHandler(private val manager: FragmentManager, private val provider
 
     @Synchronized
     fun showFragment(index: Int, forceCreate: Boolean = false, payload: Any? = null): Boolean {
-        if (index == currentIndex) {
+        if (index == currentIndex && !forceCreate) {
             return false
         }
 
@@ -61,6 +61,7 @@ class FragmentHandler(private val manager: FragmentManager, private val provider
             } catch (e: Exception) {
                 Log.w("setInitialSavedState", e)
             }
+            states.remove(index)
         }
 
         provider.decorateFragmentTransaction(currentIndex, index, fragment, transaction)
@@ -72,6 +73,18 @@ class FragmentHandler(private val manager: FragmentManager, private val provider
 
         provider.onFragmentSelected(index, fragment)
         return true
+    }
+
+    @Synchronized
+    fun removeCurrentFragment() {
+        val oldFrag = getCurrentFragment() ?: return
+        manager.beginTransaction().apply {
+            (oldFrag as? BaseFragment)?.decorateTransaction(this)
+            remove(oldFrag)
+            commit()
+        }
+        states.remove(currentIndex)
+        currentIndex = Int.MIN_VALUE
     }
 
     fun getCurrentFragment(): Fragment? {
@@ -92,19 +105,22 @@ class FragmentHandler(private val manager: FragmentManager, private val provider
 
     @SuppressLint("DefaultLocale")
     fun saveState(outState: Bundle) {
-        val state = Bundle()
+        outState.putBundle(STATE_BUNDLE, bundle {
+            putInt(STATE_SELECTED, currentIndex)
 
-        state.putInt(STATE_COUNT, states.size())
-        for (i in 0 until states.size()) {
-            state.putInt(String.format(STATE_KEY, i), states.keyAt(i))
-            state.putParcelable(String.format(STATE_VALUE, i), states.valueAt(i))
-        }
-        outState.putBundle(STATE_BUNDLE, state)
+            putInt(STATE_COUNT, states.size())
+            for (i in 0 until states.size()) {
+                putInt(String.format(STATE_KEY, i), states.keyAt(i))
+                putParcelable(String.format(STATE_VALUE, i), states.valueAt(i))
+            }
+        })
     }
 
     @SuppressLint("DefaultLocale")
     fun loadState(bundle: Bundle) {
         val state = bundle.getBundle(STATE_BUNDLE) ?: return
+
+        currentIndex = state.getInt(STATE_SELECTED, currentIndex)
         val count = state.getInt(STATE_COUNT, 0)
         for (i in 0 until count) {
             val key = state.getInt(String.format(STATE_KEY, i), -1)
@@ -121,5 +137,6 @@ class FragmentHandler(private val manager: FragmentManager, private val provider
         const val STATE_COUNT = "count"
         const val STATE_KEY = "k_%d"
         const val STATE_VALUE = "v_%d"
+        const val STATE_SELECTED = "selected"
     }
 }

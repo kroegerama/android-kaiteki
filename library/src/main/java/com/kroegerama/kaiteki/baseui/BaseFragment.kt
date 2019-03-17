@@ -3,9 +3,9 @@ package com.kroegerama.kaiteki.baseui
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.preference.PreferenceManager
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import androidx.annotation.LayoutRes
+import androidx.annotation.MenuRes
 import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
@@ -34,6 +34,9 @@ abstract class BaseFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        if (optionsMenuResource != 0) {
+            setHasOptionsMenu(true)
+        }
         setupGUI()
 
         savedInstanceState?.let {
@@ -41,8 +44,8 @@ abstract class BaseFragment : Fragment() {
         }
     }
 
-    protected fun <T : BaseActivity> getBaseActivity(): T {
-        return activity as T
+    protected fun <T : BaseActivity> getBaseActivity(): T? {
+        return activity as? T
     }
 
     override fun onStart() {
@@ -60,7 +63,18 @@ abstract class BaseFragment : Fragment() {
         savePreferences(preferences)
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        if (optionsMenuResource != 0) {
+            inflater.inflate(optionsMenuResource, menu)
+        }
+    }
+
+    @get:LayoutRes
     protected abstract val layoutResource: Int
+
+    @get:MenuRes
+    protected open val optionsMenuResource: Int = 0
 
     protected open fun prepare() {}
 
@@ -81,6 +95,9 @@ abstract class BaseFragment : Fragment() {
     @get:StringRes
     open val title: Int = android.R.string.unknownName
 
+    /**
+     * @return true if the backPress was handled (and should not be forwarded to the parent)
+     */
     open fun handleBackPress(): Boolean {
         return false
     }

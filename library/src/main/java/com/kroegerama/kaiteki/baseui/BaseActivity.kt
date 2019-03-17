@@ -5,6 +5,8 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.view.Menu
+import androidx.annotation.LayoutRes
+import androidx.annotation.MenuRes
 import androidx.appcompat.app.AppCompatActivity
 
 abstract class BaseActivity : AppCompatActivity() {
@@ -25,12 +27,8 @@ abstract class BaseActivity : AppCompatActivity() {
         setupGUI()
 
         loadPreferences(preferences)
-        if (intent.extras != null) {
-            handleArguments(intent.extras)
-        }
-        if (savedInstanceState != null) {
-            loadState(savedInstanceState)
-        }
+        intent?.extras?.let { handleArguments(it) }
+        savedInstanceState?.let { loadState(it) }
 
         runState = when (savedInstanceState) {
             null -> if (isFirstRun) RunState.FIRST_START else RunState.NORMAL_START
@@ -67,8 +65,10 @@ abstract class BaseActivity : AppCompatActivity() {
 
     }
 
+    @get:LayoutRes
     protected abstract val layoutResource: Int
 
+    @get:MenuRes
     protected open val optionsMenuResource: Int = 0
 
     protected open fun prepare() {}

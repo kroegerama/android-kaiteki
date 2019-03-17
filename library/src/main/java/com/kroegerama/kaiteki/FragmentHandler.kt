@@ -61,7 +61,6 @@ class FragmentHandler(private val manager: FragmentManager, private val provider
             } catch (e: Exception) {
                 Log.w("setInitialSavedState", e)
             }
-            states.remove(index)
         }
 
         provider.decorateFragmentTransaction(currentIndex, index, fragment, transaction)

@@ -1,23 +1,22 @@
 package com.kroegerama.kaiteki
 
-import android.Manifest
 import android.app.Activity
 import android.content.pm.PackageManager
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 
 class PermissionHandler(
-    private val context: Activity,
-    private val permission: String,
-    private val requestKey: Int = System.identityHashCode(permission) and 0xffff,
-    private val onGranted: () -> Unit,
-    private val onNotGranted: (() -> Unit)? = null
+        private val context: Activity,
+        private val permission: String,
+        private val requestKey: Int = System.identityHashCode(permission) and 0xffff,
+        private val onGranted: () -> Unit,
+        private val onNotGranted: (() -> Unit)? = null
 ) {
     fun checkPermission() {
         if (ContextCompat.checkSelfPermission(
-                context,
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
+                        context,
+                        permission
+                ) != PackageManager.PERMISSION_GRANTED
         ) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(context, permission)) {
                 request()
@@ -47,9 +46,9 @@ class PermissionHandler(
 
     private fun request() {
         ActivityCompat.requestPermissions(
-            context,
-            arrayOf(permission),
-            requestKey
+                context,
+                arrayOf(permission),
+                requestKey
         )
     }
 }

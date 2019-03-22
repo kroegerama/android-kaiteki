@@ -6,6 +6,7 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.os.Build
 import android.view.View
+import androidx.annotation.DimenRes
 import androidx.annotation.DrawableRes
 
 val Context.selectableItemBackground
@@ -26,6 +27,30 @@ val Context.selectableItemBackgroundBorderless
             recycle()
             backgroundResource
         }
+
+val Context.listPreferredItemHeight
+    @DimenRes
+    get() = obtainStyledAttributes(intArrayOf(android.R.attr.listPreferredItemHeight)).run {
+        val sizeRes = getResourceId(0, 0)
+        recycle()
+        sizeRes
+    }
+
+val Context.listPreferredItemHeightSmall
+    @DimenRes
+    get() = obtainStyledAttributes(intArrayOf(android.R.attr.listPreferredItemHeightSmall)).run {
+        val sizeRes = getResourceId(0, 0)
+        recycle()
+        sizeRes
+    }
+
+val Context.listPreferredItemHeightLarge
+    @DimenRes
+    get() = obtainStyledAttributes(intArrayOf(android.R.attr.listPreferredItemHeightLarge)).run {
+        val sizeRes = getResourceId(0, 0)
+        recycle()
+        sizeRes
+    }
 
 fun View.showIf(value: Boolean, goneIfFalse: Boolean = true) {
     visibility = when {

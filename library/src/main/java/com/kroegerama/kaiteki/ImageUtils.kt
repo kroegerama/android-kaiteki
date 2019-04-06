@@ -1,12 +1,13 @@
 package com.kroegerama.kaiteki
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Matrix
+import android.net.Uri
 import androidx.exifinterface.media.ExifInterface
-import java.io.FileDescriptor
 import java.text.SimpleDateFormat
 import kotlin.math.roundToInt
 
@@ -41,15 +42,46 @@ fun Bitmap.applyMatrix(matrix: Matrix?): Bitmap =
         if (matrix == null) this
         else Bitmap.createBitmap(this, 0, 0, width, height, matrix, true)
 
+/**
+ * decode image and apply correct rotation according to the exif orientation tag
+ * use Context.decodeImageFileEx, to support content:// uris
+ * @see Context.decodeImageFileEx
+ *
+ * @param path file path of the image
+ * @param maxSize image will be decoded with an appropriate sample to ensure max(width, height) <= maxSize
+ * @param canvasHandler can be used to add watermarks, etc.
+ */
 fun decodeImageFileEx(path: String, maxSize: Int = 0, canvasHandler: (Canvas.() -> Unit)? = null): Bitmap? =
-        decodeFileInternal({ BitmapFactory.decodeFile(path, it) }, { ExifInterface(path) }, maxSize, canvasHandler)
+        decodeImageFileInternal({
+            BitmapFactory.decodeFile(path, it)
+        }, {
+            ExifInterface(path).getRotationMatrix()
+        }, maxSize, canvasHandler)
 
-fun decodeImageFileDescriptorEx(fd: FileDescriptor, maxSize: Int = 0, canvasHandler: (Canvas.() -> Unit)? = null): Bitmap? =
-        decodeFileInternal({ BitmapFactory.decodeFileDescriptor(fd, null, it) }, { ExifInterface(fd) }, maxSize, canvasHandler)
+/**
+ * same as decodeImageFileEx, but uses FileDescriptors to access the files
+ * @see decodeImageFileEx
+ *
+ * @param uri uri of the image file; content:// uris are supported
+ * @param maxSize image will be decoded with an appropriate sample to ensure max(width, height) <= maxSize
+ * @param canvasHandler can be used to add watermarks, etc.
+ */
+fun Context.decodeImageFileEx(uri: Uri, maxSize: Int = 0, canvasHandler: (Canvas.() -> Unit)? = null): Bitmap? =
+        decodeImageFileInternal({ opts ->
+            contentResolver.openFileDescriptor(uri, "r").use {
+                it ?: return@use null
+                BitmapFactory.decodeFileDescriptor(it.fileDescriptor, null, opts)
+            }
+        }, {
+            contentResolver.openFileDescriptor(uri, "r").use {
+                it ?: return@use null
+                ExifInterface(it.fileDescriptor).getRotationMatrix()
+            }
+        }, maxSize, canvasHandler)
 
-private fun decodeFileInternal(bfFun: (BitmapFactory.Options) -> Bitmap?,
-                               exifFun: () -> ExifInterface,
-                               maxSize: Int, canvasHandler: (Canvas.() -> Unit)?): Bitmap? {
+private fun decodeImageFileInternal(bfFun: (BitmapFactory.Options) -> Bitmap?,
+                                    matrixFun: () -> Matrix?,
+                                    maxSize: Int, canvasHandler: (Canvas.() -> Unit)?): Bitmap? {
     val opts = BitmapFactory.Options()
     if (maxSize > 0) {
         opts.inJustDecodeBounds = true
@@ -62,8 +94,7 @@ private fun decodeFileInternal(bfFun: (BitmapFactory.Options) -> Bitmap?,
     if (canvasHandler != null) {
         opts.inMutable = true
     }
-    val matrix = exifFun().getRotationMatrix()
-    return bfFun(opts)?.applyMatrix(matrix)?.also {
+    return bfFun(opts)?.applyMatrix(matrixFun())?.also {
         if (it.isMutable) canvasHandler?.invoke(Canvas(it))
     }
 }

@@ -7,23 +7,15 @@ import androidx.annotation.DimenRes
 import androidx.annotation.Px
 import com.kroegerama.kaiteki.baseui.BaseFragment
 
-fun Float.dpToPxF() = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, this, Resources.getSystem().displayMetrics)
+fun <T : Number> T.dpToPxF() = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, toFloat(), Resources.getSystem().displayMetrics)
 @Px
-fun Float.dpToPx() = dpToPxF().toInt()
+fun <T : Number> T.dpToPx() = dpToPxF().toInt()
 
-fun Float.spToPxF() = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, this, Resources.getSystem().displayMetrics)
+fun <T : Number> T.spToPxF() = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, toFloat(), Resources.getSystem().displayMetrics)
 @Px
-fun Float.spToPx() = spToPxF().toInt()
+fun <T : Number> T.spToPx() = spToPxF().toInt()
 
-fun Float.spToDp() = this.spToPx() / Resources.getSystem().displayMetrics.scaledDensity
-
-fun Int.dpToPxF() = toFloat().dpToPxF()
-@Px
-fun Int.dpToPx() = toFloat().dpToPx()
-
-fun Int.spToPxF() = toFloat().spToPxF()
-@Px
-fun Int.spToPx() = toFloat().spToPx()
+fun <T : Number> T.spToDp() = this.spToPx() / Resources.getSystem().displayMetrics.scaledDensity
 
 /** @see Resources.getDimension */
 fun Context.getDimension(@DimenRes res: Int) = resources.getDimension(res)

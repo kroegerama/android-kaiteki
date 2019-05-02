@@ -11,7 +11,7 @@ android {
     defaultConfig {
         minSdkVersion 17
         versionCode 1
-        versionName "2.2.1"
+        versionName "2.2.2"
     }
 
     buildTypes {
@@ -33,5 +33,5 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.1.0-alpha04'
     implementation 'androidx.exifinterface:exifinterface:1.1.0-alpha01'
 
-    implementation 'androidx.lifecycle:lifecycle-livedata:2.1.0-alpha03'
+    implementation 'androidx.lifecycle:lifecycle-livedata:2.1.0-alpha04'
 }

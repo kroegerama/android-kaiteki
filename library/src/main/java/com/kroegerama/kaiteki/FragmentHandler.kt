@@ -29,7 +29,7 @@ class FragmentHandler(private val manager: FragmentManager, private val provider
     private var currentIndex = Integer.MIN_VALUE
 
     @Synchronized
-    fun showFragment(index: Int, forceCreate: Boolean = false, payload: Any? = null): Boolean {
+    fun showFragment(index: Int, forceCreate: Boolean = false, forceRemove: Boolean = false, payload: Any? = null): Boolean {
         if (index == currentIndex && !forceCreate) {
             return false
         }
@@ -44,6 +44,11 @@ class FragmentHandler(private val manager: FragmentManager, private val provider
 
             val savedState = manager.saveFragmentInstanceState(oldFrag)
             states.put(currentIndex, savedState)
+            if (forceRemove) {
+                transaction.remove(oldFrag)
+            } else {
+                transaction.hide(oldFrag)
+            }
         }
         if (forceCreate && fragment != null) {
             transaction.remove(fragment)
@@ -52,21 +57,21 @@ class FragmentHandler(private val manager: FragmentManager, private val provider
 
         if (fragment == null) {
             fragment = provider.createFragment(index, payload)
-            transaction.add(provider.fragmentContainer, fragment, tag)
-        }
-        val state = states.get(index)
-        if (state != null && !fragment.isRemoving) {
-            try {
-                fragment.setInitialSavedState(state)
-            } catch (e: Exception) {
-                Log.w("setInitialSavedState", e)
+            val state = states.get(index)
+            if (state != null && !fragment.isRemoving) {
+                try {
+                    fragment.setInitialSavedState(state)
+                } catch (e: Exception) {
+                    Log.w("setInitialSavedState", e)
+                }
             }
+            transaction.add(provider.fragmentContainer, fragment, tag)
+        } else {
+            transaction.show(fragment)
         }
 
         provider.decorateFragmentTransaction(currentIndex, index, fragment, transaction)
-        transaction
-                .replace(provider.fragmentContainer, fragment)
-                .commit()
+        transaction.commit()
 
         currentIndex = index
 

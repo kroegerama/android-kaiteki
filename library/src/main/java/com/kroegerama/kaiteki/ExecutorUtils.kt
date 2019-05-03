@@ -4,11 +4,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import java.util.concurrent.Executor
 
-enum class ExecutorState {
-    Idle,
-    Running,
-    Success,
-    Error
+sealed class ExecutorState {
+    object Idle : ExecutorState()
+    object Running : ExecutorState()
+    object Success : ExecutorState()
+    data class Error(val e: Exception? = null) : ExecutorState()
 }
 
 fun Executor.executeWithState(block: () -> ExecutorState): LiveData<ExecutorState> {
@@ -20,7 +20,7 @@ fun Executor.executeWithState(block: () -> ExecutorState): LiveData<ExecutorStat
                 try {
                     block.invoke()
                 } catch (e: Exception) {
-                    ExecutorState.Error
+                    ExecutorState.Error(e)
                 }
         )
     }

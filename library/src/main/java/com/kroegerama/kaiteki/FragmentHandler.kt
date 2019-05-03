@@ -29,14 +29,13 @@ class FragmentHandler(private val manager: FragmentManager, private val provider
     private var currentIndex = Integer.MIN_VALUE
 
     @Synchronized
-    fun showFragment(index: Int, forceCreate: Boolean = false, forceRemove: Boolean = false, payload: Any? = null): Boolean {
+    fun showFragment(index: Int, forceCreate: Boolean = false, hideOnly: Boolean = false, payload: Any? = null): Boolean {
         if (index == currentIndex && !forceCreate) {
             return false
         }
 
         val tag = getTagForIndex(index)
         val oldFrag = getCurrentFragment()
-        var fragment: Fragment? = manager.findFragmentByTag(tag)
 
         val transaction = manager.beginTransaction()
         if (oldFrag != null) {
@@ -44,12 +43,14 @@ class FragmentHandler(private val manager: FragmentManager, private val provider
 
             val savedState = manager.saveFragmentInstanceState(oldFrag)
             states.put(currentIndex, savedState)
-            if (forceRemove) {
-                transaction.remove(oldFrag)
-            } else {
+            if (hideOnly) {
                 transaction.hide(oldFrag)
+            } else {
+                transaction.detach(oldFrag)
             }
         }
+
+        var fragment: Fragment? = manager.findFragmentByTag(tag)
         if (forceCreate && fragment != null) {
             transaction.remove(fragment)
             fragment = null
@@ -58,7 +59,7 @@ class FragmentHandler(private val manager: FragmentManager, private val provider
         if (fragment == null) {
             fragment = provider.createFragment(index, payload)
             val state = states.get(index)
-            if (state != null && !fragment.isRemoving) {
+            if (state != null) {
                 try {
                     fragment.setInitialSavedState(state)
                 } catch (e: Exception) {
@@ -67,7 +68,11 @@ class FragmentHandler(private val manager: FragmentManager, private val provider
             }
             transaction.add(provider.fragmentContainer, fragment, tag)
         } else {
-            transaction.show(fragment)
+            if (fragment.isHidden) {
+                transaction.show(fragment)
+            } else {
+                transaction.attach(fragment)
+            }
         }
 
         provider.decorateFragmentTransaction(currentIndex, index, fragment, transaction)

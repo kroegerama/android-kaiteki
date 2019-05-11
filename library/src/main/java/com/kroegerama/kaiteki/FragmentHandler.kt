@@ -20,9 +20,9 @@ class FragmentHandler(private val manager: FragmentManager, private val provider
 
         fun createFragment(index: Int, payload: Any?): Fragment
 
-        fun decorateFragmentTransaction(fromIndex: Int, toIndex: Int, fragment: Fragment, transaction: FragmentTransaction)
+        fun decorateFragmentTransaction(fromIndex: Int, toIndex: Int, fragment: Fragment, transaction: FragmentTransaction) {}
 
-        fun onFragmentSelected(index: Int, fragment: Fragment)
+        fun onFragmentSelected(index: Int, fragment: Fragment) {}
     }
 
     private val states = SparseArray<Fragment.SavedState>()

@@ -10,7 +10,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.kroegerama.kaiteki.baseui.BaseFragment
 
-
+@Deprecated(message = "This class will be replaced by FragmentNavigator", replaceWith = ReplaceWith("FragmentNavigator", "com.kroegerama.kaiteki.FragmentNavigator"))
 class FragmentHandler(private val manager: FragmentManager, private val provider: FragmentProvider) {
 
     interface FragmentProvider {

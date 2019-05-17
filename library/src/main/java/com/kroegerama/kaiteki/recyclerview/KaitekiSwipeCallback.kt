@@ -64,10 +64,8 @@ class KaitekiSwipeCallback(
             @DrawableRes iconRes: Int,
             val onSwipe: (position: Int) -> Unit
     ) {
-        protected val color by lazy { ContextCompat.getColor(context, colorRes) }
-        protected val icon by lazy {
-            ContextCompat.getDrawable(context, iconRes)!!.apply { setBounds(0, 0, intrinsicWidth, intrinsicHeight) }
-        }
+        protected val color = ContextCompat.getColor(context, colorRes)
+        protected val icon = ContextCompat.getDrawable(context, iconRes)!!.apply { setBounds(0, 0, intrinsicWidth, intrinsicHeight) }
 
         fun draw(c: Canvas, drawLeft: Boolean, itemView: View, dX: Float) {
             if (drawLeft) {
@@ -118,16 +116,15 @@ class KaitekiSwipeCallback(
             @ColorRes textColorRes: Int,
             onSwipe: (position: Int) -> Unit
     ) : SwipeItem(context, colorRes, iconRes, onSwipe) {
-        protected val text: String by lazy { context.getString(textRes) }
+        protected val text: String = context.getString(textRes)
 
-        protected val textPaint by lazy {
-            TextPaint().apply {
-                isAntiAlias = true
-                color = ContextCompat.getColor(context, textColorRes)
-                textSize = context.getDimension(textSizeRes)
-                style = Paint.Style.FILL
-            }
+        protected val textPaint = TextPaint().apply {
+            isAntiAlias = true
+            color = ContextCompat.getColor(context, textColorRes)
+            textSize = context.getDimension(textSizeRes)
+            style = Paint.Style.FILL
         }
+
         protected val textHeight by lazy { textPaint.fontMetrics.lineHeight }
 
         override fun drawInternal(c: Canvas, drawLeft: Boolean, itemView: View, dX: Float) {

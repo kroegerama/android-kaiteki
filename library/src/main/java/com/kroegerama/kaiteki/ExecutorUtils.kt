@@ -13,7 +13,7 @@ sealed class ExecutorState {
 
 fun Executor.executeWithState(block: () -> ExecutorState): LiveData<ExecutorState> {
     val liveData = MutableLiveData<ExecutorState>()
-    liveData.value = ExecutorState.Idle
+    liveData.postValue(ExecutorState.Idle)
     execute {
         liveData.postValue(ExecutorState.Running)
         liveData.postValue(

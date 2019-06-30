@@ -6,12 +6,14 @@ android {
 
     compileOptions {
         kotlinOptions.freeCompilerArgs += ['-module-name', "android.kaiteki"]
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 
     defaultConfig {
         minSdkVersion 17
         versionCode 1
-        versionName "2.5.2"
+        versionName "2.5.3"
     }
 
     buildTypes {
@@ -24,8 +26,7 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 
     implementation 'androidx.core:core-ktx:1.1.0-rc01'
     implementation 'androidx.appcompat:appcompat:1.1.0-beta01'
@@ -33,7 +34,7 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.1.0-alpha06'
     implementation 'androidx.exifinterface:exifinterface:1.1.0-alpha01'
 
-    implementation 'androidx.lifecycle:lifecycle-livedata:2.1.0-beta01'
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.1.0-beta01'
 
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.2.1'
 }

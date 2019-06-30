@@ -56,7 +56,7 @@ class FragmentNavigator(
             (oldFrag as? BaseFragment)?.decorateTransaction(this)
             strategy.handleTransaction(manager, provider, this, oldInfo, newInfo, newFrag !== previousInstance)
             provider.decorateTransaction(oldIndex, newIndex, newFrag, this)
-        }.commit()
+        }.commitNow()
         provider.onFragmentSelected(newIndex, newFrag)
         currentIndex = newIndex
         true

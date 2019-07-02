@@ -32,7 +32,7 @@ class FragmentNavigator(
 
     private var currentIndex = INDEX_UNKNOWN
 
-    private fun showInternal(newIndex: Int, fragment: Fragment?, payload: Any?): Boolean = synchronized(this) {
+    private fun showInternal(newIndex: Int, fragment: Fragment?, payload: Any?, forceCreate: Boolean): Boolean = synchronized(this) {
         val manager = weakManager.get() ?: return@synchronized false
         val provider = weakProvider.get() ?: return@synchronized false
 
@@ -45,7 +45,7 @@ class FragmentNavigator(
 
         val newFrag = when {
             fragment != null -> fragment
-            strategy.mustCreate(newIndex) -> provider.createFragment(newIndex, payload)
+            forceCreate || strategy.mustCreate(newIndex) -> provider.createFragment(newIndex, payload)
             previousInstance != null && strategy.usePreviousInstance(newIndex, previousInstance) -> previousInstance
             else -> provider.createFragment(newIndex, payload)
         }
@@ -62,9 +62,9 @@ class FragmentNavigator(
         true
     }
 
-    fun show(index: Int, payload: Any? = null) = showInternal(index, null, payload)
+    fun show(index: Int, payload: Any? = null, forceCreate: Boolean = payload != null) = showInternal(index, null, payload, forceCreate)
 
-    fun showFragment(index: Int, fragment: Fragment) = showInternal(index, fragment, null)
+    fun showFragment(index: Int, fragment: Fragment) = showInternal(index, fragment, null, false)
 
     fun getCurrentFragment(): Fragment? {
         val manager = weakManager.get() ?: return null

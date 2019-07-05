@@ -18,11 +18,7 @@ class PreferenceFieldBinder<T : Any>(
         saveNewValue(property, value)
     }
 
-    private var field: T? = null
-
     private fun saveNewValue(property: KProperty<*>, value: T?) {
-        if (field == value) return
-        field = value
         pref.edit().apply { putValue(value, getKey(key, property)) }.apply()
     }
 
@@ -47,11 +43,7 @@ class PreferenceFieldBinderNullable<T : Any?>(
         saveNewValue(property, value)
     }
 
-    private var field: T? = null
-
     private fun saveNewValue(property: KProperty<*>, value: T?) {
-        if (field == value) return
-        field = value
         pref.edit().apply { putValue(value, getKey(key, property)) }.apply()
     }
 

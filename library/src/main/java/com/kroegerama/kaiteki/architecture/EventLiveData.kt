@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import java.util.concurrent.atomic.AtomicBoolean
 
+@Deprecated("Use LiveEvent/NotifyLiveEvent class instead")
 open class EventLiveData<T> : MutableLiveData<Event<T>>() {
 
     fun event(value: T) {

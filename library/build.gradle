@@ -13,7 +13,7 @@ android {
     defaultConfig {
         minSdkVersion 17
         versionCode 1
-        versionName "2.7.1"
+        versionName "2.7.2"
     }
 
     buildTypes {
@@ -31,7 +31,7 @@ dependencies {
     implementation 'androidx.core:core-ktx:1.1.0-rc03'
     implementation 'androidx.appcompat:appcompat:1.1.0-rc01'
     implementation 'com.google.android.material:material:1.1.0-alpha09'
-    implementation 'androidx.recyclerview:recyclerview:1.1.0-beta02'
+    implementation 'androidx.recyclerview:recyclerview:1.1.0-beta03'
     implementation 'androidx.exifinterface:exifinterface:1.1.0-beta01'
 
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.1.0-rc01'

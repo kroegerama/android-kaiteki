@@ -45,5 +45,5 @@ fun SharedPreferences.booleanLiveData(key: String, defValue: Boolean): LiveData<
 }
 
 fun SharedPreferences.stringLiveData(key: String, defValue: String): LiveData<String> {
-    return PreferencesLiveData(this, key, defValue, ::getString)
+    return PreferencesLiveData(this, key, defValue) { k, dV -> getString(k, dV) ?: dV }
 }

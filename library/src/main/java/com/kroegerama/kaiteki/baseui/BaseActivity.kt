@@ -3,13 +3,16 @@ package com.kroegerama.kaiteki.baseui
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.preference.PreferenceManager
 import android.view.Menu
 import androidx.annotation.LayoutRes
 import androidx.annotation.MenuRes
 import androidx.appcompat.app.AppCompatActivity
+import androidx.preference.PreferenceManager
 
-abstract class BaseActivity : AppCompatActivity() {
+abstract class BaseActivity(
+        @LayoutRes protected val layout: Int,
+        @MenuRes protected val optionsMenu: Int = 0
+) : AppCompatActivity() {
 
     private var runState: RunState = RunState.NORMAL_START
 
@@ -23,7 +26,7 @@ abstract class BaseActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         prepare()
-        setContentView(layoutResource)
+        setContentView(layout)
         setupGUI()
 
         loadPreferences(preferences)
@@ -56,20 +59,14 @@ abstract class BaseActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         return super.onCreateOptionsMenu(menu) ||
-                optionsMenuResource.let {
-                    return@let if (it > 0) {
+                optionsMenu.let {
+                    if (it > 0) {
                         menuInflater.inflate(it, menu)
                         true
                     } else false
                 }
 
     }
-
-    @get:LayoutRes
-    protected abstract val layoutResource: Int
-
-    @get:MenuRes
-    protected open val optionsMenuResource: Int = 0
 
     protected open fun prepare() {}
 

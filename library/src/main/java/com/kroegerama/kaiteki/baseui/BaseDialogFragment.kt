@@ -4,12 +4,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import androidx.annotation.LayoutRes
 import androidx.fragment.app.DialogFragment
 
-abstract class BaseDialogFragment : DialogFragment() {
+abstract class BaseDialogFragment(
+        @LayoutRes protected val layout: Int
+) : DialogFragment() {
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
-            inflater.inflate(layoutResource, container, false).also {
+            inflater.inflate(layout, container, false).also {
                 prepare()
             }
 
@@ -29,9 +33,6 @@ abstract class BaseDialogFragment : DialogFragment() {
         run()
     }
 
-    @get:LayoutRes
-    protected abstract val layoutResource: Int
-
     protected open fun prepare() {}
 
     protected open fun setupGUI() {}
@@ -41,4 +42,6 @@ abstract class BaseDialogFragment : DialogFragment() {
     protected open fun loadState(state: Bundle) {}
 
     protected open fun saveState(outState: Bundle) {}
+
+    protected fun window(block: Window.() -> Unit) = dialog?.window?.apply(block)
 }

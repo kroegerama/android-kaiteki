@@ -12,7 +12,7 @@ import androidx.preference.PreferenceManager
 
 abstract class BaseFragment(
         @LayoutRes protected val layout: Int,
-        @StringRes protected val title: Int = 0,
+        @StringRes val title: Int = 0,
         @MenuRes protected val optionsMenu: Int = 0
 ) : Fragment() {
 

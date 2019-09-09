@@ -34,4 +34,12 @@ abstract class BaseFragmentActivity<Index>(
 
     protected abstract fun loadIndexState(key: String, bundle: Bundle): Index?
 
+    override fun onBackPressed() {
+        if (navigator.handleBackPress()) {
+            return
+        }
+
+        super.onBackPressed()
+    }
+
 }

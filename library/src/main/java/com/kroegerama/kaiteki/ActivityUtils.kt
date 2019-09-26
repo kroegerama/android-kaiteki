@@ -1,33 +1,22 @@
 package com.kroegerama.kaiteki
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 
-fun Fragment.startActivity(cls: Class<*>, block: (Intent.() -> Unit)? = null) {
-    val intent = Intent(requireContext(), cls)
-    block?.invoke(intent)
-    startActivity(intent)
-}
+inline fun <reified T : Activity> Fragment.startActivity(block: (Intent.() -> Unit) = {}) =
+    startActivity(Intent(requireContext(), T::class.java).apply(block))
 
-fun Fragment.startActivityForResult(cls: Class<*>, requestCode: Int, block: (Intent.() -> Unit)? = null) {
-    val intent = Intent(requireContext(), cls)
-    block?.invoke(intent)
-    startActivityForResult(intent, requestCode)
-}
+inline fun <reified T : Activity> Fragment.startActivityForResult(requestCode: Int, block: (Intent.() -> Unit) = {}) =
+    startActivityForResult(Intent(requireContext(), T::class.java).apply(block), requestCode)
 
-fun Context.startActivity(cls: Class<*>, block: (Intent.() -> Unit)? = null) {
-    val intent = Intent(this, cls)
-    block?.invoke(intent)
-    startActivity(intent)
-}
+inline fun <reified T : Activity> Context.startActivity(block: (Intent.() -> Unit) = {}) =
+    startActivity(Intent(this, T::class.java).apply(block))
 
-fun AppCompatActivity.startActivityForResult(cls: Class<*>, requestCode: Int, block: (Intent.() -> Unit)? = null) {
-    val intent = Intent(this, cls)
-    block?.invoke(intent)
-    startActivityForResult(intent, requestCode)
-}
+inline fun <reified T : Activity> Activity.startActivityForResult(requestCode: Int, block: (Intent.() -> Unit) = {}) =
+    startActivityForResult(Intent(this, T::class.java).apply(block), requestCode)
 
 fun Intent.clearTop() {
     addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)

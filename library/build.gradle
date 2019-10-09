@@ -13,7 +13,7 @@ android {
     defaultConfig {
         minSdkVersion 17
         versionCode 1
-        versionName "2.8.4"
+        versionName "2.8.5"
     }
 
     buildTypes {
@@ -33,7 +33,7 @@ dependencies {
     implementation 'androidx.preference:preference:1.1.0'
     implementation 'androidx.recyclerview:recyclerview:1.1.0-beta04'
     implementation 'androidx.exifinterface:exifinterface:1.1.0-beta01'
-    implementation 'com.google.android.material:material:1.1.0-alpha10'
+    implementation 'com.google.android.material:material:1.1.0-beta01'
 
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.1.0'
     implementation 'androidx.lifecycle:lifecycle-common-java8:2.1.0'

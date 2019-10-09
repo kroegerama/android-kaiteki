@@ -30,13 +30,25 @@ abstract class BaseFragmentActivity<Index>(
         super.loadState(state)
     }
 
+    fun navigate(index: Index, payload: Any? = null, forceCreate: Boolean = payload != null) = navigator.show(index, payload, forceCreate)
+
     protected abstract fun saveIndexState(index: Index, key: String, bundle: Bundle)
 
     protected abstract fun loadIndexState(key: String, bundle: Bundle): Index?
 
+    protected open fun getIndexAfterBackPress(currentIndex: Index?): Index? = if (currentIndex != startIndex) startIndex else null
+
+    protected open fun handleBackPress(): Boolean = false
+
     override fun onBackPressed() {
-        if (navigator.handleBackPress()) {
+        if (navigator.handleBackPress() || handleBackPress()) {
             return
+        }
+        getIndexAfterBackPress(navigator.selection)?.let { idx ->
+            if (idx != null) {
+                navigator.show(idx)
+                return
+            }
         }
 
         super.onBackPressed()

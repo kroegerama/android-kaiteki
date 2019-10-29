@@ -57,8 +57,8 @@ class FragmentNavigator<Index>(
             val newInfo = FragmentStrategy.FragmentInfo(newFrag, tag)
 
             (oldFrag as? BaseFragment)?.decorateTransaction(this)
-            strategy.handleTransaction(manager, provider, this, oldInfo, newInfo, newFrag !== previousInstance, forceCreate)
             provider.decorateTransaction(oldIndex, newIndex, newFrag, this)
+            strategy.handleTransaction(manager, provider, this, oldInfo, newInfo, newFrag !== previousInstance, forceCreate)
         }.commitNow()
         provider.onFragmentSelected(newIndex, newFrag)
         currentIndex = newIndex

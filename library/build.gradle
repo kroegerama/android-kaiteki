@@ -13,7 +13,7 @@ android {
     defaultConfig {
         minSdkVersion 17
         versionCode 1
-        versionName "2.8.5"
+        versionName "2.8.6"
     }
 
     buildTypes {

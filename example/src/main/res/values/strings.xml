@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Kaiteki Example</string>
+
+    <string name="leak_canary_display_activity_label">Kaiteki Example Leaks</string>
+</resources>

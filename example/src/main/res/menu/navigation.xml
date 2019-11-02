@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/navMain"
+        android:icon="@android:drawable/ic_dialog_dialer"
+        android:title="Main" />
+
+    <item
+        android:id="@+id/navMap"
+        android:icon="@android:drawable/ic_dialog_map"
+        android:title="Map" />
+
+    <item
+        android:id="@+id/navInfo"
+        android:icon="@android:drawable/ic_dialog_info"
+        android:title="Info" />
+</menu>

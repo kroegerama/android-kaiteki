@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/mnuFace"
+        android:icon="@drawable/ic_mnu_face"
+        android:title="Face"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/mnuFlower"
+        android:icon="@drawable/ic_mnu_flower"
+        android:title="Flower"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/mnuRefresh"
+        android:icon="@drawable/ic_mnu_refresh"
+        android:title="Refresh"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/mnuPopup"
+        android:icon="@drawable/ic_mnu_refresh"
+        android:title="Pop"
+        app:showAsAction="never" />
+</menu>

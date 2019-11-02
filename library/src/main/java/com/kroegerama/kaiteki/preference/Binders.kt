@@ -7,9 +7,9 @@ import kotlin.reflect.KProperty
 internal fun getKey(keySet: String?, property: KProperty<*>) = keySet ?: "${property.name}Key"
 
 class PreferenceFieldBinder<T : Any>(
-        private val pref: SharedPreferences,
-        private val default: T,
-        private val key: String?
+    private val pref: SharedPreferences,
+    private val default: T,
+    private val key: String?
 ) : ReadWriteProperty<Any, T> {
 
     override operator fun getValue(thisRef: Any, property: KProperty<*>): T = readValue(property)
@@ -33,8 +33,8 @@ class PreferenceFieldBinder<T : Any>(
 }
 
 class PreferenceFieldBinderNullable<T : Any?>(
-        private val pref: SharedPreferences,
-        private val key: String?
+    private val pref: SharedPreferences,
+    private val key: String?
 ) : ReadWriteProperty<Any, T?> {
 
     override operator fun getValue(thisRef: Any, property: KProperty<*>): T? = readValue(property)
@@ -71,15 +71,15 @@ internal fun SharedPreferences.Editor.putValue(value: Any?, key: String) {
 
 @Suppress("UNCHECKED_CAST")
 internal fun <T : Any?> SharedPreferences.getFromPreferenceNullable(key: String): T? =
-        if (!contains(key)) null else all[key] as? T
+    if (!contains(key)) null else all[key] as? T
 
 @Suppress("UNCHECKED_CAST")
 internal fun <T : Any> SharedPreferences.getFromPreference(default: T, key: String): T =
-        when (default) {
-            is Long -> getLong(key, default as? Long ?: 0L) as T
-            is Int -> getInt(key, default as? Int ?: 0) as T
-            is String -> getString(key, default as? String ?: "") as T
-            is Boolean -> getBoolean(key, default as? Boolean ?: false) as T
-            is Float -> getFloat(key, default as? Float ?: 0f) as T
-            else -> throw  IllegalArgumentException("type not allowed")
-        }
+    when (default) {
+        is Long -> getLong(key, default as? Long ?: 0L) as T
+        is Int -> getInt(key, default as? Int ?: 0) as T
+        is String -> getString(key, default as? String ?: "") as T
+        is Boolean -> getBoolean(key, default as? Boolean ?: false) as T
+        is Float -> getFloat(key, default as? Float ?: 0f) as T
+        else -> throw  IllegalArgumentException("type not allowed")
+    }

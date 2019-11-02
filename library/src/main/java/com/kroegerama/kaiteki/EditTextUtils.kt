@@ -9,9 +9,9 @@ import androidx.core.widget.doAfterTextChanged
 fun EditText.addClearButton(@DrawableRes clearRes: Int, onClearClick: ((EditText) -> Unit)? = null) {
     val updateFun = {
         setCompoundDrawablesRelativeWithIntrinsicBounds(
-                0, 0,
-                if (text.isNullOrEmpty()) 0 else clearRes,
-                0
+            0, 0,
+            if (text.isNullOrEmpty()) 0 else clearRes,
+            0
         )
     }.also { it.invoke() }
     val clearFun = {
@@ -42,9 +42,9 @@ fun EditText.addClearButton(@DrawableRes clearRes: Int, onClearClick: ((EditText
 fun EditText.onImeAction(vararg actionIds: Int, block: (actionId: Int, event: KeyEvent) -> Unit) {
     setOnEditorActionListener { _, actionId, event ->
         if (event != null &&
-                actionIds.contains(actionId) &&
-                event.action == KeyEvent.ACTION_DOWN &&
-                event.keyCode == KeyEvent.KEYCODE_ENTER
+            actionIds.contains(actionId) &&
+            event.action == KeyEvent.ACTION_DOWN &&
+            event.keyCode == KeyEvent.KEYCODE_ENTER
         ) {
             block.invoke(actionId, event)
             true

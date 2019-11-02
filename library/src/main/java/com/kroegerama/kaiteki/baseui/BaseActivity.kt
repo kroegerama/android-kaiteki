@@ -10,8 +10,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.PreferenceManager
 
 abstract class BaseActivity(
-        @LayoutRes protected val layout: Int,
-        @MenuRes protected val optionsMenu: Int = 0
+    @LayoutRes protected val layout: Int,
+    @MenuRes protected val optionsMenu: Int = 0
 ) : AppCompatActivity() {
 
     private var runState: RunState = RunState.NORMAL_START
@@ -50,9 +50,9 @@ abstract class BaseActivity(
         super.onPause()
         if (isFirstRun) {
             getPreferences(Context.MODE_PRIVATE)
-                    .edit()
-                    .putBoolean(PREF_FIRST_RUN, false)
-                    .apply()
+                .edit()
+                .putBoolean(PREF_FIRST_RUN, false)
+                .apply()
         }
         savePreferences(preferences)
     }

@@ -9,13 +9,13 @@ import androidx.annotation.LayoutRes
 import androidx.fragment.app.DialogFragment
 
 abstract class BaseDialogFragment(
-        @LayoutRes protected val layout: Int
+    @LayoutRes protected val layout: Int
 ) : DialogFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
-            inflater.inflate(layout, container, false).also {
-                prepare()
-            }
+        inflater.inflate(layout, container, false).also {
+            prepare()
+        }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

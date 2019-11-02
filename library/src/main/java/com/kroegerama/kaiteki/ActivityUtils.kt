@@ -3,7 +3,6 @@ package com.kroegerama.kaiteki
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 
 inline fun <reified T : Activity> Fragment.startActivity(block: (Intent.() -> Unit) = {}) =

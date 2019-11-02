@@ -69,8 +69,8 @@ class NotifyLiveEvent : LiveEvent<Unit>() {
     fun post() = postValue(Unit)
 
     fun observe(owner: LifecycleOwner, observer: () -> Unit) =
-            observe(owner, Observer { observer.invoke() })
+        observe(owner, Observer { observer.invoke() })
 
     fun observeForever(observer: () -> Unit) =
-            observeForever(Observer { observer.invoke() })
+        observeForever(Observer { observer.invoke() })
 }

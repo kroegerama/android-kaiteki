@@ -12,9 +12,11 @@ object LiveDataMerger {
      * @param waitForAll if set to **true**, the observer will only be notified,
      * if all source LiveData objects have emitted a value
      */
-    fun <A, B, T> merge(sourceA: LiveData<A>, sourceB: LiveData<B>,
-                        waitForAll: Boolean = false,
-                        merge: (A?, B?) -> T?): LiveData<T> {
+    fun <A, B, T> merge(
+        sourceA: LiveData<A>, sourceB: LiveData<B>,
+        waitForAll: Boolean = false,
+        merge: (A?, B?) -> T?
+    ): LiveData<T> {
         val mediator = MediatorLiveData<T>()
 
         var emittedA = !waitForAll
@@ -44,9 +46,11 @@ object LiveDataMerger {
      * @param waitForAll if set to **true**, the observer will only be notified,
      * if all source LiveData objects have emitted a value
      */
-    fun <A, B, C, T> merge(sourceA: LiveData<A>, sourceB: LiveData<B>, sourceC: LiveData<C>,
-                           waitForAll: Boolean = false,
-                           merge: (A?, B?, C?) -> T?): LiveData<T> {
+    fun <A, B, C, T> merge(
+        sourceA: LiveData<A>, sourceB: LiveData<B>, sourceC: LiveData<C>,
+        waitForAll: Boolean = false,
+        merge: (A?, B?, C?) -> T?
+    ): LiveData<T> {
         val mediator = MediatorLiveData<T>()
 
         var emittedA = !waitForAll
@@ -75,15 +79,19 @@ object LiveDataMerger {
         return mediator
     }
 
-    fun <T, A, B> split(source: LiveData<T>,
-                        split: (T?) -> Pair<A?, B?>): Pair<LiveData<A>, LiveData<B>> {
+    fun <T, A, B> split(
+        source: LiveData<T>,
+        split: (T?) -> Pair<A?, B?>
+    ): Pair<LiveData<A>, LiveData<B>> {
         val resultA: LiveData<A> = Transformations.map(source) { split(it).first }
         val resultB: LiveData<B> = Transformations.map(source) { split(it).second }
         return Pair(resultA, resultB)
     }
 
-    fun <T, A, B, C> split(source: LiveData<T>,
-                           split: (T?) -> Triple<A?, B?, C?>): Triple<LiveData<A>, LiveData<B>, LiveData<C>> {
+    fun <T, A, B, C> split(
+        source: LiveData<T>,
+        split: (T?) -> Triple<A?, B?, C?>
+    ): Triple<LiveData<A>, LiveData<B>, LiveData<C>> {
         val resultA: LiveData<A> = Transformations.map(source) { split(it).first }
         val resultB: LiveData<B> = Transformations.map(source) { split(it).second }
         val resultC: LiveData<C> = Transformations.map(source) { split(it).third }

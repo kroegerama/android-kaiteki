@@ -11,9 +11,9 @@ import androidx.fragment.app.FragmentTransaction
 import androidx.preference.PreferenceManager
 
 abstract class BaseFragment(
-        @LayoutRes protected val layout: Int,
-        @StringRes val title: Int = 0,
-        @MenuRes protected val optionsMenu: Int = 0
+    @LayoutRes protected val layout: Int,
+    @StringRes val title: Int = 0,
+    @MenuRes protected val optionsMenu: Int = 0
 ) : Fragment() {
 
     protected val preferences: SharedPreferences by lazy {
@@ -30,7 +30,7 @@ abstract class BaseFragment(
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
-            inflater.inflate(layout, container, false)
+        inflater.inflate(layout, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

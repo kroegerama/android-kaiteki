@@ -4,10 +4,10 @@ import android.content.SharedPreferences
 import androidx.lifecycle.LiveData
 
 private class PreferencesLiveData<T>(
-        private val preferences: SharedPreferences,
-        private val key: String,
-        private val defValue: T,
-        private val getter: (key: String, defValue: T) -> T
+    private val preferences: SharedPreferences,
+    private val key: String,
+    private val defValue: T,
+    private val getter: (key: String, defValue: T) -> T
 ) : LiveData<T>() {
 
     private val listener = SharedPreferences.OnSharedPreferenceChangeListener { _, key ->

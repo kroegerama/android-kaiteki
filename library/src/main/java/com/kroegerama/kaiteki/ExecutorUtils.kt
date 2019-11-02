@@ -17,11 +17,11 @@ fun Executor.executeWithState(block: () -> ExecutorState): LiveData<ExecutorStat
     execute {
         liveData.postValue(ExecutorState.Running)
         liveData.postValue(
-                try {
-                    block.invoke()
-                } catch (e: Exception) {
-                    ExecutorState.Error(e)
-                }
+            try {
+                block.invoke()
+            } catch (e: Exception) {
+                ExecutorState.Error(e)
+            }
         )
     }
     return liveData

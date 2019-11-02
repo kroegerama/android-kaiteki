@@ -28,9 +28,9 @@ fun BaseActivity.snackBar(@StringRes message: Int, duration: Int = Snackbar.LENG
 }
 
 fun BaseActivity.snackBar(
-        message: CharSequence,
-        duration: Int = Snackbar.LENGTH_SHORT,
-        block: Snackbar.() -> Unit = {}
+    message: CharSequence,
+    duration: Int = Snackbar.LENGTH_SHORT,
+    block: Snackbar.() -> Unit = {}
 ) {
     findViewById<View>(android.R.id.content)?.snackBar(message, duration, block)
 }
@@ -40,9 +40,9 @@ fun BaseFragment.snackBar(@StringRes message: Int, duration: Int = Snackbar.LENG
 }
 
 fun BaseFragment.snackBar(
-        message: CharSequence,
-        duration: Int = Snackbar.LENGTH_SHORT,
-        block: Snackbar.() -> Unit = {}
+    message: CharSequence,
+    duration: Int = Snackbar.LENGTH_SHORT,
+    block: Snackbar.() -> Unit = {}
 ) {
     view?.snackBar(message, duration, block)
 }
@@ -56,10 +56,10 @@ fun Context.toast(@StringRes message: Int, duration: Int = Toast.LENGTH_SHORT) {
 }
 
 fun Context.showYesNoDialog(
-        @StringRes messageRes: Int,
-        @StringRes titleRes: Int = 0,
-        onNo: (() -> Unit)? = null,
-        onYes: () -> Unit
+    @StringRes messageRes: Int,
+    @StringRes titleRes: Int = 0,
+    onNo: (() -> Unit)? = null,
+    onYes: () -> Unit
 ) {
     AlertDialog.Builder(this).apply {
         setMessage(messageRes)

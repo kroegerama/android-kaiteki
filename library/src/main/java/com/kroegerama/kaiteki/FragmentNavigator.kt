@@ -9,9 +9,9 @@ import com.kroegerama.kaiteki.baseui.BaseFragment
 import java.lang.ref.WeakReference
 
 class FragmentNavigator<Index>(
-        manager: FragmentManager,
-        provider: FragmentProvider<Index>,
-        private val strategy: FragmentStrategy<Index> = FragmentStrategy.ReplaceStrategy()
+    manager: FragmentManager,
+    provider: FragmentProvider<Index>,
+    private val strategy: FragmentStrategy<Index> = FragmentStrategy.ReplaceStrategy()
 ) {
 
     interface FragmentProvider<in Index> {
@@ -109,21 +109,21 @@ class FragmentNavigator<Index>(
 
 abstract class FragmentStrategy<Index> {
     data class FragmentInfo(
-            val fragment: Fragment,
-            val tag: String
+        val fragment: Fragment,
+        val tag: String
     )
 
     abstract fun accept(fromIndex: Index, toIndex: Index): Boolean
     abstract fun mustCreate(index: Index): Boolean
     abstract fun usePreviousInstance(index: Index, instance: Fragment): Boolean
     abstract fun handleTransaction(
-            manager: FragmentManager,
-            provider: FragmentNavigator.FragmentProvider<Index>,
-            transaction: FragmentTransaction,
-            oldInfo: FragmentInfo?,
-            newInfo: FragmentInfo,
-            isNew: Boolean,
-            isForced: Boolean
+        manager: FragmentManager,
+        provider: FragmentNavigator.FragmentProvider<Index>,
+        transaction: FragmentTransaction,
+        oldInfo: FragmentInfo?,
+        newInfo: FragmentInfo,
+        isNew: Boolean,
+        isForced: Boolean
     )
 
     open fun saveState(outState: Bundle) {}
@@ -137,13 +137,13 @@ abstract class FragmentStrategy<Index> {
         override fun usePreviousInstance(index: Index, instance: Fragment) = false
 
         override fun handleTransaction(
-                manager: FragmentManager,
-                provider: FragmentNavigator.FragmentProvider<Index>,
-                transaction: FragmentTransaction,
-                oldInfo: FragmentInfo?,
-                newInfo: FragmentInfo,
-                isNew: Boolean,
-                isForced: Boolean
+            manager: FragmentManager,
+            provider: FragmentNavigator.FragmentProvider<Index>,
+            transaction: FragmentTransaction,
+            oldInfo: FragmentInfo?,
+            newInfo: FragmentInfo,
+            isNew: Boolean,
+            isForced: Boolean
         ): Unit = transaction.run {
             if (oldInfo != null) {
                 val (oldFrag, oldTag) = oldInfo
@@ -164,7 +164,7 @@ abstract class FragmentStrategy<Index> {
             val keys = bundle.getStringArray(STATE_KEYS).orEmpty()
             keys.forEach { k ->
                 val v: Fragment.SavedState =
-                        bundle.getParcelable("$STATE_VALUE_PREFIX.$k") ?: return@forEach
+                    bundle.getParcelable("$STATE_VALUE_PREFIX.$k") ?: return@forEach
                 states[k] = v
             }
         }
@@ -189,13 +189,13 @@ abstract class FragmentStrategy<Index> {
         override fun usePreviousInstance(index: Index, instance: Fragment) = true
 
         override fun handleTransaction(
-                manager: FragmentManager,
-                provider: FragmentNavigator.FragmentProvider<Index>,
-                transaction: FragmentTransaction,
-                oldInfo: FragmentInfo?,
-                newInfo: FragmentInfo,
-                isNew: Boolean,
-                isForced: Boolean
+            manager: FragmentManager,
+            provider: FragmentNavigator.FragmentProvider<Index>,
+            transaction: FragmentTransaction,
+            oldInfo: FragmentInfo?,
+            newInfo: FragmentInfo,
+            isNew: Boolean,
+            isForced: Boolean
         ): Unit = transaction.run {
             oldInfo?.fragment?.run(::detach)
             val (newFrag, newTag) = newInfo
@@ -212,13 +212,13 @@ abstract class FragmentStrategy<Index> {
         override fun usePreviousInstance(index: Index, instance: Fragment) = true
 
         override fun handleTransaction(
-                manager: FragmentManager,
-                provider: FragmentNavigator.FragmentProvider<Index>,
-                transaction: FragmentTransaction,
-                oldInfo: FragmentInfo?,
-                newInfo: FragmentInfo,
-                isNew: Boolean,
-                isForced: Boolean
+            manager: FragmentManager,
+            provider: FragmentNavigator.FragmentProvider<Index>,
+            transaction: FragmentTransaction,
+            oldInfo: FragmentInfo?,
+            newInfo: FragmentInfo,
+            isNew: Boolean,
+            isForced: Boolean
         ): Unit = transaction.run {
             oldInfo?.fragment?.run(::hide)
             val (newFrag, newTag) = newInfo

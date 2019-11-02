@@ -7,10 +7,10 @@ import androidx.annotation.MenuRes
 import com.kroegerama.kaiteki.FragmentNavigator
 
 abstract class BaseFragmentActivity<Index>(
-        @LayoutRes layout: Int,
-        @IdRes override val fragmentContainer: Int,
-        protected val startIndex: Index,
-        @MenuRes optionsMenu: Int = 0
+    @LayoutRes layout: Int,
+    @IdRes override val fragmentContainer: Int,
+    protected val startIndex: Index,
+    @MenuRes optionsMenu: Int = 0
 ) : BaseActivity(layout, optionsMenu), FragmentNavigator.FragmentProvider<Index> {
 
     protected val navigator by lazy { FragmentNavigator(supportFragmentManager, this) }

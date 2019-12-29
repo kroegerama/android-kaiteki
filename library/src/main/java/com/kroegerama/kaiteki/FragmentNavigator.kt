@@ -21,7 +21,7 @@ class FragmentNavigator<Index>(
 
         fun createFragment(index: Index, payload: Any?): Fragment
 
-        fun decorateTransaction(fromIndex: Index?, toIndex: Index, fragment: Fragment, transaction: FragmentTransaction) {}
+        fun FragmentTransaction.decorate(fromIndex: Index?, toIndex: Index, fragment: Fragment) {}
 
         fun onFragmentSelected(index: Index, fragment: Fragment) {}
 
@@ -57,7 +57,7 @@ class FragmentNavigator<Index>(
             val newInfo = FragmentStrategy.FragmentInfo(newFrag, tag)
 
             (oldFrag as? BaseFragment)?.decorateTransaction(this)
-            provider.decorateTransaction(oldIndex, newIndex, newFrag, this)
+            provider.run { decorate(oldIndex, newIndex, newFrag) }
             strategy.handleTransaction(manager, provider, this, oldInfo, newInfo, newFrag !== previousInstance, forceCreate)
         }.commitNow()
         provider.onFragmentSelected(newIndex, newFrag)

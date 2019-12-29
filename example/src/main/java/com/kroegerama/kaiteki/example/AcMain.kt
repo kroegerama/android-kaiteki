@@ -54,8 +54,8 @@ class AcMain : BaseFragmentActivity<Navigation>(
         Log.d(TAG, "navSelect: $result")
     }
 
-    override fun decorateTransaction(fromIndex: Navigation?, toIndex: Navigation, fragment: Fragment, transaction: FragmentTransaction) {
-        transaction.setReorderingAllowed(true)
+    override fun FragmentTransaction.decorate(fromIndex: Navigation?, toIndex: Navigation, fragment: Fragment) {
+        setReorderingAllowed(true)
     }
 
     override fun createFragment(index: Navigation, payload: Any?) = when (index) {

@@ -5,15 +5,18 @@ import androidx.annotation.IdRes
 import androidx.annotation.LayoutRes
 import androidx.annotation.MenuRes
 import com.kroegerama.kaiteki.FragmentNavigator
+import com.kroegerama.kaiteki.FragmentStrategy
 
 abstract class BaseFragmentActivity<Index>(
     @LayoutRes layout: Int,
     @IdRes override val fragmentContainer: Int,
     protected val startIndex: Index,
-    @MenuRes optionsMenu: Int = 0
+    @MenuRes optionsMenu: Int = 0,
+    strategy: FragmentStrategy<Index> = FragmentStrategy.ReplaceStrategy(),
+    commitStrategy: FragmentStrategy.CommitStrategy = FragmentStrategy.CommitStrategy.CommitNow
 ) : BaseActivity(layout, optionsMenu), FragmentNavigator.FragmentProvider<Index> {
 
-    protected val navigator by lazy { FragmentNavigator(supportFragmentManager, this) }
+    protected val navigator by lazy { FragmentNavigator(supportFragmentManager, this, strategy, commitStrategy) }
 
     override fun run(runState: RunState) {
         if (!navigator.hasSelection) navigator.show(startIndex)

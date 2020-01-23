@@ -11,7 +11,8 @@ import java.lang.ref.WeakReference
 class FragmentNavigator<Index>(
     manager: FragmentManager,
     provider: FragmentProvider<Index>,
-    private val strategy: FragmentStrategy<Index> = FragmentStrategy.ReplaceStrategy()
+    private val strategy: FragmentStrategy<Index> = FragmentStrategy.ReplaceStrategy(),
+    private val commitStrategy: FragmentStrategy.CommitStrategy = FragmentStrategy.CommitStrategy.CommitNow
 ) {
 
     interface FragmentProvider<in Index> {
@@ -59,7 +60,14 @@ class FragmentNavigator<Index>(
             (oldFrag as? BaseFragment)?.decorateTransaction(this)
             provider.run { decorate(oldIndex, newIndex, newFrag) }
             strategy.handleTransaction(manager, provider, this, oldInfo, newInfo, newFrag !== previousInstance, forceCreate)
-        }.commitNow()
+
+            when (commitStrategy){
+                FragmentStrategy.CommitStrategy.Commit -> commit()
+                FragmentStrategy.CommitStrategy.CommitNow -> commitNow()
+                FragmentStrategy.CommitStrategy.CommitAllowingStateLoss -> commitAllowingStateLoss()
+                FragmentStrategy.CommitStrategy.CommitNowAllowingStateLoss -> commitNowAllowingStateLoss()
+            }
+        }
         provider.onFragmentSelected(newIndex, newFrag)
         currentIndex = newIndex
         true
@@ -228,5 +236,12 @@ abstract class FragmentStrategy<Index> {
                 show(newFrag)
         }
 
+    }
+
+    enum class CommitStrategy {
+        Commit,
+        CommitNow,
+        CommitAllowingStateLoss,
+        CommitNowAllowingStateLoss
     }
 }

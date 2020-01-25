@@ -16,6 +16,7 @@ abstract class BaseActivity(
 
     private var runState: RunState = RunState.NORMAL_START
 
+    @Deprecated("Use persistence pattern instead", level = DeprecationLevel.ERROR)
     protected val preferences: SharedPreferences by lazy {
         PreferenceManager.getDefaultSharedPreferences(this)
     }
@@ -29,9 +30,8 @@ abstract class BaseActivity(
         setContentView(layout)
         setupGUI()
 
-        loadPreferences(preferences)
-        intent?.extras?.let { handleArguments(it) }
-        savedInstanceState?.let { loadState(it) }
+        intent?.extras?.let(::handleArguments)
+        savedInstanceState?.let(::loadState)
 
         runState = when (savedInstanceState) {
             null -> if (isFirstRun) RunState.FIRST_START else RunState.NORMAL_START
@@ -54,19 +54,15 @@ abstract class BaseActivity(
                 .putBoolean(PREF_FIRST_RUN, false)
                 .apply()
         }
-        savePreferences(preferences)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        return super.onCreateOptionsMenu(menu) ||
-                optionsMenu.let {
-                    if (it > 0) {
-                        menuInflater.inflate(it, menu)
-                        true
-                    } else false
-                }
-
-    }
+    override fun onCreateOptionsMenu(menu: Menu) =
+        super.onCreateOptionsMenu(menu) || optionsMenu.let {
+            if (it > 0) {
+                menuInflater.inflate(it, menu)
+                true
+            } else false
+        }
 
     protected open fun prepare() {}
 
@@ -74,12 +70,14 @@ abstract class BaseActivity(
 
     protected open fun handleArguments(args: Bundle) {}
 
+    @Deprecated("Use persistence pattern instead", level = DeprecationLevel.ERROR)
     protected open fun loadPreferences(prefs: SharedPreferences) {}
 
     protected open fun loadState(state: Bundle) {}
 
     protected open fun saveState(outState: Bundle) {}
 
+    @Deprecated("Use persistence pattern instead", level = DeprecationLevel.ERROR)
     protected open fun savePreferences(outPrefs: SharedPreferences) {}
 
     protected open fun run(runState: RunState) {}

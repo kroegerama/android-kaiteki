@@ -8,18 +8,19 @@ import android.view.ViewGroup
 import android.view.Window
 import androidx.annotation.LayoutRes
 import androidx.annotation.StyleRes
-import androidx.fragment.app.DialogFragment
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
-abstract class BaseDialogFragment(
+abstract class BaseBottomSheetDialogFragment(
     @LayoutRes protected val layout: Int,
     @StyleRes protected val dialogTheme: Int = 0
-) : DialogFragment() {
+) : BottomSheetDialogFragment() {
 
-    override fun onCreateDialog(savedInstanceState: Bundle?) =
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog =
         if (dialogTheme == 0)
             super.onCreateDialog(savedInstanceState)
         else
-            Dialog(requireContext(), dialogTheme)
+            BottomSheetDialog(requireContext(), dialogTheme)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
         inflater.inflate(layout, container, false).also {
@@ -52,5 +53,8 @@ abstract class BaseDialogFragment(
 
     protected open fun saveState(outState: Bundle) {}
 
+    protected fun bottomSheetDialog(block: BottomSheetDialog.() -> Unit) = (dialog as BottomSheetDialog).apply(block)
+
     protected fun window(block: Window.() -> Unit) = dialog?.window?.apply(block)
+
 }

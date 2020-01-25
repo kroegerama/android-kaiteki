@@ -16,6 +16,7 @@ abstract class BaseFragment(
     @MenuRes protected val optionsMenu: Int = 0
 ) : Fragment() {
 
+    @Deprecated("Use persistence pattern instead", level = DeprecationLevel.ERROR)
     protected val preferences: SharedPreferences by lazy {
         PreferenceManager.getDefaultSharedPreferences(activity)
     }
@@ -23,10 +24,7 @@ abstract class BaseFragment(
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         prepare()
-        arguments?.let {
-            handleArguments(it)
-        }
-        loadPreferences(preferences)
+        arguments?.let(::handleArguments)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
@@ -39,9 +37,7 @@ abstract class BaseFragment(
         }
         setupGUI()
 
-        savedInstanceState?.let {
-            loadState(it)
-        }
+        savedInstanceState?.let(::loadState)
     }
 
     override fun onStart() {
@@ -52,11 +48,6 @@ abstract class BaseFragment(
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         saveState(outState)
-    }
-
-    override fun onPause() {
-        super.onPause()
-        savePreferences(preferences)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -74,12 +65,14 @@ abstract class BaseFragment(
 
     protected open fun handleArguments(args: Bundle) {}
 
+    @Deprecated("Use persistence pattern instead", level = DeprecationLevel.ERROR)
     protected open fun loadPreferences(prefs: SharedPreferences) {}
 
     protected open fun loadState(state: Bundle) {}
 
     protected open fun saveState(outState: Bundle) {}
 
+    @Deprecated("Use persistence pattern instead", level = DeprecationLevel.ERROR)
     protected open fun savePreferences(outPrefs: SharedPreferences) {}
 
     /**

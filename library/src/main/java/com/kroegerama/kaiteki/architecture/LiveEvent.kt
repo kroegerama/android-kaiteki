@@ -45,9 +45,7 @@ open class LiveEvent<T> : MutableLiveData<T> {
     @MainThread
     operator fun invoke(value: T) = setValue(value)
 
-    private class Wrapper<W>(delegate: Observer<W>) : Observer<W> {
-
-        private val weakDelegate = WeakReference(delegate)
+    private class Wrapper<W>(private val delegate: Observer<W>) : Observer<W> {
 
         private var pending = false
 
@@ -59,7 +57,7 @@ open class LiveEvent<T> : MutableLiveData<T> {
             if (!pending) return
 
             pending = false
-            weakDelegate.get()?.onChanged(t)
+            delegate.onChanged(t)
         }
     }
 }

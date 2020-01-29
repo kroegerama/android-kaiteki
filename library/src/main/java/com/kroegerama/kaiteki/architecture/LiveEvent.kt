@@ -4,6 +4,7 @@ import androidx.annotation.MainThread
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
+import java.lang.ref.WeakReference
 import java.util.*
 
 open class LiveEvent<T> : MutableLiveData<T> {
@@ -44,7 +45,9 @@ open class LiveEvent<T> : MutableLiveData<T> {
     @MainThread
     operator fun invoke(value: T) = setValue(value)
 
-    private class Wrapper<W>(val delegate: Observer<W>) : Observer<W> {
+    private class Wrapper<W>(delegate: Observer<W>) : Observer<W> {
+
+        private val weakDelegate = WeakReference(delegate)
 
         private var pending = false
 
@@ -56,7 +59,7 @@ open class LiveEvent<T> : MutableLiveData<T> {
             if (!pending) return
 
             pending = false
-            delegate.onChanged(t)
+            weakDelegate.get()?.onChanged(t)
         }
     }
 }

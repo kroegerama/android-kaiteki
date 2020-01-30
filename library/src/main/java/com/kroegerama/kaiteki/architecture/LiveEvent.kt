@@ -4,7 +4,6 @@ import androidx.annotation.MainThread
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
-import java.lang.ref.WeakReference
 import java.util.*
 
 open class LiveEvent<T> : MutableLiveData<T> {
@@ -24,14 +23,15 @@ open class LiveEvent<T> : MutableLiveData<T> {
     override fun observeForever(observer: Observer<in T>) {
         val wrapper = Wrapper(observer)
         wrappers[observer] = wrapper
-        super.observeForever(observer)
+        super.observeForever(wrapper)
     }
 
     @MainThread
     override fun removeObserver(observer: Observer<in T>) {
-        val wrapper: Wrapper<in T>? = if (observer is Wrapper) observer else wrappers[observer]
+        val key = if (observer is Wrapper) observer.delegate else observer
+        val wrapper = if (observer is Wrapper) observer else wrappers[observer]
+        wrappers -= key
         if (wrapper != null) {
-            wrappers -= wrapper
             super.removeObserver(wrapper)
         }
     }
@@ -45,7 +45,7 @@ open class LiveEvent<T> : MutableLiveData<T> {
     @MainThread
     operator fun invoke(value: T) = setValue(value)
 
-    private class Wrapper<W>(private val delegate: Observer<W>) : Observer<W> {
+    private class Wrapper<W>(val delegate: Observer<W>) : Observer<W> {
 
         private var pending = false
 

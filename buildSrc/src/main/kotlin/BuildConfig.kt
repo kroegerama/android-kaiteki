@@ -28,11 +28,8 @@ object BuildConfig {
         }
 
         configure<BintrayExtension> {
-            val bintrayUser: String by project
-            val bintrayApiKey: String by project
-
-            user = bintrayUser
-            key = bintrayApiKey
+            user = project.findProperty("bintrayUser") as? String
+            key = project.findProperty("bintrayApiKey") as? String
 
             setPublications("maven")
 

@@ -1,5 +1,5 @@
 object V {
-    const val coroutines = "1.3.3"
+    const val coroutines = "1.3.5"
     const val core = "1.2.0"
     const val appcompat = "1.1.0"
     const val constraint = "2.0.0-beta4"
@@ -8,9 +8,9 @@ object V {
     const val preference = "1.1.0"
     const val recycler = "1.1.0"
     const val exif = "1.1.0"
-    const val paging = "2.1.1"
+    const val paging = "2.1.2"
 
-    const val retrofit = "2.7.1"
+    const val retrofit = "2.8.1"
 }
 
 object Plugins {
@@ -46,7 +46,7 @@ object Libs {
     const val androidxExif = "androidx.exifinterface:exifinterface:${V.exif}"
     const val androidxPaging = "androidx.paging:paging-runtime-ktx:${V.paging}"
 
-    const val leakCanary = "com.squareup.leakcanary:leakcanary-android:2.1"
+    const val leakCanary = "com.squareup.leakcanary:leakcanary-android:2.2"
 
     const val retrofit = "com.squareup.retrofit2:retrofit:${V.retrofit}"
     const val diskLru = "com.jakewharton:disklrucache:2.0.2"

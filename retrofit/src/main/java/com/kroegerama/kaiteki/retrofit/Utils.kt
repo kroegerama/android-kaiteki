@@ -1,5 +1,6 @@
 package com.kroegerama.kaiteki.retrofit
 
+import okio.Timeout
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -48,6 +49,8 @@ fun <T, R> Call<T>.map(mapFunc: (T?) -> R?): Call<R> {
         override fun execute(): Response<R> = self.execute().map(mapFunc)
 
         override fun request() = self.request()
+
+        override fun timeout() = self.timeout()
     }
 }
 

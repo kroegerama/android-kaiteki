@@ -1,5 +1,7 @@
 # Android Kaiteki
 
+[![Build Status](https://travis-ci.org/kroegerama/android-kaiteki.svg)](https://travis-ci.org/kroegerama/android-kaiteki)
+
 | Artifact | Version |
 |:-|:-:|
 | android-kaiteki:core | [ ![Download](https://api.bintray.com/packages/kroegerama/maven/android-kaiteki%3Acore/images/download.svg) ](https://bintray.com/kroegerama/maven/android-kaiteki%3Acore/_latestVersion) |

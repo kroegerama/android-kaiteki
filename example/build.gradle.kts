@@ -30,6 +30,9 @@ android {
         }
     }
 
+    viewBinding {
+        isEnabled = true
+    }
 }
 
 dependencies {
@@ -45,6 +48,7 @@ dependencies {
     implementation(Libs.androidxLifecycleLiveData)
 
     implementation(project(":core"))
+    implementation(project(":recyclerview"))
     implementation(project(":retrofit"))
     implementation(project(":views"))
 

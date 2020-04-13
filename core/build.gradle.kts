@@ -47,6 +47,7 @@ dependencies {
     implementation(Libs.androidxExif)
     implementation(Libs.androidxLifecycleCommon)
     implementation(Libs.androidxLifecycleLiveData)
+    implementation(Libs.androidxViewBinding)
 }
 
 afterEvaluate(configurePublish())

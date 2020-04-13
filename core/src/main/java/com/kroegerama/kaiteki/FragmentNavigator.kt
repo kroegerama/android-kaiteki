@@ -5,7 +5,6 @@ import androidx.annotation.IdRes
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
-import com.kroegerama.kaiteki.baseui.BaseFragment
 import java.lang.ref.WeakReference
 
 class FragmentNavigator<Index>(
@@ -26,6 +25,15 @@ class FragmentNavigator<Index>(
 
         fun onFragmentSelected(index: Index, fragment: Fragment) {}
 
+    }
+
+    interface BaseFragment {
+        fun decorateTransaction(transaction: FragmentTransaction)
+
+        /**
+         * @return true if the backPress was handled (and should not be forwarded to the parent)
+         */
+        fun handleBackPress(): Boolean
     }
 
     private val weakManager = WeakReference(manager)
@@ -61,7 +69,7 @@ class FragmentNavigator<Index>(
             provider.run { decorate(oldIndex, newIndex, newFrag) }
             strategy.handleTransaction(manager, provider, this, oldInfo, newInfo, newFrag !== previousInstance, forceCreate)
 
-            when (commitStrategy){
+            when (commitStrategy) {
                 FragmentStrategy.CommitStrategy.Commit -> commit()
                 FragmentStrategy.CommitStrategy.CommitNow -> commitNow()
                 FragmentStrategy.CommitStrategy.CommitAllowingStateLoss -> commitAllowingStateLoss()

@@ -1,6 +1,7 @@
 package com.kroegerama.kaiteki.recyclerview
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.recyclerview.widget.DiffUtil
@@ -10,10 +11,10 @@ abstract class SimpleAdapter<T>(
     private val itemLayoutRes: Int
 ) : BaseAdapter<T>() {
 
-    abstract fun simpleUpdate(viewHolder: BaseViewHolder<T>, item: T?)
+    abstract fun View.simpleUpdate(viewHolder: BaseViewHolder<T>, item: T?)
     abstract fun itemClick(viewHolder: BaseViewHolder<T>, item: T?)
 
-    override fun getLayoutRes(viewType: Int) = itemLayoutRes
+    final override fun getLayoutRes(viewType: Int) = itemLayoutRes
     override fun injectListeners(
         viewHolder: BaseViewHolder<T>,
         viewType: Int,
@@ -23,12 +24,54 @@ abstract class SimpleAdapter<T>(
     }
 
     override fun updater(viewHolder: BaseViewHolder<T>, viewType: Int, item: T?) =
-        simpleUpdate(viewHolder, item)
+        viewHolder.itemView.simpleUpdate(viewHolder, item)
 }
 
 abstract class BaseAdapter<T> : RecyclerView.Adapter<BaseViewHolder<T>>() {
 
     private val items = ArrayList<T>()
+
+    fun setItems(newItems: List<T>) {
+        val diff = calculateDiff(items, newItems, ::compareItems)
+        items.clear()
+        items.addAll(newItems)
+        diff.dispatchUpdatesTo(this)
+    }
+
+    fun add(element: T) {
+        items.add(element)
+        notifyItemInserted(itemCount - 1)
+    }
+
+    fun add(index: Int, element: T) {
+        items.add(index, element)
+        notifyItemInserted(index)
+    }
+
+    fun set(index: Int, element: T) {
+        items[index] = element
+        notifyItemChanged(index)
+    }
+
+    fun remove(element: T) {
+        val idx = items.indexOf(element)
+        if (idx >= 0) {
+            items.removeAt(idx)
+            notifyItemRemoved(idx)
+        }
+    }
+
+    fun removeAt(index: Int) {
+        items.removeAt(index)
+        notifyItemRemoved(index)
+    }
+
+    fun clear() {
+        items.clear()
+        notifyDataSetChanged()
+    }
+
+    fun getItems(): List<T> = ArrayList(items)
 
     abstract fun getLayoutRes(viewType: Int): Int
     abstract fun updater(viewHolder: BaseViewHolder<T>, viewType: Int, item: T?)
@@ -38,14 +81,9 @@ abstract class BaseAdapter<T> : RecyclerView.Adapter<BaseViewHolder<T>>() {
         currentItem: () -> T?
     )
 
-    abstract fun compareItems(checkContent: Boolean, a: T, b: T): Boolean
+    protected open fun prepare() = Unit
 
-    fun setItems(newItems: List<T>) {
-        val diff = calculateDiff(items, newItems, ::compareItems)
-        items.clear()
-        items.addAll(newItems)
-        diff.dispatchUpdatesTo(this)
-    }
+    abstract fun compareItems(checkContent: Boolean, a: T, b: T): Boolean
 
     protected fun getItemAtPosition(position: Int) = items[position]
 
@@ -58,6 +96,7 @@ abstract class BaseAdapter<T> : RecyclerView.Adapter<BaseViewHolder<T>>() {
             viewType,
             ::updater
         ) { viewHolder, itemGetter ->
+            prepare()
             injectListeners(viewHolder, viewType, itemGetter)
         }
 

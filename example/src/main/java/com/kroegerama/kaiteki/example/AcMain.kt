@@ -61,7 +61,7 @@ class AcMain : BaseFragmentActivity<Navigation>(
     override fun createFragment(index: Navigation, payload: Any?) = when (index) {
         Navigation.Main,
         Navigation.Info,
-        Navigation.Map -> FragExample.makeInstance(index.idx).apply {
+        Navigation.Map -> VBFragment.makeInstance(index.idx).apply {
             enterTransition = Fade()
             exitTransition = Fade()
         }

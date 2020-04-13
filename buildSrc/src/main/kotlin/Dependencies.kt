@@ -9,6 +9,7 @@ object V {
     const val recycler = "1.1.0"
     const val exif = "1.1.0"
     const val paging = "2.1.2"
+    const val viewBinding = "3.6.2"
 
     const val retrofit = "2.8.1"
 }
@@ -45,9 +46,9 @@ object Libs {
     const val androidxRecycler = "androidx.recyclerview:recyclerview:${V.recycler}"
     const val androidxExif = "androidx.exifinterface:exifinterface:${V.exif}"
     const val androidxPaging = "androidx.paging:paging-runtime-ktx:${V.paging}"
+    const val androidxViewBinding = "androidx.databinding:viewbinding:${V.viewBinding}"
 
     const val leakCanary = "com.squareup.leakcanary:leakcanary-android:2.2"
 
     const val retrofit = "com.squareup.retrofit2:retrofit:${V.retrofit}"
-    const val diskLru = "com.jakewharton:disklrucache:2.0.2"
 }

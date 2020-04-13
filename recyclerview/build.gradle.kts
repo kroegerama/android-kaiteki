@@ -41,6 +41,7 @@ dependencies {
     
     implementation(Libs.androidxCore)
     implementation(Libs.androidxRecycler)
+    implementation(Libs.androidxViewBinding)
 }
 
 afterEvaluate(configurePublish())

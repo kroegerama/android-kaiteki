@@ -2,7 +2,6 @@ rootProject.name = "android-kaiteki"
 
 pluginManagement {
     repositories {
-        gradlePluginPortal()
         google()
         jcenter()
     }

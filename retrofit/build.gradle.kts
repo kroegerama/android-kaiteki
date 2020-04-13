@@ -39,7 +39,6 @@ dependencies {
     implementation(Libs.coroutines)
 
     implementation(Libs.retrofit)
-    implementation(Libs.diskLru)
 
     implementation(Libs.androidxLifecycleLiveData)
     implementation(Libs.androidxPaging)

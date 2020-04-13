@@ -1,49 +1,47 @@
 package com.kroegerama.kaiteki.baseui
 
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.*
-import androidx.annotation.LayoutRes
 import androidx.annotation.MenuRes
 import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
-import androidx.preference.PreferenceManager
+import androidx.viewbinding.ViewBinding
 import com.kroegerama.kaiteki.FragmentNavigator
 
-abstract class BaseFragment(
-    @LayoutRes protected val layout: Int,
+abstract class ViewBindingFragment<VB : ViewBinding>(
+    protected val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> VB,
     @StringRes val title: Int = 0,
     @MenuRes protected val optionsMenu: Int = 0
 ) : Fragment(), FragmentNavigator.BaseFragment {
 
-    @Deprecated("Use persistence pattern instead", level = DeprecationLevel.ERROR)
-    protected val preferences: SharedPreferences by lazy {
-        PreferenceManager.getDefaultSharedPreferences(activity)
-    }
+    private var binding: VB? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         prepare()
-        arguments?.let(::handleArguments)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
-        inflater.inflate(layout, container, false)
+        bindingInflater(inflater, container, false).also { binding = it }.root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         if (optionsMenu != 0) {
             setHasOptionsMenu(true)
         }
-        setupGUI()
-
+        binding!!.setupGUI()
         savedInstanceState?.let(::loadState)
     }
 
-    override fun onStart() {
-        super.onStart()
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
         run()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding = null
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -60,23 +58,13 @@ abstract class BaseFragment(
 
     protected open fun prepare() {}
 
-    protected open fun setupGUI() {}
+    protected open fun VB.setupGUI() {}
 
     protected open fun run() {}
-
-    protected open fun handleArguments(args: Bundle) {}
-
-    @Deprecated("Use persistence pattern instead", level = DeprecationLevel.ERROR)
-    protected open fun loadPreferences(prefs: SharedPreferences) {
-    }
 
     protected open fun loadState(state: Bundle) {}
 
     protected open fun saveState(outState: Bundle) {}
-
-    @Deprecated("Use persistence pattern instead", level = DeprecationLevel.ERROR)
-    protected open fun savePreferences(outPrefs: SharedPreferences) {
-    }
 
     override fun handleBackPress(): Boolean {
         return false

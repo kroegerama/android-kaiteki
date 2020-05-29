@@ -22,6 +22,34 @@ sealed class RetrofitResponse<out R> {
     override fun toString(): String = this::class.java.simpleName
 }
 
+fun <T> RetrofitResponse<T>.success(block: RetrofitResponse.Success<T>.() -> Unit): RetrofitResponse<T> {
+    if (this is RetrofitResponse.Success) {
+        block(this)
+    }
+    return this
+}
+
+fun <T> RetrofitResponse<T>.noSuccessOrError(block: RetrofitResponse<T>.() -> Unit): RetrofitResponse<T> {
+    if (this is RetrofitResponse.NoSuccess || this is RetrofitResponse.Error) {
+        block(this)
+    }
+    return this
+}
+
+fun <T> RetrofitResponse<T>.noSuccess(block: RetrofitResponse.NoSuccess.() -> Unit): RetrofitResponse<T> {
+    if (this is RetrofitResponse.NoSuccess) {
+        block(this)
+    }
+    return this
+}
+
+fun <T> RetrofitResponse<T>.error(block: RetrofitResponse.Error.() -> Unit): RetrofitResponse<T> {
+    if (this is RetrofitResponse.Error) {
+        block(this)
+    }
+    return this
+}
+
 @ExperimentalContracts
 fun <T> RetrofitResponse<T>.isSuccess(): Boolean {
     contract {

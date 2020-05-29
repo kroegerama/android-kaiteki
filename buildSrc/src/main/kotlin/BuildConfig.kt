@@ -17,7 +17,10 @@ object BuildConfig {
                 create<MavenPublication>("maven") {
                     val sourcesJar = project.task<Jar>("sourcesJar") {
                         archiveClassifier.set("sources")
-                        from(project.the<BaseExtension>().sourceSets["main"].java.srcDirs)
+                        project.the<BaseExtension>().sourceSets.forEach {
+                            from(it.java.srcDirs)
+                        }
+//                        from(project.the<BaseExtension>().sourceSets["main"].java.srcDirs)
                     }
                     from(components["release"])
 
@@ -60,14 +63,14 @@ object BuildConfig {
         scm(projectScm)
     }
 
-    private val projectLicenses = Action<MavenPomLicenseSpec> {
+    val projectLicenses = Action<MavenPomLicenseSpec> {
         license {
             name.set(P.pomLicense)
             url.set(P.pomLicenseUrl)
         }
     }
 
-    private val projectDevelopers = Action<MavenPomDeveloperSpec> {
+    val projectDevelopers = Action<MavenPomDeveloperSpec> {
         developer {
             id.set("kroegerama")
             name.set("Chris")
@@ -75,7 +78,7 @@ object BuildConfig {
         }
     }
 
-    private val projectScm = Action<MavenPomScm> {
+    val projectScm = Action<MavenPomScm> {
         url.set(P.projectUrl)
         connection.set(P.projectScm)
         developerConnection.set(P.developerScm)

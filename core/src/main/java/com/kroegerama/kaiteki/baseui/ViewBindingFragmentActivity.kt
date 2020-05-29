@@ -2,10 +2,7 @@ package com.kroegerama.kaiteki.baseui
 
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.annotation.MenuRes
-import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
 import com.kroegerama.kaiteki.FragmentNavigator
 import com.kroegerama.kaiteki.FragmentStrategy
@@ -36,9 +33,6 @@ abstract class ViewBindingFragmentActivity<Index, VB : ViewBinding>(
     }
 
     fun navigate(index: Index, payload: Any? = null, forceCreate: Boolean = payload != null) = navigator.show(index, payload, forceCreate)
-
-    final override val fragmentContainer get() = binding.fragmentContainer.id
-    protected abstract val VB.fragmentContainer: View
 
     protected abstract fun saveIndexState(index: Index, key: String, bundle: Bundle)
 

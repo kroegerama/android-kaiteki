@@ -1,19 +1,19 @@
 package com.kroegerama.kaiteki.baseui
 
+import android.app.Dialog
 import android.os.Bundle
-import android.view.*
-import androidx.annotation.MenuRes
-import androidx.annotation.StringRes
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.view.Window
+import androidx.annotation.StyleRes
+import androidx.fragment.app.DialogFragment
 import androidx.viewbinding.ViewBinding
-import com.kroegerama.kaiteki.FragmentNavigator
 
-abstract class ViewBindingFragment<VB : ViewBinding>(
+abstract class ViewBindingDialogFragment<VB : ViewBinding>(
     protected val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> VB,
-    @StringRes val title: Int = 0,
-    @MenuRes protected val optionsMenu: Int = 0
-) : Fragment(), FragmentNavigator.BaseFragment {
+    @StyleRes protected val dialogTheme: Int = 0
+) : DialogFragment() {
 
     private var binding: VB? = null
 
@@ -26,14 +26,17 @@ abstract class ViewBindingFragment<VB : ViewBinding>(
         prepare()
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
+    override fun onCreateDialog(savedInstanceState: Bundle?) =
+        if (dialogTheme == 0)
+            super.onCreateDialog(savedInstanceState)
+        else
+            Dialog(requireContext(), dialogTheme)
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
         bindingInflater(inflater, container, false).also { binding = it }.root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if (optionsMenu != 0) {
-            setHasOptionsMenu(true)
-        }
         binding!!.setupGUI()
         savedInstanceState?.let(::loadState)
     }
@@ -53,13 +56,6 @@ abstract class ViewBindingFragment<VB : ViewBinding>(
         saveState(outState)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
-        if (optionsMenu != 0) {
-            inflater.inflate(optionsMenu, menu)
-        }
-    }
-
     protected open fun prepare() {}
 
     protected open fun VB.setupGUI() {}
@@ -70,9 +66,5 @@ abstract class ViewBindingFragment<VB : ViewBinding>(
 
     protected open fun saveState(outState: Bundle) {}
 
-    override fun handleBackPress(): Boolean {
-        return false
-    }
-
-    override fun decorateTransaction(transaction: FragmentTransaction) {}
+    protected fun window(block: Window.() -> Unit) = dialog?.window?.apply(block)
 }

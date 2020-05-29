@@ -8,7 +8,7 @@ class VBFragment : ViewBindingFragment<FragExampleBinding>(
 ) {
 
     override fun FragExampleBinding.setupGUI() {
-        btnTest.setOnClickListener { activity!!.finish() }
+        btnTest.setOnClickListener { requireActivity().finish() }
     }
 
     companion object {

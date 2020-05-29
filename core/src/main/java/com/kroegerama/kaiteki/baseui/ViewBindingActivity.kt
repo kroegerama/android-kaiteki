@@ -12,7 +12,11 @@ abstract class ViewBindingActivity<VB : ViewBinding>(
     @MenuRes protected val optionsMenu: Int = 0
 ) : AppCompatActivity() {
 
-    protected val binding by lazy { bindingInflater(layoutInflater) }
+    private val binding by lazy { bindingInflater(layoutInflater) }
+
+    protected fun binding(block: VB.() -> Unit) {
+        binding.apply(block)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

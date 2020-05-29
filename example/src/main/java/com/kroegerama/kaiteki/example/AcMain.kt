@@ -2,12 +2,10 @@ package com.kroegerama.kaiteki.example
 
 import android.Manifest
 import android.os.Bundle
-import android.preference.PreferenceManager
 import android.util.Log
 import android.view.MenuItem
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
-import androidx.lifecycle.ViewModelProviders
 import androidx.transition.Fade
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.kroegerama.kaiteki.PermissionEvent
@@ -21,9 +19,6 @@ class AcMain : BaseFragmentActivity<Navigation>(
     R.id.container,
     Navigation.Main
 ) {
-
-    private val vm by lazy { ViewModelProviders.of(this)[TestViewModel::class.java] }
-    private val prefController by lazy { PrefController(PreferenceManager.getDefaultSharedPreferences(this)) }
 
     private val permissionHandler by lazy {
         PermissionHandler(

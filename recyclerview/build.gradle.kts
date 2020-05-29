@@ -32,6 +32,10 @@ android {
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
+
+    buildFeatures {
+        viewBinding = true
+    }
 }
 
 dependencies {
@@ -41,7 +45,7 @@ dependencies {
     
     implementation(Libs.androidxCore)
     implementation(Libs.androidxRecycler)
-    implementation(Libs.androidxViewBinding)
+//    implementation(Libs.androidxViewBinding)
 }
 
 afterEvaluate(configurePublish())

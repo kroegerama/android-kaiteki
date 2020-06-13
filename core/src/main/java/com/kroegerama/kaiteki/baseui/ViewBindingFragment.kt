@@ -15,10 +15,12 @@ abstract class ViewBindingFragment<VB : ViewBinding>(
     @MenuRes protected val optionsMenu: Int = 0
 ) : Fragment(), FragmentNavigator.BaseFragment {
 
-    private var binding: VB? = null
+    private var _binding: VB? = null
 
-    protected fun binding(block: VB.() -> Unit) {
-        binding!!.apply(block)
+    protected val binding get() = _binding!!
+
+    protected inline fun binding(block: VB.() -> Unit) {
+        binding.apply(block)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,14 +29,14 @@ abstract class ViewBindingFragment<VB : ViewBinding>(
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
-        bindingInflater(inflater, container, false).also { binding = it }.root
+        bindingInflater(inflater, container, false).also { _binding = it }.root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         if (optionsMenu != 0) {
             setHasOptionsMenu(true)
         }
-        binding!!.setupGUI()
+        binding.setupGUI()
         savedInstanceState?.let(::loadState)
     }
 
@@ -45,7 +47,7 @@ abstract class ViewBindingFragment<VB : ViewBinding>(
 
     override fun onDestroyView() {
         super.onDestroyView()
-        binding = null
+        _binding = null
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

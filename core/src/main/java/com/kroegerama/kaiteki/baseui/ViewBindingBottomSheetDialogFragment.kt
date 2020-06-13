@@ -16,10 +16,12 @@ abstract class ViewBindingBottomSheetDialogFragment<VB : ViewBinding>(
     @StyleRes protected val dialogTheme: Int = 0
 ) : BottomSheetDialogFragment() {
 
-    private var binding: VB? = null
+    private var _binding: VB? = null
 
-    protected fun binding(block: VB.() -> Unit) {
-        binding!!.apply(block)
+    protected val binding get() = _binding!!
+
+    protected inline fun binding(block: VB.() -> Unit) {
+        binding.apply(block)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,11 +36,11 @@ abstract class ViewBindingBottomSheetDialogFragment<VB : ViewBinding>(
             BottomSheetDialog(requireContext(), dialogTheme)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
-        bindingInflater(inflater, container, false).also { binding = it }.root
+        bindingInflater(inflater, container, false).also { _binding = it }.root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding!!.setupGUI()
+        binding.setupGUI()
         savedInstanceState?.let(::loadState)
     }
 
@@ -49,7 +51,7 @@ abstract class ViewBindingBottomSheetDialogFragment<VB : ViewBinding>(
 
     override fun onDestroyView() {
         super.onDestroyView()
-        binding = null
+        _binding = null
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

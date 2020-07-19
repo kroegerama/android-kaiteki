@@ -17,7 +17,12 @@ class Listing<T>(
     fun cancel() = cancelFun.invoke()
 }
 
-fun <T> LiveData<Listing<T>>.result() = switchMap { it.result }
-fun <T> LiveData<Listing<T>>.isRunning() = switchMap { it.state }.map { it.isRunning }
-fun LiveData<Listing<*>>.update() = value?.update()
-fun LiveData<Listing<*>>.cancel() = value?.cancel()
+fun <T> LiveData<out Listing<T>>.result() = switchMap { it.result }
+fun <T> LiveData<out Listing<T>>.isRunning() = switchMap { it.state }.map { it.isRunning }
+fun LiveData<out Listing<*>>.update() {
+    value?.update()
+}
+
+fun LiveData<out Listing<*>>.cancel() {
+    value?.cancel()
+}

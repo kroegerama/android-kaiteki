@@ -66,7 +66,7 @@ class RetrofitPageKeyedDataSource<T>(
         val page = pageProvider.firstPage
         val size = params.requestedLoadSize
         makeLoadRequest(true, page, size) { data ->
-            callback.onResult(data, pageProvider.getPreviousPage(page), pageProvider.getNextPage(page))
+            callback.onResult(data, pageProvider.getPreviousPage(page, data.size, size), pageProvider.getNextPage(page, data.size, size))
         }
     }
 
@@ -74,7 +74,7 @@ class RetrofitPageKeyedDataSource<T>(
         val page = params.key
         val size = params.requestedLoadSize
         makeLoadRequest(false, page, size) { data ->
-            callback.onResult(data, pageProvider.getNextPage(page))
+            callback.onResult(data, pageProvider.getNextPage(page, data.size, size))
         }
     }
 
@@ -82,7 +82,7 @@ class RetrofitPageKeyedDataSource<T>(
         val page = params.key
         val size = params.requestedLoadSize
         makeLoadRequest(false, page, size) { data ->
-            callback.onResult(data, pageProvider.getPreviousPage(page))
+            callback.onResult(data, pageProvider.getPreviousPage(page, data.size, size))
         }
     }
 

@@ -70,7 +70,7 @@ abstract class ViewBindingBaseAdapter<T, VB : ViewBinding>(
         rootClickListener?.let { root.setOnClickListener { it(currentItem()) } }
     }
 
-    protected open fun prepare() = Unit
+    protected open fun VB.prepare() = Unit
 
     abstract fun compareItems(checkContent: Boolean, a: T, b: T): Boolean
 

@@ -1,9 +1,9 @@
 object V {
-    const val coroutines = "1.3.7"
+    const val coroutines = "1.3.8"
     const val core = "1.3.0"
     const val appcompat = "1.1.0"
-    const val constraint = "2.0.0-beta7"
-    const val material = "1.1.0"
+    const val constraint = "2.0.0-beta8"
+    const val material = "1.2.0-rc01"
     const val lifecycle = "2.2.0"
     const val preference = "1.1.1"
     const val recycler = "1.1.0"

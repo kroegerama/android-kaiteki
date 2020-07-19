@@ -53,3 +53,9 @@ fun EditText.onImeAction(vararg actionIds: Int, block: (actionId: Int, event: Ke
         }
     }
 }
+
+var EditText.string: String
+    get() = text?.toString().orEmpty()
+    set(value) {
+        setText(value)
+    }

@@ -22,28 +22,35 @@ sealed class RetrofitResponse<out R> {
     override fun toString(): String = this::class.java.simpleName
 }
 
-fun <T> RetrofitResponse<T>.success(block: RetrofitResponse.Success<T>.() -> Unit): RetrofitResponse<T> {
+data class RetryableRetrofitResponse<T>(
+    val response: RetrofitResponse<T>,
+    private val retryFun: RetryFun?
+) {
+    fun retry() = retryFun?.invoke()
+}
+
+inline fun <T> RetrofitResponse<T>.success(block: RetrofitResponse.Success<T>.() -> Unit): RetrofitResponse<T> {
     if (this is RetrofitResponse.Success) {
         block(this)
     }
     return this
 }
 
-fun <T> RetrofitResponse<T>.noSuccessOrError(block: RetrofitResponse<T>.() -> Unit): RetrofitResponse<T> {
+inline fun <T> RetrofitResponse<T>.noSuccessOrError(block: RetrofitResponse<T>.() -> Unit): RetrofitResponse<T> {
     if (this is RetrofitResponse.NoSuccess || this is RetrofitResponse.Error) {
         block(this)
     }
     return this
 }
 
-fun <T> RetrofitResponse<T>.noSuccess(block: RetrofitResponse.NoSuccess.() -> Unit): RetrofitResponse<T> {
+inline fun <T> RetrofitResponse<T>.noSuccess(block: RetrofitResponse.NoSuccess.() -> Unit): RetrofitResponse<T> {
     if (this is RetrofitResponse.NoSuccess) {
         block(this)
     }
     return this
 }
 
-fun <T> RetrofitResponse<T>.error(block: RetrofitResponse.Error.() -> Unit): RetrofitResponse<T> {
+inline fun <T> RetrofitResponse<T>.error(block: RetrofitResponse.Error.() -> Unit): RetrofitResponse<T> {
     if (this is RetrofitResponse.Error) {
         block(this)
     }

@@ -6,6 +6,8 @@ import android.os.Build
 import android.view.View
 import androidx.annotation.DimenRes
 import androidx.annotation.DrawableRes
+import androidx.core.widget.doOnTextChanged
+import com.google.android.material.textfield.TextInputLayout
 
 val Context.selectableItemBackground
     @DrawableRes
@@ -56,4 +58,21 @@ fun View.showIf(value: Boolean, goneIfFalse: Boolean = true) {
         goneIfFalse -> View.GONE
         else -> View.INVISIBLE
     }
+}
+
+inline fun <reified T : View> T.onClick(crossinline block: T.() -> Unit) {
+    setOnClickListener {
+        block(this)
+    }
+}
+
+inline fun <reified T : View> T.onLongClick(crossinline block: T.() -> Unit) {
+    setOnLongClickListener {
+        block(this)
+        true
+    }
+}
+
+fun TextInputLayout.clearErrorOnInput() {
+    editText!!.doOnTextChanged { _, _, _, _ -> error = null }
 }

@@ -45,6 +45,7 @@ dependencies {
     
     implementation(Libs.androidxCore)
     implementation(Libs.androidxRecycler)
+    implementation(Libs.androidxPaging)
 //    implementation(Libs.androidxViewBinding)
 }
 

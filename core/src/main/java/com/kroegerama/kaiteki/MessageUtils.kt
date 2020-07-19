@@ -41,6 +41,12 @@ inline fun BaseFragment.snackBar(
     block: Snackbar.() -> Unit = {}
 ) = requireView().snackBar(message, duration, block)
 
+fun Snackbar.doOnDismiss(block: (event: Int) -> Unit) {
+    addCallback(object : Snackbar.Callback() {
+        override fun onDismissed(transientBottomBar: Snackbar, event: Int) = block(event)
+    })
+}
+
 fun Context.toast(message: CharSequence, duration: Int = Toast.LENGTH_SHORT) {
     Toast.makeText(this, message, duration).show()
 }

@@ -1,12 +1,13 @@
 package com.kroegerama.kaiteki.retrofit
 
+import okhttp3.Response
 import okhttp3.ResponseBody
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.contract
 
 sealed class RetrofitResponse<out R> {
-    data class Success<out T>(val data: T?) : RetrofitResponse<T>()
-    data class NoSuccess(val code: Int, val response: ResponseBody?) : RetrofitResponse<Nothing>()
+    data class Success<out T>(val data: T?, val rawResponse: Response) : RetrofitResponse<T>()
+    data class NoSuccess(val code: Int, val errorBody: ResponseBody?, val rawResponse: Response) : RetrofitResponse<Nothing>()
     object Cancelled : RetrofitResponse<Nothing>()
     data class Error(val exception: Exception) : RetrofitResponse<Nothing>()
 
@@ -16,7 +17,7 @@ sealed class RetrofitResponse<out R> {
     val isError get() = this is Error
 
     fun getOrNull() = if (this is Success) data else null
-    fun <E> map(mapFun: (R?) -> E?) = if (this is Success) Success(mapFun(data)) else this
+    fun <E> map(mapFun: (R?) -> E?) = if (this is Success) Success(mapFun(data), rawResponse) else this
 
     // better toString name for objects, data classes will automatically overwrite this
     override fun toString(): String = this::class.java.simpleName

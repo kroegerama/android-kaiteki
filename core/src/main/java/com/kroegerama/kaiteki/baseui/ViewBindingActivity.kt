@@ -8,9 +8,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.viewbinding.ViewBinding
 
 abstract class ViewBindingActivity<VB : ViewBinding>(
-    protected val bindingInflater: (LayoutInflater) -> VB,
-    @MenuRes protected val optionsMenu: Int = 0
+    protected val bindingInflater: (LayoutInflater) -> VB
 ) : AppCompatActivity() {
+
+    @MenuRes
+    protected open val optionsMenu: Int = 0
 
     protected val binding by lazy { bindingInflater(layoutInflater) }
 

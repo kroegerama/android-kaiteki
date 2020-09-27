@@ -3,8 +3,6 @@ package com.kroegerama.kaiteki.retrofit
 import androidx.lifecycle.MutableLiveData
 import kotlinx.coroutines.*
 import retrofit2.Response
-import kotlin.coroutines.CoroutineContext
-import kotlin.coroutines.EmptyCoroutineContext
 import kotlin.random.Random
 
 internal typealias ApiFun<T> = suspend () -> Response<T>
@@ -27,9 +25,9 @@ suspend fun <T> retrofitCall(
             return RetrofitResponse.Error(e)
         }
         if (response.isSuccessful) {
-            return RetrofitResponse.Success(response.body())
+            return RetrofitResponse.Success(response.body(), response.raw())
         } else {
-            lastResult = RetrofitResponse.NoSuccess(response.code(), response.errorBody())
+            lastResult = RetrofitResponse.NoSuccess(response.code(), response.errorBody(), response.raw())
 
             val doRenew = counter < retryCount && renewFun(counter, response)
             if (doRenew) {
@@ -41,14 +39,6 @@ suspend fun <T> retrofitCall(
     }
     return lastResult
 }
-
-fun <T> CoroutineScope.retrofitCallAsync(
-    context: CoroutineContext = EmptyCoroutineContext,
-    start: CoroutineStart = CoroutineStart.DEFAULT,
-    renewFun: RenewFun<T> = DefaultRenewFun,
-    retryCount: Int = 0,
-    block: ApiFun<T>
-) = async(context, start) { retrofitCall(renewFun, retryCount, block) }
 
 fun <T> CoroutineScope.retrofitListing(
     resultLiveData: MutableLiveData<RetrofitResponse<T>> = MutableLiveData(),

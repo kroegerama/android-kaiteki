@@ -37,6 +37,7 @@ android {
 dependencies {
     implementation(Libs.kotlinStdLib)
     implementation(Libs.coroutines)
+    implementation(Libs.material)
 
     implementation(Libs.retrofit)
 

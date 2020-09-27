@@ -11,9 +11,11 @@ import androidx.fragment.app.DialogFragment
 import androidx.viewbinding.ViewBinding
 
 abstract class ViewBindingDialogFragment<VB : ViewBinding>(
-    protected val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> VB,
-    @StyleRes protected val dialogTheme: Int = 0
+    protected val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> VB
 ) : DialogFragment() {
+
+    @StyleRes
+    protected open val dialogTheme: Int = 0
 
     private var _binding: VB? = null
 

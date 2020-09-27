@@ -48,10 +48,8 @@ abstract class BaseFragmentActivity<Index>(
             return
         }
         getIndexAfterBackPress(navigator.selection)?.let { idx ->
-            if (idx != null) {
-                navigator.show(idx)
-                return
-            }
+            navigator.show(idx)
+            return
         }
 
         super.onBackPressed()

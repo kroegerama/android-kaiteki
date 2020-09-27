@@ -1,5 +1,6 @@
 package com.kroegerama.kaiteki
 
+import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
 import android.os.SystemClock
@@ -7,9 +8,8 @@ import android.util.SparseArray
 import android.view.View
 import android.widget.Toast
 import androidx.annotation.StringRes
+import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
-import com.kroegerama.kaiteki.baseui.BaseActivity
-import com.kroegerama.kaiteki.baseui.BaseFragment
 
 inline fun View.snackBar(message: CharSequence, duration: Int = Snackbar.LENGTH_SHORT, block: Snackbar.() -> Unit = {}) =
     Snackbar.make(this, message, duration).apply {
@@ -23,19 +23,19 @@ inline fun View.snackBar(@StringRes message: Int, duration: Int = Snackbar.LENGT
         show()
     }
 
-inline fun BaseActivity.snackBar(@StringRes message: Int, duration: Int = Snackbar.LENGTH_SHORT, block: Snackbar.() -> Unit = {}) =
+inline fun Activity.snackBar(@StringRes message: Int, duration: Int = Snackbar.LENGTH_SHORT, block: Snackbar.() -> Unit = {}) =
     findViewById<View>(android.R.id.content).snackBar(message, duration, block)
 
-inline fun BaseActivity.snackBar(
+inline fun Activity.snackBar(
     message: CharSequence,
     duration: Int = Snackbar.LENGTH_SHORT,
     block: Snackbar.() -> Unit = {}
 ) = findViewById<View>(android.R.id.content).snackBar(message, duration, block)
 
-inline fun BaseFragment.snackBar(@StringRes message: Int, duration: Int = Snackbar.LENGTH_SHORT, block: Snackbar.() -> Unit = {}) =
+inline fun Fragment.snackBar(@StringRes message: Int, duration: Int = Snackbar.LENGTH_SHORT, block: Snackbar.() -> Unit = {}) =
     requireView().snackBar(message, duration, block)
 
-inline fun BaseFragment.snackBar(
+inline fun Fragment.snackBar(
     message: CharSequence,
     duration: Int = Snackbar.LENGTH_SHORT,
     block: Snackbar.() -> Unit = {}

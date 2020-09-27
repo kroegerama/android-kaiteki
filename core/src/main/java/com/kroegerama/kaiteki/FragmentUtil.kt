@@ -11,9 +11,13 @@ inline fun <reified T> Fragment.notifyListener(block: T.() -> Unit) {
         block(it)
         return
     }
-    (parentFragment as? T)?.let {
-        block(it)
-        return
+    var parent: Fragment? = parentFragment
+    while (parent != null) {
+        (parent as? T)?.let {
+            block(it)
+            return
+        }
+        parent = parent.parentFragment
     }
     (activity as? T)?.let {
         block(it)

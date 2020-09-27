@@ -10,10 +10,14 @@ import androidx.viewbinding.ViewBinding
 import com.kroegerama.kaiteki.FragmentNavigator
 
 abstract class ViewBindingFragment<VB : ViewBinding>(
-    protected val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> VB,
-    @StringRes val title: Int = 0,
-    @MenuRes protected val optionsMenu: Int = 0
+    protected val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> VB
 ) : Fragment(), FragmentNavigator.BaseFragment {
+
+    @StringRes
+    open val title: Int = 0
+
+    @MenuRes
+    protected open val optionsMenu: Int = 0
 
     private var _binding: VB? = null
 

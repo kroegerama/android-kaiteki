@@ -12,9 +12,11 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 abstract class ViewBindingBottomSheetDialogFragment<VB : ViewBinding>(
-    protected val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> VB,
-    @StyleRes protected val dialogTheme: Int = 0
+    protected val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> VB
 ) : BottomSheetDialogFragment() {
+
+    @StyleRes
+    protected open val dialogTheme: Int = 0
 
     private var _binding: VB? = null
 

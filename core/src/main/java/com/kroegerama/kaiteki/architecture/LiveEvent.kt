@@ -4,7 +4,7 @@ import androidx.annotation.MainThread
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
-import java.util.*
+import java.util.WeakHashMap
 
 open class LiveEvent<T> : MutableLiveData<T> {
     constructor() : super()
@@ -28,8 +28,8 @@ open class LiveEvent<T> : MutableLiveData<T> {
 
     @MainThread
     override fun removeObserver(observer: Observer<in T>) {
-        val key = if (observer is Wrapper) observer.delegate else observer
-        val wrapper = if (observer is Wrapper) observer else wrappers[observer]
+        val key: Observer<in T> = if (observer is Wrapper) observer.delegate else observer
+        val wrapper: Wrapper<in T>? = if (observer is Wrapper) observer else wrappers[observer]
         wrappers -= key
         if (wrapper != null) {
             super.removeObserver(wrapper)

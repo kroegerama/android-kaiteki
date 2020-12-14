@@ -4,7 +4,11 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import androidx.annotation.IdRes
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.CoroutineScope
 
 inline fun <reified T : Activity> Fragment.startActivity(
     options: Bundle? = null,
@@ -43,3 +47,13 @@ fun Intent.clearTask() {
 fun Intent.newTask() {
     addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
 }
+
+inline fun <reified T : Fragment> AppCompatActivity.findFragmentById(@IdRes id: Int) =
+    supportFragmentManager.findFragmentById(id) as T
+
+inline fun <reified T : Fragment> AppCompatActivity.findFragmentByTag(tag: String) =
+    supportFragmentManager.findFragmentByTag(tag) as T
+
+fun AppCompatActivity.launchWhenCreated(block: suspend CoroutineScope.() -> Unit) = lifecycleScope.launchWhenCreated(block)
+fun AppCompatActivity.launchWhenStarted(block: suspend CoroutineScope.() -> Unit) = lifecycleScope.launchWhenStarted(block)
+fun AppCompatActivity.launchWhenResumed(block: suspend CoroutineScope.() -> Unit) = lifecycleScope.launchWhenResumed(block)

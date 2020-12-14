@@ -18,6 +18,9 @@ android {
         jvmTarget = JavaVersion.VERSION_1_8.toString()
         freeCompilerArgs = listOf("-module-name", "android.kaiteki.core")
     }
+    buildFeatures {
+        buildConfig = false
+    }
 
     defaultConfig {
         minSdkVersion(Android.minSdk)
@@ -51,6 +54,9 @@ dependencies {
     implementation(Libs.androidxExif)
     implementation(Libs.androidxLifecycleCommon)
     implementation(Libs.androidxLifecycleLiveData)
+    implementation(Libs.androidxLifecycleRuntime)
+    implementation(Libs.androidxLifecycleViewModel)
+    implementation(Libs.androidxNavigationCommon)
 }
 
 afterEvaluate(configurePublish())

@@ -5,6 +5,8 @@ import androidx.core.view.doOnLayout
 import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.CoroutineScope
 
 inline fun <reified T> Fragment.notifyListener(block: T.() -> Unit) {
     (targetFragment as? T)?.let {
@@ -47,3 +49,8 @@ fun Fragment.postponeUntilLayout(target: View = requireView()) {
         startPostponedEnterTransition()
     }
 }
+
+val Fragment.viewLifecycleScope get() = viewLifecycleOwner.lifecycleScope
+fun Fragment.launchWhenViewCreated(block: suspend CoroutineScope.() -> Unit) = viewLifecycleScope.launchWhenCreated(block)
+fun Fragment.launchWhenViewStarted(block: suspend CoroutineScope.() -> Unit) = viewLifecycleScope.launchWhenStarted(block)
+fun Fragment.launchWhenViewResumed(block: suspend CoroutineScope.() -> Unit) = viewLifecycleScope.launchWhenResumed(block)

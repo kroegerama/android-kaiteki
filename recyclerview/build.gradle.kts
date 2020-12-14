@@ -18,6 +18,9 @@ android {
         jvmTarget = JavaVersion.VERSION_1_8.toString()
         freeCompilerArgs = listOf("-module-name", "android.kaiteki.recyclerview")
     }
+    buildFeatures {
+        buildConfig = false
+    }
 
     defaultConfig {
         minSdkVersion(Android.minSdk)
@@ -42,7 +45,7 @@ dependencies {
     implementation(Libs.kotlinStdLib)
 
     implementation(Libs.appcompat)
-    
+
     implementation(Libs.androidxCore)
     implementation(Libs.androidxRecycler)
     implementation(Libs.androidxPaging)

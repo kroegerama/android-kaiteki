@@ -17,11 +17,6 @@ abstract class BaseFragment(
     @MenuRes protected val optionsMenu: Int = 0
 ) : Fragment(), FragmentNavigator.BaseFragment {
 
-    @Deprecated("Use persistence pattern instead", level = DeprecationLevel.ERROR)
-    protected val preferences: SharedPreferences by lazy {
-        PreferenceManager.getDefaultSharedPreferences(activity)
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         prepare()
@@ -66,17 +61,9 @@ abstract class BaseFragment(
 
     protected open fun handleArguments(args: Bundle) {}
 
-    @Deprecated("Use persistence pattern instead", level = DeprecationLevel.ERROR)
-    protected open fun loadPreferences(prefs: SharedPreferences) {
-    }
-
     protected open fun loadState(state: Bundle) {}
 
     protected open fun saveState(outState: Bundle) {}
-
-    @Deprecated("Use persistence pattern instead", level = DeprecationLevel.ERROR)
-    protected open fun savePreferences(outPrefs: SharedPreferences) {
-    }
 
     override fun handleBackPress(): Boolean {
         return false

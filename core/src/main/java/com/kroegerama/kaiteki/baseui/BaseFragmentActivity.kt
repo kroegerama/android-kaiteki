@@ -18,9 +18,9 @@ abstract class BaseFragmentActivity<Index>(
 
     protected val navigator by lazy { FragmentNavigator(supportFragmentManager, this, strategy, commitStrategy) }
 
-    override fun run(runState: RunState) {
+    override fun run() {
         if (!navigator.hasSelection) navigator.show(startIndex)
-        super.run(runState)
+        super.run()
     }
 
     override fun saveState(outState: Bundle) {

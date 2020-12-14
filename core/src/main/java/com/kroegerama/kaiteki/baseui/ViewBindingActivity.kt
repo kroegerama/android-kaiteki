@@ -21,8 +21,8 @@ abstract class ViewBindingActivity<VB : ViewBinding>(
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
         prepare()
+        super.onCreate(savedInstanceState)
 
         setContentView(binding.root)
         binding.setupGUI()

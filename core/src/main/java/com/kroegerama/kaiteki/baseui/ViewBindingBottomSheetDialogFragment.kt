@@ -27,8 +27,8 @@ abstract class ViewBindingBottomSheetDialogFragment<VB : ViewBinding>(
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
         prepare()
+        super.onCreate(savedInstanceState)
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog =

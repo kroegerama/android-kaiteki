@@ -8,7 +8,7 @@ plugins {
 }
 
 android {
-   compileSdkVersion(Android.compileSdk)
+    compileSdkVersion(Android.compileSdk)
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
@@ -17,6 +17,9 @@ android {
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_1_8.toString()
         freeCompilerArgs = listOf("-module-name", "android.kaiteki.retrofit")
+    }
+    buildFeatures {
+        buildConfig = false
     }
 
     defaultConfig {

@@ -60,6 +60,14 @@ fun View.showIf(value: Boolean, goneIfFalse: Boolean = true) {
     }
 }
 
+fun View.showIf(goneIfFalse: Boolean, block: () -> Boolean) {
+    visibility = when {
+        block() -> View.VISIBLE
+        goneIfFalse -> View.GONE
+        else -> View.INVISIBLE
+    }
+}
+
 inline fun <reified T : View> T.onClick(crossinline block: T.() -> Unit) {
     setOnClickListener {
         block(this)

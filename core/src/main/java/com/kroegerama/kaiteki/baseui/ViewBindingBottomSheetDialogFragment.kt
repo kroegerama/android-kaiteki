@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
+import androidx.annotation.CallSuper
 import androidx.annotation.StyleRes
 import androidx.viewbinding.ViewBinding
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -26,6 +27,7 @@ abstract class ViewBindingBottomSheetDialogFragment<VB : ViewBinding>(
         binding.apply(block)
     }
 
+    @CallSuper
     override fun onCreate(savedInstanceState: Bundle?) {
         prepare()
         super.onCreate(savedInstanceState)
@@ -40,22 +42,21 @@ abstract class ViewBindingBottomSheetDialogFragment<VB : ViewBinding>(
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
         bindingInflater(inflater, container, false).also { _binding = it }.root
 
+    @CallSuper
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.setupGUI()
         savedInstanceState?.let(::loadState)
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
         run()
     }
 
+    @CallSuper
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
 
+    @CallSuper
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         saveState(outState)

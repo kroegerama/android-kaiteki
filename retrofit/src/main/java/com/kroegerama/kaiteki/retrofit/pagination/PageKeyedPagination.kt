@@ -1,4 +1,4 @@
-package com.kroegerama.kaiteki.retrofit
+package com.kroegerama.kaiteki.retrofit.pagination
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.switchMap
@@ -6,6 +6,10 @@ import androidx.paging.DataSource
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PageKeyedDataSource
 import androidx.paging.PagedList
+import com.kroegerama.kaiteki.retrofit.ListingState
+import com.kroegerama.kaiteki.retrofit.RetrofitResource
+import com.kroegerama.kaiteki.retrofit.RetryableRetrofitResource
+import com.kroegerama.kaiteki.retrofit.retrofitCall
 import kotlinx.coroutines.*
 import retrofit2.Response
 
@@ -59,8 +63,8 @@ class RetrofitPageKeyedDataSource<T>(
     val initialState = MutableLiveData<ListingState>()
     val loadState = MutableLiveData<ListingState>()
 
-    val initialResponse = MutableLiveData<RetryableRetrofitResponse<List<T>>>()
-    val loadResponse = MutableLiveData<RetryableRetrofitResponse<List<T>>>()
+    val initialResponse = MutableLiveData<RetryableRetrofitResource<List<T>>>()
+    val loadResponse = MutableLiveData<RetryableRetrofitResource<List<T>>>()
 
     override fun loadInitial(params: LoadInitialParams<Int>, callback: LoadInitialCallback<Int, T>) {
         val page = pageProvider.firstPage
@@ -95,7 +99,7 @@ class RetrofitPageKeyedDataSource<T>(
         updateState(isInitial, ListingState.RUNNING)
         val result = retrofitCall { apiFun(currentPage, size) }
 
-        if (result is RetrofitResponse.Success) {
+        if (result is RetrofitResource.Success) {
             val items = result.data.orEmpty()
             callback(items)
             updateRetry(isInitial, result, null)
@@ -108,11 +112,11 @@ class RetrofitPageKeyedDataSource<T>(
         }
     }
 
-    private suspend fun updateRetry(isInitial: Boolean, response: RetrofitResponse<List<T>>, retry: RetryFun?) = withContext(Dispatchers.Main) {
+    private suspend fun updateRetry(isInitial: Boolean, response: RetrofitResource<List<T>>, retry: RetryFun?) = withContext(Dispatchers.Main) {
         if (isInitial) {
-            initialResponse.value = RetryableRetrofitResponse(response, retry)
+            initialResponse.value = RetryableRetrofitResource(response, retry)
         } else {
-            loadResponse.value = RetryableRetrofitResponse(response, retry)
+            loadResponse.value = RetryableRetrofitResource(response, retry)
         }
     }
 

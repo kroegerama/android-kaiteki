@@ -6,7 +6,7 @@ import androidx.lifecycle.switchMap
 import java.io.Closeable
 
 class Listing<T>(
-    val result: LiveData<RetrofitResponse<T>>,
+    val result: LiveData<RetrofitResource<T>>,
     val state: LiveData<ListingState>,
     private val updateFun: () -> Unit,
     private val cancelFun: () -> Unit

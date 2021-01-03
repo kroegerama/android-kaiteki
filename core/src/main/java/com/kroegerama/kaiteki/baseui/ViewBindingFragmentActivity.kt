@@ -2,6 +2,7 @@ package com.kroegerama.kaiteki.baseui
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import androidx.annotation.CallSuper
 import androidx.viewbinding.ViewBinding
 import com.kroegerama.kaiteki.FragmentNavigator
 import com.kroegerama.kaiteki.FragmentStrategy
@@ -13,16 +14,19 @@ abstract class ViewBindingFragmentActivity<Index, VB : ViewBinding>(
 
     protected val navigator by lazy { FragmentNavigator(supportFragmentManager, this, getFragmentStrategy(), getFragmentCommitStrategy()) }
 
+    @CallSuper
     override fun run() {
         if (!navigator.hasSelection) navigator.show(startIndex)
         super.run()
     }
 
+    @CallSuper
     override fun saveState(outState: Bundle) {
         navigator.saveState(outState, ::saveIndexState)
         super.saveState(outState)
     }
 
+    @CallSuper
     override fun loadState(state: Bundle) {
         navigator.loadState(state, ::loadIndexState)
         super.loadState(state)
@@ -42,6 +46,7 @@ abstract class ViewBindingFragmentActivity<Index, VB : ViewBinding>(
 
     protected open fun handleBackPress(): Boolean = false
 
+    @CallSuper
     override fun onBackPressed() {
         if (navigator.handleBackPress() || handleBackPress()) {
             return

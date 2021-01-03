@@ -74,10 +74,9 @@ inline fun <reified T : View> T.onClick(crossinline block: T.() -> Unit) {
     }
 }
 
-inline fun <reified T : View> T.onLongClick(crossinline block: T.() -> Unit) {
+inline fun <reified T : View> T.onLongClick(crossinline block: T.() -> Boolean) {
     setOnLongClickListener {
         block(this)
-        true
     }
 }
 

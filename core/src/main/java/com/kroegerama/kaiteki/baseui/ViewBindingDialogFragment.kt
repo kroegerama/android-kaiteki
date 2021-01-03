@@ -10,6 +10,7 @@ import androidx.annotation.StyleRes
 import androidx.fragment.app.DialogFragment
 import androidx.viewbinding.ViewBinding
 
+@Deprecated("Use ViewBindingMaterialDialogFragment instead", ReplaceWith("ViewBindingMaterialDialogFragment<VB>"))
 abstract class ViewBindingDialogFragment<VB : ViewBinding>(
     protected val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> VB
 ) : DialogFragment() {

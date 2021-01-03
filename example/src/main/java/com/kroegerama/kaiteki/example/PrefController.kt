@@ -1,27 +1,33 @@
 package com.kroegerama.kaiteki.example
 
 import android.content.SharedPreferences
-import com.kroegerama.kaiteki.preference.asField
-import com.kroegerama.kaiteki.preference.asFieldNullable
+import com.kroegerama.kaiteki.booleanField
+import com.kroegerama.kaiteki.enumField
+import com.kroegerama.kaiteki.floatField
+import com.kroegerama.kaiteki.intField
+import com.kroegerama.kaiteki.longField
+import com.kroegerama.kaiteki.stringField
+import com.kroegerama.kaiteki.stringSetField
 
 class PrefController(
     private val preferences: SharedPreferences
 ) {
-    fun clear() = preferences.edit().clear().apply()
 
-    var myLongNull: Long? by preferences.asFieldNullable("test")
-    var myLong: Long by preferences.asField(0L)
+    var myNewLong by preferences.longField()
+    var myNewInt by preferences.intField()
+    var myNewString by preferences.stringField()
+    var myNewStringSet by preferences.stringSetField()
+    var myNewBoolean by preferences.booleanField()
+    var myNewFloat by preferences.floatField()
+    var myNewEnum by preferences.enumField<TestEnum>()
 
-    var myIntNull: Int? by preferences.asFieldNullable()
-    var myInt: Int by preferences.asField(0)
-
-    var myStringNull: String? by preferences.asFieldNullable()
-    var myString: String by preferences.asField("")
-
-    var myBooleanNull: Boolean? by preferences.asFieldNullable()
-    var myBoolean: Boolean by preferences.asField(false)
-
-    var myFloatNull: Float? by preferences.asFieldNullable()
-    var myFloat: Float by preferences.asField(0f)
+    enum class TestEnum {
+        One, Two, Three;
+        val next get() = when(this){
+            One -> Two
+            Two -> Three
+            Three -> One
+        }
+    }
 
 }

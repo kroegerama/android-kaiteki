@@ -63,14 +63,14 @@ object BuildConfig {
         scm(projectScm)
     }
 
-    val projectLicenses = Action<MavenPomLicenseSpec> {
+    private val projectLicenses = Action<MavenPomLicenseSpec> {
         license {
             name.set(P.pomLicense)
             url.set(P.pomLicenseUrl)
         }
     }
 
-    val projectDevelopers = Action<MavenPomDeveloperSpec> {
+    private val projectDevelopers = Action<MavenPomDeveloperSpec> {
         developer {
             id.set("kroegerama")
             name.set("Chris")
@@ -78,7 +78,7 @@ object BuildConfig {
         }
     }
 
-    val projectScm = Action<MavenPomScm> {
+    private val projectScm = Action<MavenPomScm> {
         url.set(P.projectUrl)
         connection.set(P.projectScm)
         developerConnection.set(P.developerScm)

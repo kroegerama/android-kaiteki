@@ -16,5 +16,4 @@ class TestViewModel : ViewModel() {
         stringLiveData.value = string
     }
 
-
 }

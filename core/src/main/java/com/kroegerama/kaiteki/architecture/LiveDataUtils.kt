@@ -3,11 +3,10 @@ package com.kroegerama.kaiteki.architecture
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.Observer
 import java.io.Closeable
 
 fun <T> LiveData<T>.observeNonNull(owner: LifecycleOwner, observer: (t: T) -> Unit) {
-    this.observe(owner, Observer { it?.let(observer) })
+    this.observe(owner, { it?.let(observer) })
 }
 
 /**

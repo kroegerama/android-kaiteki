@@ -3,6 +3,7 @@ package com.kroegerama.kaiteki.baseui
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
+import androidx.annotation.CallSuper
 import androidx.annotation.MenuRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewbinding.ViewBinding
@@ -20,6 +21,7 @@ abstract class ViewBindingActivity<VB : ViewBinding>(
         binding.apply(block)
     }
 
+    @CallSuper
     override fun onCreate(savedInstanceState: Bundle?) {
         prepare()
         super.onCreate(savedInstanceState)
@@ -31,18 +33,23 @@ abstract class ViewBindingActivity<VB : ViewBinding>(
         run()
     }
 
+    @CallSuper
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         saveState(outState)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu) =
-        super.onCreateOptionsMenu(menu) || optionsMenu.let {
+    @CallSuper
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        val superResult = super.onCreateOptionsMenu(menu)
+        val ownResult = optionsMenu.let {
             if (it > 0) {
                 menuInflater.inflate(it, menu)
                 true
             } else false
         }
+        return superResult || ownResult
+    }
 
     protected open fun prepare() {}
 

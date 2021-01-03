@@ -1,7 +1,13 @@
 package com.kroegerama.kaiteki.retrofit
 
 import androidx.lifecycle.MutableLiveData
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import retrofit2.Response
 import kotlin.random.Random
 
@@ -14,20 +20,20 @@ suspend fun <T> retrofitCall(
     renewFun: RenewFun<T> = DefaultRenewFun,
     retryCount: Int = 0,
     block: ApiFun<T>
-): RetrofitResponse<T> {
-    lateinit var lastResult: RetrofitResponse<T>
+): RetrofitResource<T> {
+    lateinit var lastResult: RetrofitResource<T>
     repeat(retryCount + 1) { counter ->
         val response = try {
             withContext(Dispatchers.IO) { block.invoke() }
         } catch (c: CancellationException) {
-            return RetrofitResponse.Cancelled
+            return RetrofitResource.Cancelled
         } catch (e: Exception) {
-            return RetrofitResponse.Error(e)
+            return RetrofitResource.Error(e)
         }
         if (response.isSuccessful) {
-            return RetrofitResponse.Success(response.body(), response.raw())
+            return RetrofitResource.Success(response.body(), response.raw())
         } else {
-            lastResult = RetrofitResponse.NoSuccess(response.code(), response.errorBody(), response.raw())
+            lastResult = RetrofitResource.NoSuccess(response.code(), response.errorBody(), response.raw())
 
             val doRenew = counter < retryCount && renewFun(counter, response)
             if (doRenew) {
@@ -41,7 +47,7 @@ suspend fun <T> retrofitCall(
 }
 
 fun <T> CoroutineScope.retrofitListing(
-    resultLiveData: MutableLiveData<RetrofitResponse<T>> = MutableLiveData(),
+    resultLiveData: MutableLiveData<RetrofitResource<T>> = MutableLiveData(),
     stateLiveData: MutableLiveData<ListingState> = MutableLiveData(),
     launchNow: Boolean = true,
     renewFun: RenewFun<T> = DefaultRenewFun,

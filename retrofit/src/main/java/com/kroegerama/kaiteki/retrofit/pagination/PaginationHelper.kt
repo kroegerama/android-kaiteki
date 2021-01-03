@@ -1,9 +1,11 @@
-package com.kroegerama.kaiteki.retrofit
+package com.kroegerama.kaiteki.retrofit.pagination
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.map
 import androidx.lifecycle.switchMap
 import androidx.paging.PagedList
+import com.kroegerama.kaiteki.retrofit.ListingState
+import com.kroegerama.kaiteki.retrofit.RetryableRetrofitResource
 import java.io.Closeable
 
 internal typealias RetryFun = () -> Unit
@@ -29,8 +31,8 @@ class PagedListing<T>(
     val pagedList: LiveData<PagedList<T>>,
     val initialState: LiveData<ListingState>,
     val loadState: LiveData<ListingState>,
-    val initialResponse: LiveData<RetryableRetrofitResponse<List<T>>>,
-    val loadResponse: LiveData<RetryableRetrofitResponse<List<T>>>,
+    val initialResponse: LiveData<RetryableRetrofitResource<List<T>>>,
+    val loadResponse: LiveData<RetryableRetrofitResource<List<T>>>,
     private val refreshFun: () -> Unit,
     private val cancelFun: () -> Unit
 ) : Closeable {

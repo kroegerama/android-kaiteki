@@ -4,37 +4,48 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.IdRes
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityOptionsCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.CoroutineScope
 
 inline fun <reified T : Activity> Fragment.startActivity(
     options: Bundle? = null,
-    block: (Intent.() -> Unit) = {}
-) =
-    startActivity(Intent(requireContext(), T::class.java).apply(block), options)
-
-inline fun <reified T : Activity> Fragment.startActivityForResult(
-    requestCode: Int,
-    options: Bundle? = null,
-    block: (Intent.() -> Unit) = {}
-) =
-    startActivityForResult(Intent(requireContext(), T::class.java).apply(block), requestCode, options)
+    crossinline block: (Intent.() -> Unit) = {}
+) = startActivity(Intent(requireContext(), T::class.java).apply(block), options)
 
 inline fun <reified T : Activity> Context.startActivity(
     options: Bundle? = null,
-    block: (Intent.() -> Unit) = {}
-) =
-    startActivity(Intent(this, T::class.java).apply(block), options)
+    crossinline block: (Intent.() -> Unit) = {}
+) = startActivity(Intent(this, T::class.java).apply(block), options)
 
-inline fun <reified T : Activity> Activity.startActivityForResult(
-    requestCode: Int,
-    options: Bundle? = null,
-    block: (Intent.() -> Unit) = {}
-) =
-    startActivityForResult(Intent(this, T::class.java).apply(block), requestCode, options)
+inline fun Fragment.registerStartActivityForResult(
+    crossinline callback: ActivityResult.() -> Unit
+) = registerForActivityResult(
+    ActivityResultContracts.StartActivityForResult()
+) { callback.invoke(it) }
+
+inline fun AppCompatActivity.registerStartActivityForResult(
+    crossinline callback: ActivityResult.() -> Unit
+) = registerForActivityResult(
+    ActivityResultContracts.StartActivityForResult()
+) { callback.invoke(it) }
+
+inline fun <reified T : Activity> intentOf(
+    context: Context,
+    crossinline block: Intent.() -> Unit = {}
+) = Intent(context, T::class.java).apply(block)
+
+inline fun <reified T : Activity> ActivityResultLauncher<Intent>.launch(
+    context: Context,
+    options: ActivityOptionsCompat? = null,
+    crossinline block: Intent.() -> Unit = {}
+) = launch(intentOf<T>(context, block), options)
 
 fun Intent.clearTop() {
     addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)

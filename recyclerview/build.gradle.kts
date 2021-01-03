@@ -42,6 +42,8 @@ android {
 }
 
 dependencies {
+    implementation(platform(Libs.platform))
+
     implementation(Libs.kotlinStdLib)
 
     implementation(Libs.appcompat)

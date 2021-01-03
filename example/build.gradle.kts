@@ -1,7 +1,6 @@
 plugins {
     id(Plugins.androidApplication)
     id(Plugins.kotlinAndroid)
-    id(Plugins.kotlinAndroidExt)
 }
 
 android {
@@ -36,6 +35,8 @@ android {
 }
 
 dependencies {
+    implementation(platform(Libs.platform))
+
     implementation(Libs.kotlinStdLib)
 
     implementation(Libs.appcompat)
@@ -43,9 +44,10 @@ dependencies {
 
     implementation(Libs.androidxCore)
     implementation(Libs.androidxConstraint)
-    implementation(Libs.androidxLifecycleExt)
+    implementation(Libs.androidxFragment)
     implementation(Libs.androidxLifecycleViewModel)
     implementation(Libs.androidxLifecycleLiveData)
+    implementation(Libs.androidxLifecycleRuntime)
 
     implementation(project(":core"))
     implementation(project(":recyclerview"))

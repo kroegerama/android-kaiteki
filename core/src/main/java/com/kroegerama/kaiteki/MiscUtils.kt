@@ -3,11 +3,8 @@ package com.kroegerama.kaiteki
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.view.KeyEvent
 import android.view.View
-import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
 import kotlin.math.ln
@@ -29,18 +26,6 @@ fun View.requestInputFocus() {
 
 fun Context.isPermissionGranted(permission: String) =
     ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED
-
-fun EditText.onDone(listener: (CharSequence) -> Unit) = setOnEditorActionListener { v, actionId, event ->
-    if (actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_ACTION_NONE
-        || (event.action == KeyEvent.ACTION_DOWN && event.keyCode == KeyEvent.KEYCODE_ENTER)
-    ) {
-        v.closeKeyboard()
-        listener(v.text)
-        return@setOnEditorActionListener true
-    }
-    false
-}
-
 
 fun Long.asHumanReadableBytes(si: Boolean = false): String {
     val unit = if (si) 1000f else 1024f

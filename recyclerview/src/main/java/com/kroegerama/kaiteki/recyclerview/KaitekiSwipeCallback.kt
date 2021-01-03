@@ -36,8 +36,8 @@ class KaitekiSwipeCallback(
 
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
         when (direction) {
-            ItemTouchHelper.START -> swipeToStartItem?.onSwipe?.invoke(viewHolder.adapterPosition)
-            ItemTouchHelper.END -> swipeToEndItem?.onSwipe?.invoke(viewHolder.adapterPosition)
+            ItemTouchHelper.START -> swipeToStartItem?.onSwipe?.invoke(viewHolder.bindingAdapterPosition)
+            ItemTouchHelper.END -> swipeToEndItem?.onSwipe?.invoke(viewHolder.bindingAdapterPosition)
         }
     }
 
@@ -62,7 +62,7 @@ class KaitekiSwipeCallback(
         context: Context,
         @ColorRes colorRes: Int,
         @DrawableRes iconRes: Int,
-        val onSwipe: (position: Int) -> Unit
+        val onSwipe: (bindingAdapterPosition: Int) -> Unit
     ) {
         protected val color = ContextCompat.getColor(context, colorRes)
         protected val icon =

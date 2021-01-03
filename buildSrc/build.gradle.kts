@@ -8,12 +8,10 @@ plugins {
 }
 
 dependencies {
-    val kotlinVersion: String by project
-    val androidGradleVersion: String by project
-    val bintrayVersion: String by project
+    implementation(platform("com.kroegerama:magic-bom:1.0.0"))
 
     implementation(gradleApi())
-    implementation(kotlin("gradle-plugin", kotlinVersion))
-    implementation("com.android.tools.build:gradle:$androidGradleVersion")
-    implementation("com.jfrog.bintray.gradle:gradle-bintray-plugin:$bintrayVersion")
+    implementation(kotlin("gradle-plugin"))
+    implementation("com.android.tools.build:gradle")
+    implementation("com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.5")
 }

@@ -1,6 +1,7 @@
 package com.kroegerama.kaiteki.example
 
 import com.kroegerama.kaiteki.baseui.ViewBindingFragment
+import com.kroegerama.kaiteki.callFirstListener
 import com.kroegerama.kaiteki.example.databinding.FragExampleBinding
 
 class VBFragment : ViewBindingFragment<FragExampleBinding>(
@@ -9,6 +10,11 @@ class VBFragment : ViewBindingFragment<FragExampleBinding>(
 
     override fun FragExampleBinding.setupGUI() {
         btnTest.setOnClickListener { requireActivity().finish() }
+        val callSuccess = callFirstListener<FragListener> { onNotify() }
+    }
+
+    interface FragListener {
+        fun onNotify()
     }
 
     companion object {

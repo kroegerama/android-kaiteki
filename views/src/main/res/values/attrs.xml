@@ -6,4 +6,9 @@
         <attr name="verticalCropBias" format="float" />
     </declare-styleable>
 
+    <declare-styleable name="DrawView">
+        <attr name="drawStrokeColor" format="color" />
+        <attr name="drawStrokeWidth" format="dimension" />
+    </declare-styleable>
+
 </resources>

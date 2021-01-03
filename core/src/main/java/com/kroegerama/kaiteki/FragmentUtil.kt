@@ -8,28 +8,33 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.CoroutineScope
 
-inline fun <reified T> Fragment.notifyListener(block: T.() -> Unit) {
+@Deprecated("use callFirstListener instead", ReplaceWith("callSuccess = callFirstListener<T>(block)"))
+inline fun <reified T> Fragment.notifyListener(crossinline block: T.() -> Unit) {
+    if (!callFirstListener(block)) throw IllegalStateException("No implementation found for ${T::class.java.name}")
+}
+
+inline fun <reified T> Fragment.callFirstListener(crossinline block: T.() -> Unit): Boolean {
     (targetFragment as? T)?.let {
         block(it)
-        return
+        return true
     }
     var parent: Fragment? = parentFragment
     while (parent != null) {
         (parent as? T)?.let {
             block(it)
-            return
+            return true
         }
         parent = parent.parentFragment
     }
     (activity as? T)?.let {
         block(it)
-        return
+        return true
     }
     (context as? T)?.let {
         block(it)
-        return
+        return true
     }
-    throw IllegalStateException("No implementation found for ${T::class.java.name}")
+    return false
 }
 
 fun FragmentManager.removeByTag(tag: String) {

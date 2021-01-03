@@ -46,7 +46,7 @@ class FragmentNavigator<Index>(
         val provider = weakProvider.get() ?: return@synchronized false
 
         val oldIndex = currentIndex
-        if (oldIndex != null && !strategy.accept(oldIndex, newIndex)) return@synchronized false
+        if (oldIndex != null && !strategy.accept(oldIndex, newIndex, forceCreate)) return@synchronized false
 
         val tag = getTagForIndex(newIndex)
         val oldFrag = getCurrentFragment()
@@ -129,7 +129,7 @@ abstract class FragmentStrategy<Index> {
         val tag: String
     )
 
-    abstract fun accept(fromIndex: Index, toIndex: Index): Boolean
+    abstract fun accept(fromIndex: Index, toIndex: Index, forceCreate: Boolean): Boolean
     abstract fun mustCreate(index: Index): Boolean
     abstract fun usePreviousInstance(index: Index, instance: Fragment): Boolean
     abstract fun handleTransaction(
@@ -148,7 +148,7 @@ abstract class FragmentStrategy<Index> {
     open class ReplaceStrategy<Index> : FragmentStrategy<Index>() {
         private val states = HashMap<String, Fragment.SavedState>()
 
-        override fun accept(fromIndex: Index, toIndex: Index) = fromIndex != toIndex
+        override fun accept(fromIndex: Index, toIndex: Index, forceCreate: Boolean) = forceCreate || fromIndex != toIndex
         override fun mustCreate(index: Index) = true
         override fun usePreviousInstance(index: Index, instance: Fragment) = false
 
@@ -200,7 +200,7 @@ abstract class FragmentStrategy<Index> {
     }
 
     open class DetachStrategy<Index> : FragmentStrategy<Index>() {
-        override fun accept(fromIndex: Index, toIndex: Index) = fromIndex != toIndex
+        override fun accept(fromIndex: Index, toIndex: Index, forceCreate: Boolean) = forceCreate || fromIndex != toIndex
         override fun mustCreate(index: Index) = false
         override fun usePreviousInstance(index: Index, instance: Fragment) = true
 
@@ -223,7 +223,7 @@ abstract class FragmentStrategy<Index> {
     }
 
     open class HideStrategy<Index> : FragmentStrategy<Index>() {
-        override fun accept(fromIndex: Index, toIndex: Index) = fromIndex != toIndex
+        override fun accept(fromIndex: Index, toIndex: Index, forceCreate: Boolean) = forceCreate || fromIndex != toIndex
         override fun mustCreate(index: Index) = false
         override fun usePreviousInstance(index: Index, instance: Fragment) = true
 

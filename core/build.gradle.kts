@@ -20,6 +20,7 @@ android {
     }
     buildFeatures {
         buildConfig = false
+        viewBinding = true
     }
 
     defaultConfig {
@@ -35,13 +36,11 @@ android {
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
-
-    buildFeatures {
-        viewBinding = true
-    }
 }
 
 dependencies {
+    implementation(platform(Libs.platform))
+
     implementation(Libs.kotlinStdLib)
     implementation(Libs.coroutines)
 

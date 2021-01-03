@@ -9,7 +9,7 @@ import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.content.res.use
 
 @SuppressLint("Recycle")
-class BiasCropImageView @JvmOverloads constructor(
+open class BiasCropImageView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : AppCompatImageView(context, attrs, defStyleAttr) {
 

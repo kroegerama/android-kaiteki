@@ -1,28 +1,22 @@
 package com.kroegerama.kaiteki.baseui
 
+import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.CallSuper
-import androidx.annotation.MenuRes
-import androidx.annotation.StringRes
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
+import androidx.annotation.StyleRes
+import androidx.fragment.app.DialogFragment
 import androidx.viewbinding.ViewBinding
-import com.kroegerama.kaiteki.FragmentNavigator
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
-abstract class ViewBindingFragment<VB : ViewBinding>(
+abstract class ViewBindingMaterialDialogFragment<VB : ViewBinding>(
     protected val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> VB
-) : Fragment(), FragmentNavigator.BaseFragment {
+) : DialogFragment() {
 
-    @StringRes
-    open val title: Int = 0
-
-    @MenuRes
-    protected open val optionsMenu: Int = 0
+    @StyleRes
+    protected open val overrideThemeResId: Int = 0
 
     private var _binding: VB? = null
 
@@ -38,15 +32,18 @@ abstract class ViewBindingFragment<VB : ViewBinding>(
         super.onCreate(savedInstanceState)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
-        bindingInflater(inflater, container, false).also { _binding = it }.root
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog =
+        MaterialAlertDialogBuilder(requireContext(), overrideThemeResId).apply {
+            val view = bindingInflater(layoutInflater, null, false).also { _binding = it }.root
+            setView(view)
+            setupDialog()
+        }.create()
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? = binding.root
 
     @CallSuper
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if (optionsMenu != 0) {
-            setHasOptionsMenu(true)
-        }
         binding.setupGUI()
         savedInstanceState?.let(::loadState)
         run()
@@ -64,15 +61,9 @@ abstract class ViewBindingFragment<VB : ViewBinding>(
         saveState(outState)
     }
 
-    @CallSuper
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
-        if (optionsMenu != 0) {
-            inflater.inflate(optionsMenu, menu)
-        }
-    }
-
     protected open fun prepare() {}
+
+    protected open fun MaterialAlertDialogBuilder.setupDialog() {}
 
     protected open fun VB.setupGUI() {}
 
@@ -82,9 +73,4 @@ abstract class ViewBindingFragment<VB : ViewBinding>(
 
     protected open fun saveState(outState: Bundle) {}
 
-    override fun handleBackPress(): Boolean {
-        return false
-    }
-
-    override fun decorateTransaction(transaction: FragmentTransaction) {}
 }

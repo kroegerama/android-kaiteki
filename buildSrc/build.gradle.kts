@@ -8,7 +8,7 @@ plugins {
 }
 
 dependencies {
-    implementation(platform("com.kroegerama:magic-bom:1.0.0"))
+    implementation(platform("com.kroegerama:magic-bom:1.0.4"))
 
     implementation(gradleApi())
     implementation(kotlin("gradle-plugin"))

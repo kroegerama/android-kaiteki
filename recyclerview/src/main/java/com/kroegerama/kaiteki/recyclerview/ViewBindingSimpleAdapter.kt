@@ -8,54 +8,35 @@ import androidx.viewbinding.ViewBinding
 
 abstract class ViewBindingBaseAdapter<T, VB : ViewBinding>(
     protected val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> VB,
+    private val items: MutableList<T> = ArrayList(),
     protected val rootClickListener: ((item: T?) -> Unit)? = null
-) : RecyclerView.Adapter<ViewBindingBaseViewHolder<T, VB>>() {
+) : RecyclerView.Adapter<ViewBindingBaseViewHolder<T, VB>>(),
+    MutableList<T> by items {
 
-    private val items = ArrayList<T>()
-
-    fun setItems(newItems: List<T>) {
-        val diff = calculateDiff(items, newItems, ::compareItems)
-        items.clear()
-        items.addAll(newItems)
-        diff.dispatchUpdatesTo(this)
+    fun setItems(newItems: List<T>): Unit = delegateAndDiff {
+        clear()
+        addAll(newItems)
     }
 
-    fun add(element: T) {
-        items.add(element)
-        notifyItemInserted(itemCount - 1)
+    private fun <E> delegateAndDiff(block: MutableList<T>.() -> E): E {
+        val old = ArrayList(items)
+        val result = items.block()
+        calculateDiff(old, items, ::compareItems)
+        return result
     }
 
-    fun add(index: Int, element: T) {
-        items.add(index, element)
-        notifyItemInserted(index)
-    }
+    override fun add(element: T): Boolean = delegateAndDiff { add(element) }
+    override fun remove(element: T): Boolean = delegateAndDiff { remove(element) }
+    override fun addAll(elements: Collection<T>): Boolean = delegateAndDiff { addAll(elements) }
+    override fun addAll(index: Int, elements: Collection<T>): Boolean = delegateAndDiff { addAll(index, elements) }
+    override fun removeAll(elements: Collection<T>): Boolean = delegateAndDiff { removeAll(elements) }
+    override fun retainAll(elements: Collection<T>): Boolean = delegateAndDiff { retainAll(elements) }
+    override fun clear() = delegateAndDiff { clear() }
+    override fun set(index: Int, element: T): T = delegateAndDiff { set(index, element) }
+    override fun add(index: Int, element: T) = delegateAndDiff { add(index, element) }
+    override fun removeAt(index: Int): T = delegateAndDiff { removeAt(index) }
 
-    fun set(index: Int, element: T) {
-        items[index] = element
-        notifyItemChanged(index)
-    }
-
-    fun remove(element: T) {
-        val idx = items.indexOf(element)
-        if (idx >= 0) {
-            items.removeAt(idx)
-            notifyItemRemoved(idx)
-        }
-    }
-
-    fun removeAt(index: Int) {
-        items.removeAt(index)
-        notifyItemRemoved(index)
-    }
-
-    fun clear() {
-        items.clear()
-        notifyDataSetChanged()
-    }
-
-    fun getItems(): List<T> = ArrayList(items)
-
-    abstract fun VB.update(
+    protected abstract fun VB.update(
         viewHolder: ViewBindingBaseViewHolder<T, VB>,
         context: Context,
         viewType: Int,
@@ -95,7 +76,7 @@ abstract class ViewBindingBaseAdapter<T, VB : ViewBinding>(
 }
 
 class ViewBindingBaseViewHolder<T, VB : ViewBinding>(
-    private val binding: VB,
+    val binding: VB,
     private val updater: VB.(viewHolder: ViewBindingBaseViewHolder<T, VB>, item: T?) -> Unit,
     injectListeners: VB.(ViewBindingBaseViewHolder<T, VB>, () -> T?) -> Unit
 ) : RecyclerView.ViewHolder(binding.root) {

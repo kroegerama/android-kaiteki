@@ -21,7 +21,7 @@ abstract class ViewBindingBaseAdapter<T, VB : ViewBinding>(
     private fun <E> delegateAndDiff(block: MutableList<T>.() -> E): E {
         val old = ArrayList(items)
         val result = items.block()
-        calculateDiff(old, items, ::compareItems)
+        calculateDiff(old, items, ::compareItems).dispatchUpdatesTo(this)
         return result
     }
 

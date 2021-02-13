@@ -1,10 +1,10 @@
 # Android Kaiteki
 
-[![Build Status](https://travis-ci.org/kroegerama/android-kaiteki.svg)](https://travis-ci.org/kroegerama/android-kaiteki)
+![Publish](https://github.com/kroegerama/android-kaiteki/workflows/Publish/badge.svg)
 
 | Artifact | Version |
 |:-|:-:|
-| android-kaiteki:core | [ ![Download](https://api.bintray.com/packages/kroegerama/maven/android-kaiteki%3Acore/images/download.svg) ](https://bintray.com/kroegerama/maven/android-kaiteki%3Acore/_latestVersion) |
-| android-kaiteki:recyclerview | [ ![Download](https://api.bintray.com/packages/kroegerama/maven/android-kaiteki%3Arecyclerview/images/download.svg) ](https://bintray.com/kroegerama/maven/android-kaiteki%3Arecyclerview/_latestVersion) |
-| android-kaiteki:retrofit | [ ![Download](https://api.bintray.com/packages/kroegerama/maven/android-kaiteki%3Aretrofit/images/download.svg) ](https://bintray.com/kroegerama/maven/android-kaiteki%3Aretrofit/_latestVersion) |
-| android-kaiteki:views | [ ![Download](https://api.bintray.com/packages/kroegerama/maven/android-kaiteki%3Aviews/images/download.svg) ](https://bintray.com/kroegerama/maven/android-kaiteki%3Aviews/_latestVersion) |
+| android-kaiteki:core | [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.kroegerama.android-kaiteki/core/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.kroegerama.android-kaiteki/core) |
+| android-kaiteki:recyclerview | [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.kroegerama.android-kaiteki/recyclerview/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.kroegerama.android-kaiteki/recyclerview) |
+| android-kaiteki:retrofit | [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.kroegerama.android-kaiteki/retrofit/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.kroegerama.android-kaiteki/retrofit) |
+| android-kaiteki:views | [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.kroegerama.android-kaiteki/views/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.kroegerama.android-kaiteki/views) |

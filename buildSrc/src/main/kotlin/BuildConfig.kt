@@ -1,16 +1,31 @@
 import com.android.build.gradle.BaseExtension
-import com.jfrog.bintray.gradle.BintrayExtension
 import org.gradle.api.Action
 import org.gradle.api.Project
 import org.gradle.api.publish.PublishingExtension
-import org.gradle.api.publish.maven.*
+import org.gradle.api.publish.maven.MavenPom
+import org.gradle.api.publish.maven.MavenPomDeveloperSpec
+import org.gradle.api.publish.maven.MavenPomLicenseSpec
+import org.gradle.api.publish.maven.MavenPomScm
+import org.gradle.api.publish.maven.MavenPublication
 import org.gradle.api.tasks.bundling.Jar
-import org.gradle.kotlin.dsl.*
+import org.gradle.kotlin.dsl.configure
+import org.gradle.kotlin.dsl.create
+import org.gradle.kotlin.dsl.get
+import org.gradle.kotlin.dsl.getByType
+import org.gradle.kotlin.dsl.provideDelegate
+import org.gradle.kotlin.dsl.task
+import org.gradle.kotlin.dsl.the
+import org.gradle.plugins.signing.SigningExtension
 
 @Suppress("UnstableApiUsage")
 object BuildConfig {
 
     fun configurePublish() = Action<Project> {
+        val nexusUsername: String? by this
+        val nexusPassword: String? by this
+        val signingKey: String? by this
+        val signingPassword: String? by this
+
         configure<PublishingExtension> {
             publications {
 
@@ -28,28 +43,24 @@ object BuildConfig {
                     pom(createPomAction())
                 }
             }
+            repositories {
+                maven {
+                    name = "sonatype"
+                    setUrl("https://oss.sonatype.org/service/local/staging/deploy/maven2/")
+
+                    credentials {
+                        username = nexusUsername
+                        password = nexusPassword
+                    }
+                }
+            }
         }
 
-        configure<BintrayExtension> {
-            user = project.findProperty("bintrayUser") as? String
-            key = project.findProperty("bintrayApiKey") as? String
-
-            setPublications("maven")
-
-            pkg(delegateClosureOf<BintrayExtension.PackageConfig> {
-                repo = "maven"
-                userOrg = "kroegerama"
-
-                name = "${rootProject.name}:${project.name}"
-                desc = project.description
-
-                setLicenses(P.pkgLicense)
-                setLabels(*P.projectLabels)
-                vcsUrl = P.projectUrl
-                githubRepo = P.githubRepo
-
-                publicDownloadNumbers = true
-            })
+        configure<SigningExtension> {
+            sign(convention.getByType<PublishingExtension>().publications)
+            if (signingKey != null && signingPassword != null) {
+                useInMemoryPgpKeys(signingKey, signingPassword)
+            }
         }
     }
 

@@ -3,7 +3,7 @@ rootProject.name = "android-kaiteki"
 pluginManagement {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
     }
     resolutionStrategy {
         eachPlugin {

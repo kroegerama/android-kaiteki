@@ -1,56 +1,13 @@
 package com.kroegerama.kaiteki
 
-import android.annotation.TargetApi
-import android.content.Context
-import android.os.Build
 import android.view.View
-import androidx.annotation.DimenRes
-import androidx.annotation.DrawableRes
+import android.view.ViewPropertyAnimator
+import androidx.core.graphics.Insets
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.doOnAttach
 import androidx.core.widget.doOnTextChanged
 import com.google.android.material.textfield.TextInputLayout
-
-val Context.selectableItemBackground
-    @DrawableRes
-    get() =
-        obtainStyledAttributes(intArrayOf(android.R.attr.selectableItemBackground)).run {
-            val backgroundResource = getResourceId(0, 0)
-            recycle()
-            backgroundResource
-        }
-
-val Context.selectableItemBackgroundBorderless
-    @DrawableRes
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    get() =
-        obtainStyledAttributes(intArrayOf(android.R.attr.selectableItemBackgroundBorderless)).run {
-            val backgroundResource = getResourceId(0, 0)
-            recycle()
-            backgroundResource
-        }
-
-val Context.listPreferredItemHeight
-    @DimenRes
-    get() = obtainStyledAttributes(intArrayOf(android.R.attr.listPreferredItemHeight)).run {
-        val sizeRes = getResourceId(0, 0)
-        recycle()
-        sizeRes
-    }
-
-val Context.listPreferredItemHeightSmall
-    @DimenRes
-    get() = obtainStyledAttributes(intArrayOf(android.R.attr.listPreferredItemHeightSmall)).run {
-        val sizeRes = getResourceId(0, 0)
-        recycle()
-        sizeRes
-    }
-
-val Context.listPreferredItemHeightLarge
-    @DimenRes
-    get() = obtainStyledAttributes(intArrayOf(android.R.attr.listPreferredItemHeightLarge)).run {
-        val sizeRes = getResourceId(0, 0)
-        recycle()
-        sizeRes
-    }
 
 fun View.showIf(value: Boolean, goneIfFalse: Boolean = true) {
     visibility = when {
@@ -79,6 +36,28 @@ inline fun <reified T : View> T.onLongClick(crossinline block: T.() -> Boolean) 
         block(this)
     }
 }
+
+fun View.doOnApplyWindowInsets(
+    block: WindowInsetsCompat.(v: View, originalPadding: Insets) -> Unit
+) {
+    val originalPadding = Insets.of(
+        paddingLeft, paddingTop, paddingRight, paddingBottom
+    )
+    ViewCompat.setOnApplyWindowInsetsListener(this) { v, insets ->
+        insets.block(v, originalPadding)
+        insets
+    }
+    doOnAttach {
+        requestApplyInsets()
+    }
+}
+
+fun View.scale(scale: Float) {
+    scaleX = scale
+    scaleY = scale
+}
+
+fun ViewPropertyAnimator.scale(scale: Float): ViewPropertyAnimator = scaleX(scale).scaleY(scale)
 
 fun TextInputLayout.clearErrorOnInput() {
     editText!!.doOnTextChanged { _, _, _, _ -> error = null }

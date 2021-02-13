@@ -3,7 +3,8 @@ object Plugins {
     const val androidLibrary = "com.android.library"
     const val kotlinAndroid = "kotlin-android"
     const val mavenPublish = "maven-publish"
-    const val bintray = "com.jfrog.bintray"
+    const val signing = "signing"
+    const val nexusStaging = "io.codearte.nexus-staging"
 }
 
 object Android {
@@ -13,7 +14,7 @@ object Android {
 }
 
 object Libs {
-    const val platform = "com.kroegerama:magic-bom:1.0.4"
+    const val platform = "com.kroegerama:magic-bom:1.1.0"
 
     const val kotlinStdLib = "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
     const val coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-core"

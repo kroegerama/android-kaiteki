@@ -4,7 +4,7 @@ plugins {
     id(Plugins.androidLibrary)
     id(Plugins.kotlinAndroid)
     id(Plugins.mavenPublish)
-    id(Plugins.bintray)
+    id(Plugins.signing)
 }
 
 android {

@@ -71,6 +71,6 @@ sealed class RetrofitResource<out TSuccess> {
 data class RetryableRetrofitResource<out T>(
     val resource: RetrofitResource<T>,
     private val retryFun: RetryFun?
-) : RetrofitResource<T>() {
+) {
     fun retry() = retryFun?.invoke()
 }

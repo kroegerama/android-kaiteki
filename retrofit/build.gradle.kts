@@ -48,6 +48,11 @@ dependencies {
 
     implementation(Libs.androidxLifecycleLiveData)
     implementation(Libs.androidxPaging)
+
+    implementation(Libs.moshi)
+    implementation(Libs.timber)
+
+    implementation(project(":core"))
 }
 
 afterEvaluate(configurePublish())

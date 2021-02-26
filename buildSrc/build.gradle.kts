@@ -14,7 +14,7 @@ configurations.all {
 }
 
 dependencies {
-    implementation(platform("com.kroegerama:magic-bom:1.1.0"))
+    implementation(platform("com.kroegerama:magic-bom:1.1.1"))
     implementation("io.codearte.gradle.nexus:gradle-nexus-staging-plugin:0.22.0")
 
     implementation(gradleApi())

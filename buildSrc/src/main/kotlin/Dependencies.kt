@@ -14,7 +14,7 @@ object Android {
 }
 
 object Libs {
-    const val platform = "com.kroegerama:magic-bom:1.1.0"
+    const val platform = "com.kroegerama:magic-bom:1.1.1"
 
     const val kotlinStdLib = "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
     const val coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-core"
@@ -38,4 +38,6 @@ object Libs {
     const val leakCanary = "com.squareup.leakcanary:leakcanary-android:2.5"
 
     const val retrofit = "com.squareup.retrofit2:retrofit"
+    const val moshi = "com.squareup.moshi:moshi"
+    const val timber = "com.jakewharton.timber:timber"
 }

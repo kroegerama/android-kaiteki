@@ -1,3 +1,5 @@
+@file:Suppress("DeprecatedCallableAddReplaceWith")
+
 package com.kroegerama.kaiteki.retrofit.pagination
 
 import androidx.lifecycle.LiveData
@@ -10,12 +12,14 @@ import java.io.Closeable
 
 internal typealias RetryFun = () -> Unit
 
+@Deprecated("switch to Paging 3")
 interface PageProvider {
     val firstPage: Int
     fun getNextPage(currentPage: Int, currentSize: Int, requestedSize: Int): Int?
     fun getPreviousPage(currentPage: Int, currentSize: Int, requestedSize: Int): Int?
 }
 
+@Deprecated("switch to Paging 3")
 object DefaultPageProvider : PageProvider {
     override val firstPage = 0
 
@@ -27,7 +31,8 @@ object DefaultPageProvider : PageProvider {
 
 val DefaultPageConfig by lazy { PagedList.Config.Builder().setPageSize(10).setPrefetchDistance(20).build() }
 
-class PagedListing<T>(
+@Deprecated("switch to Paging 3")
+class PagedListing<T : Any>(
     val pagedList: LiveData<PagedList<T>>,
     val initialState: LiveData<ListingState>,
     val loadState: LiveData<ListingState>,
@@ -50,23 +55,38 @@ class PagedListing<T>(
     }
 }
 
-fun <T> LiveData<out PagedListing<T>>.pagedList() = switchMap { it.pagedList }
-fun <T> LiveData<out PagedListing<T>>.initialRunning() = switchMap { it.initialState }.map { it.isRunning }
-fun <T> LiveData<out PagedListing<T>>.loadRunning() = switchMap { it.loadState }.map { it.isRunning }
-fun <T> LiveData<out PagedListing<T>>.initialResult() = switchMap { it.initialResponse }
-fun <T> LiveData<out PagedListing<T>>.loadResult() = switchMap { it.loadResponse }
+
+@Deprecated("switch to Paging 3")
+fun <T : Any> LiveData<out PagedListing<T>>.pagedList() = switchMap { it.pagedList }
+
+@Deprecated("switch to Paging 3")
+fun <T : Any> LiveData<out PagedListing<T>>.initialRunning() = switchMap { it.initialState }.map { it.isRunning }
+
+@Deprecated("switch to Paging 3")
+fun <T : Any> LiveData<out PagedListing<T>>.loadRunning() = switchMap { it.loadState }.map { it.isRunning }
+
+@Deprecated("switch to Paging 3")
+fun <T : Any> LiveData<out PagedListing<T>>.initialResult() = switchMap { it.initialResponse }
+
+@Deprecated("switch to Paging 3")
+fun <T : Any> LiveData<out PagedListing<T>>.loadResult() = switchMap { it.loadResponse }
+
+@Deprecated("switch to Paging 3")
 fun LiveData<out PagedListing<*>>.refresh() {
     value?.refresh()
 }
 
+@Deprecated("switch to Paging 3")
 fun LiveData<out PagedListing<*>>.retryInitial() {
     value?.retryInitial()
 }
 
+@Deprecated("switch to Paging 3")
 fun LiveData<out PagedListing<*>>.retryLoad() {
     value?.retryLoad()
 }
 
+@Deprecated("switch to Paging 3")
 fun LiveData<out PagedListing<*>>.cancel() {
     value?.cancel()
 }

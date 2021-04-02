@@ -10,12 +10,18 @@ import com.kroegerama.kaiteki.retrofit.ListingState
 import com.kroegerama.kaiteki.retrofit.RetrofitResource
 import com.kroegerama.kaiteki.retrofit.RetryableRetrofitResource
 import com.kroegerama.kaiteki.retrofit.retrofitCall
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import retrofit2.Response
 
 private typealias PageApiListFun<T> = suspend (page: Int, size: Int) -> Response<List<T>>
 
-fun <T> CoroutineScope.retrofitPageKeyedListing(
+@Deprecated("switch to Paging 3")
+fun <T : Any> CoroutineScope.retrofitPageKeyedListing(
     config: PagedList.Config = DefaultPageConfig,
     pageProvider: PageProvider = DefaultPageProvider,
     apiFun: PageApiListFun<T>
@@ -37,7 +43,8 @@ fun <T> CoroutineScope.retrofitPageKeyedListing(
     )
 }
 
-class RetrofitPageKeyedDataSourceFactory<T>(
+@Deprecated("switch to Paging 3")
+class RetrofitPageKeyedDataSourceFactory<T : Any>(
     private val scope: CoroutineScope,
     private val parentJob: Job,
     private val apiFun: PageApiListFun<T>,
@@ -53,7 +60,8 @@ class RetrofitPageKeyedDataSourceFactory<T>(
     }
 }
 
-class RetrofitPageKeyedDataSource<T>(
+@Deprecated("switch to Paging 3")
+class RetrofitPageKeyedDataSource<T : Any>(
     private val scope: CoroutineScope,
     private val parentJob: Job,
     private val apiFun: PageApiListFun<T>,

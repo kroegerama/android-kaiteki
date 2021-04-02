@@ -10,14 +10,20 @@ import com.kroegerama.kaiteki.retrofit.ListingState
 import com.kroegerama.kaiteki.retrofit.RetrofitResource
 import com.kroegerama.kaiteki.retrofit.RetryableRetrofitResource
 import com.kroegerama.kaiteki.retrofit.retrofitCall
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import retrofit2.Response
 
 private typealias ItemApiListFun<Key, T> = suspend (key: Key?, size: Int) -> Response<List<T>>
 private typealias KeyProvider<Key, T> = (T) -> Key
 private typealias ShouldLoadFun<Key> = (Key) -> Boolean
 
-fun <Key, T> CoroutineScope.retrofitItemKeyedListing(
+@Deprecated("switch to Paging 3")
+fun <Key : Any, T : Any> CoroutineScope.retrofitItemKeyedListing(
     config: PagedList.Config = DefaultPageConfig,
     keyProvider: KeyProvider<Key, T>,
     shouldLoadBefore: ShouldLoadFun<Key>,
@@ -48,7 +54,8 @@ fun <Key, T> CoroutineScope.retrofitItemKeyedListing(
     )
 }
 
-class RetrofitItemKeyedDataSourceFactory<Key, T>(
+@Deprecated("switch to Paging 3")
+class RetrofitItemKeyedDataSourceFactory<Key : Any, T : Any>(
     private val scope: CoroutineScope,
     private val parentJob: Job,
     private val apiFun: ItemApiListFun<Key, T>,
@@ -73,7 +80,8 @@ class RetrofitItemKeyedDataSourceFactory<Key, T>(
     }
 }
 
-class RetrofitItemKeyedDataSource<Key, T>(
+@Deprecated("switch to Paging 3")
+class RetrofitItemKeyedDataSource<Key : Any, T : Any>(
     private val scope: CoroutineScope,
     private val parentJob: Job,
     private val apiFun: ItemApiListFun<Key, T>,

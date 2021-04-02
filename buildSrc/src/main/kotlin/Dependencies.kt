@@ -4,7 +4,7 @@ object Plugins {
     const val kotlinAndroid = "kotlin-android"
     const val mavenPublish = "maven-publish"
     const val signing = "signing"
-    const val nexusStaging = "io.codearte.nexus-staging"
+    const val nexusPublish = "io.github.gradle-nexus.publish-plugin"
 }
 
 object Android {
@@ -14,7 +14,7 @@ object Android {
 }
 
 object Libs {
-    const val platform = "com.kroegerama:magic-bom:1.1.1"
+    const val platform = "com.kroegerama:magic-bom:1.1.4"
 
     const val kotlinStdLib = "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
     const val coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-core"

@@ -1,6 +1,7 @@
 repositories {
     google()
     mavenCentral()
+    gradlePluginPortal()
 }
 
 plugins {
@@ -14,10 +15,10 @@ configurations.all {
 }
 
 dependencies {
-    implementation(platform("com.kroegerama:magic-bom:1.1.1"))
-    implementation("io.codearte.gradle.nexus:gradle-nexus-staging-plugin:0.22.0")
+    implementation(platform("com.kroegerama:magic-bom:1.1.4"))
 
     implementation(gradleApi())
     implementation(kotlin("gradle-plugin"))
     implementation("com.android.tools.build:gradle")
+    implementation("io.github.gradle-nexus:publish-plugin:1.0.0")
 }

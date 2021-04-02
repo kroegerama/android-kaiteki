@@ -10,7 +10,7 @@ abstract class ViewBindingBaseAdapter<T, VB : ViewBinding>(
     protected val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> VB,
     private val items: MutableList<T> = ArrayList(),
     protected val rootClickListener: ((item: T?) -> Unit)? = null
-) : RecyclerView.Adapter<ViewBindingBaseViewHolder<T, VB>>(),
+) : RecyclerView.Adapter<ViewBindingBaseViewHolder<VB>>(),
     MutableList<T> by items {
 
     fun setItems(newItems: List<T>): Unit = delegateAndDiff {
@@ -37,14 +37,14 @@ abstract class ViewBindingBaseAdapter<T, VB : ViewBinding>(
     override fun removeAt(index: Int): T = delegateAndDiff { removeAt(index) }
 
     protected abstract fun VB.update(
-        viewHolder: ViewBindingBaseViewHolder<T, VB>,
+        viewHolder: ViewBindingBaseViewHolder<VB>,
         context: Context,
         viewType: Int,
         item: T?
     )
 
     open fun VB.injectListeners(
-        viewHolder: ViewBindingBaseViewHolder<T, VB>,
+        viewHolder: ViewBindingBaseViewHolder<VB>,
         viewType: Int,
         currentItem: () -> T?
     ) {
@@ -59,37 +59,21 @@ abstract class ViewBindingBaseAdapter<T, VB : ViewBinding>(
 
     override fun getItemCount() = items.size
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewBindingBaseViewHolder<T, VB> {
-        val binding = bindingInflater(LayoutInflater.from(parent.context), parent, false)
-        return ViewBindingBaseViewHolder(
-            binding,
-            { viewHolder, item -> binding.update(viewHolder, viewHolder.itemView.context, viewType, item) }
-        ) { viewHolder, itemGetter ->
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewBindingBaseViewHolder<VB> {
+        val binding = bindingInflater(LayoutInflater.from(parent.context), parent, false).apply {
             prepare()
-            injectListeners(viewHolder, viewType, itemGetter)
+        }
+        return ViewBindingBaseViewHolder(binding).apply {
+            binding.injectListeners(this, viewType) { getItemAtPosition(bindingAdapterPosition) }
         }
     }
 
-    override fun onBindViewHolder(holder: ViewBindingBaseViewHolder<T, VB>, position: Int) =
-        holder.update(items[position])
-
-}
-
-class ViewBindingBaseViewHolder<T, VB : ViewBinding>(
-    val binding: VB,
-    private val updater: VB.(viewHolder: ViewBindingBaseViewHolder<T, VB>, item: T?) -> Unit,
-    injectListeners: VB.(ViewBindingBaseViewHolder<T, VB>, () -> T?) -> Unit
-) : RecyclerView.ViewHolder(binding.root) {
-
-    private var currentItem: T? = null
-
-    init {
-        binding.injectListeners(this) { currentItem }
-    }
-
-    fun update(item: T) {
-        currentItem = item
-        binding.updater(this, item)
+    override fun onBindViewHolder(holder: ViewBindingBaseViewHolder<VB>, position: Int) {
+        with(holder) {
+            binding.update(this, itemView.context, itemViewType, items[position])
+        }
     }
 
 }
+
+class ViewBindingBaseViewHolder<VB : ViewBinding>(val binding: VB) : RecyclerView.ViewHolder(binding.root)

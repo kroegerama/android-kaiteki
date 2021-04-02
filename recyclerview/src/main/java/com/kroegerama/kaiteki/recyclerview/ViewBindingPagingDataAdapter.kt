@@ -3,19 +3,16 @@ package com.kroegerama.kaiteki.recyclerview
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.paging.PagedListAdapter
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.viewbinding.ViewBinding
 
-@Deprecated("Use ViewBindingPagingDataAdapter instead")
-abstract class ViewBindingPagedAdapter<T : Any, VB : ViewBinding>(
+abstract class ViewBindingPagingDataAdapter<T : Any, VB : ViewBinding>(
     protected val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> VB,
     diffCallback: DiffUtil.ItemCallback<T>,
     @Suppress("MemberVisibilityCanBePrivate")
     protected val rootClickListener: ((item: T?) -> Unit)? = null
-) : PagedListAdapter<T, ViewBindingBaseViewHolder<VB>>(
-    diffCallback
-) {
+) : PagingDataAdapter<T, ViewBindingBaseViewHolder<VB>>(diffCallback) {
 
     abstract fun VB.update(
         viewHolder: ViewBindingBaseViewHolder<VB>,

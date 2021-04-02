@@ -7,7 +7,7 @@ import com.kroegerama.kaiteki.recyclerview.ViewBindingBaseViewHolder
 
 class VBAdapter : ViewBindingBaseAdapter<String, ListItemBinding>(ListItemBinding::inflate) {
     override fun ListItemBinding.update(
-        viewHolder: ViewBindingBaseViewHolder<String, ListItemBinding>,
+        viewHolder: ViewBindingBaseViewHolder<ListItemBinding>,
         context: Context,
         viewType: Int,
         item: String?

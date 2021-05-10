@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.viewbinding.ViewBinding
 
 abstract class ViewBindingPagingDataAdapter<T : Any, VB : ViewBinding>(
+    @Suppress("MemberVisibilityCanBePrivate")
     protected val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> VB,
     diffCallback: DiffUtil.ItemCallback<T>,
     @Suppress("MemberVisibilityCanBePrivate")
@@ -33,13 +34,9 @@ abstract class ViewBindingPagingDataAdapter<T : Any, VB : ViewBinding>(
 
     protected fun getItemAtPosition(position: Int) = getItem(position)
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewBindingBaseViewHolder<VB> {
-        val binding = bindingInflater(LayoutInflater.from(parent.context), parent, false).apply {
-            prepare()
-        }
-        return ViewBindingBaseViewHolder(binding).apply {
-            binding.injectListeners(this, viewType) { getItem(bindingAdapterPosition) }
-        }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewBindingBaseViewHolder.create(parent, bindingInflater).apply {
+        binding.prepare()
+        binding.injectListeners(this, viewType) { getItem(bindingAdapterPosition) }
     }
 
     override fun onBindViewHolder(holder: ViewBindingBaseViewHolder<VB>, position: Int) = with(holder) {

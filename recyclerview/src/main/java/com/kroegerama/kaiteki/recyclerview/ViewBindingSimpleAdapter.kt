@@ -59,13 +59,9 @@ abstract class ViewBindingBaseAdapter<T, VB : ViewBinding>(
 
     override fun getItemCount() = items.size
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewBindingBaseViewHolder<VB> {
-        val binding = bindingInflater(LayoutInflater.from(parent.context), parent, false).apply {
-            prepare()
-        }
-        return ViewBindingBaseViewHolder(binding).apply {
-            binding.injectListeners(this, viewType) { getItemAtPosition(bindingAdapterPosition) }
-        }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewBindingBaseViewHolder.create(parent, bindingInflater).apply {
+        binding.prepare()
+        binding.injectListeners(this, viewType) { getItemAtPosition(bindingAdapterPosition) }
     }
 
     override fun onBindViewHolder(holder: ViewBindingBaseViewHolder<VB>, position: Int) {
@@ -76,4 +72,17 @@ abstract class ViewBindingBaseAdapter<T, VB : ViewBinding>(
 
 }
 
-class ViewBindingBaseViewHolder<VB : ViewBinding>(val binding: VB) : RecyclerView.ViewHolder(binding.root)
+open class ViewBindingBaseViewHolder<VB : ViewBinding>(val binding: VB) : RecyclerView.ViewHolder(binding.root) {
+    companion object {
+        fun <VB : ViewBinding> create(
+            parent: ViewGroup,
+            bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> VB
+        ): ViewBindingBaseViewHolder<VB> = ViewBindingBaseViewHolder(
+            bindingInflater.invoke(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
+        )
+    }
+}

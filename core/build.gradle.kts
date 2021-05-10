@@ -47,6 +47,7 @@ dependencies {
     implementation(Libs.appcompat)
     implementation(Libs.material)
 
+    implementation(Libs.androidxBrowser)
     implementation(Libs.androidxCore)
     implementation(Libs.androidxPreference)
     implementation(Libs.androidxRecycler)
@@ -56,6 +57,7 @@ dependencies {
     implementation(Libs.androidxLifecycleRuntime)
     implementation(Libs.androidxLifecycleViewModel)
     implementation(Libs.androidxNavigationCommon)
+    implementation(Libs.androidxNavigationFragment)
 }
 
 afterEvaluate(configurePublish())

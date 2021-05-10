@@ -8,11 +8,6 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.CoroutineScope
 
-@Deprecated("use callFirstListener instead", ReplaceWith("callSuccess = callFirstListener<T>(block)"))
-inline fun <reified T> Fragment.notifyListener(crossinline block: T.() -> Unit) {
-    if (!callFirstListener(block)) throw IllegalStateException("No implementation found for ${T::class.java.name}")
-}
-
 inline fun <reified T> Fragment.callFirstListener(crossinline block: T.() -> Unit): Boolean {
     (targetFragment as? T)?.let {
         block(it)

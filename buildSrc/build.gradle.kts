@@ -9,10 +9,10 @@ plugins {
 }
 
 dependencies {
-    implementation(platform("com.kroegerama:magic-bom:1.1.7"))
+    implementation(platform("com.kroegerama:magic-bom:1.1.10"))
 
     implementation(gradleApi())
     implementation(kotlin("gradle-plugin"))
-    implementation("com.android.tools.build:gradle")
-    implementation("io.github.gradle-nexus:publish-plugin:1.0.0")
+    implementation("com.android.tools.build:gradle:7.1.0-alpha02")
+    implementation("io.github.gradle-nexus:publish-plugin:1.1.0")
 }

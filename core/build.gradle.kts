@@ -8,7 +8,7 @@ plugins {
 }
 
 android {
-    compileSdkVersion(Android.compileSdk)
+    compileSdk = Android.compileSdk
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
@@ -16,7 +16,7 @@ android {
     }
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_1_8.toString()
-        freeCompilerArgs = listOf("-module-name", "android.kaiteki.core")
+        moduleName = "android.kaiteki.core"
     }
     buildFeatures {
         buildConfig = false
@@ -24,10 +24,8 @@ android {
     }
 
     defaultConfig {
-        minSdkVersion(Android.minSdk)
-        targetSdkVersion(Android.targetSdk)
-        versionCode = 1
-        versionName = P.projectVersion
+        minSdk = Android.minSdk
+        targetSdk = Android.targetSdk
     }
 
     buildTypes {

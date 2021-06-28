@@ -14,7 +14,7 @@ object Android {
 }
 
 object Libs {
-    const val platform = "com.kroegerama:magic-bom:1.1.7"
+    const val platform = "com.kroegerama:magic-bom:1.1.10"
 
     const val kotlinStdLib = "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
     const val coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-core"

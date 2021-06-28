@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    compileSdkVersion(Android.compileSdk)
+    compileSdk = Android.compileSdk
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
@@ -16,8 +16,8 @@ android {
 
     defaultConfig {
         applicationId = "com.kroegerama.kaiteki.example"
-        minSdkVersion(Android.minSdk)
-        targetSdkVersion(Android.targetSdk)
+        minSdk = Android.minSdk
+        targetSdk = Android.targetSdk
         versionCode = 1
         versionName = "1.0"
     }

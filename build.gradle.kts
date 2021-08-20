@@ -1,19 +1,10 @@
 import io.github.gradlenexus.publishplugin.NexusPublishExtension
 
 plugins {
-    id(Plugins.androidLibrary) apply false
-    id(Plugins.androidApplication) apply false
-    kotlin("android") apply false
     id(Plugins.nexusPublish)
 }
 
 allprojects {
-    repositories {
-        google()
-        mavenCentral()
-        gradlePluginPortal()
-    }
-
     version = P.projectVersion
     group = P.projectGroupId
     description = P.projectDescription

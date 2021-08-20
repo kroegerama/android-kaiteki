@@ -1,10 +1,10 @@
 import BuildConfig.configurePublish
 
 plugins {
-    id(Plugins.androidLibrary)
-    id(Plugins.kotlinAndroid)
-    id(Plugins.mavenPublish)
-    id(Plugins.signing)
+    com.android.library
+    `kotlin-android`
+    `maven-publish`
+    signing
 }
 
 android {
@@ -37,25 +37,20 @@ android {
 }
 
 dependencies {
-    implementation(platform(Libs.platform))
+    implementation(lib.kotlin)
+    implementation(lib.coroutines.android)
 
-    implementation(Libs.kotlinStdLib)
-    implementation(Libs.coroutines)
+    implementation(androidx.bundles.lifecycle)
+    implementation(androidx.bundles.navigation)
 
-    implementation(Libs.appcompat)
-    implementation(Libs.material)
+    implementation(lib.material)
 
-    implementation(Libs.androidxBrowser)
-    implementation(Libs.androidxCore)
-    implementation(Libs.androidxPreference)
-    implementation(Libs.androidxRecycler)
-    implementation(Libs.androidxExif)
-    implementation(Libs.androidxLifecycleCommon)
-    implementation(Libs.androidxLifecycleLiveData)
-    implementation(Libs.androidxLifecycleRuntime)
-    implementation(Libs.androidxLifecycleViewModel)
-    implementation(Libs.androidxNavigationCommon)
-    implementation(Libs.androidxNavigationFragment)
+    implementation(androidx.appcompat)
+    implementation(androidx.browser)
+    implementation(androidx.core)
+    implementation(androidx.preference)
+    implementation(androidx.recyclerview)
+    implementation(androidx.exifinterface)
 }
 
 afterEvaluate(configurePublish())

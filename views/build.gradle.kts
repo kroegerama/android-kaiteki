@@ -1,10 +1,10 @@
 import BuildConfig.configurePublish
 
 plugins {
-    id(Plugins.androidLibrary)
-    id(Plugins.kotlinAndroid)
-    id(Plugins.mavenPublish)
-    id(Plugins.signing)
+    com.android.library
+    `kotlin-android`
+    `maven-publish`
+    signing
 }
 
 android {
@@ -36,13 +36,11 @@ android {
 }
 
 dependencies {
-    implementation(platform(Libs.platform))
+    implementation(lib.kotlin)
+    implementation(lib.coroutines.android)
 
-    implementation(Libs.kotlinStdLib)
-    implementation(Libs.coroutines)
-
-    implementation(Libs.appcompat)
-    implementation(Libs.androidxCore)
+    implementation(androidx.appcompat)
+    implementation(androidx.core)
 }
 
 afterEvaluate(configurePublish())

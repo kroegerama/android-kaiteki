@@ -1,10 +1,10 @@
 import BuildConfig.configurePublish
 
 plugins {
-    id(Plugins.androidLibrary)
-    id(Plugins.kotlinAndroid)
-    id(Plugins.mavenPublish)
-    id(Plugins.signing)
+    com.android.library
+    `kotlin-android`
+    `maven-publish`
+    signing
 }
 
 android {
@@ -40,15 +40,13 @@ android {
 }
 
 dependencies {
-    implementation(platform(Libs.platform))
+    implementation(lib.kotlin)
 
-    implementation(Libs.kotlinStdLib)
+    implementation(androidx.paging.runtime)
 
-    implementation(Libs.appcompat)
-
-    implementation(Libs.androidxCore)
-    implementation(Libs.androidxRecycler)
-    implementation(Libs.androidxPaging)
+    implementation(androidx.appcompat)
+    implementation(androidx.core)
+    implementation(androidx.recyclerview)
 //    implementation(Libs.androidxViewBinding)
 }
 

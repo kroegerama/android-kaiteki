@@ -1,15 +1,22 @@
+enableFeaturePreview("VERSION_CATALOGS")
+
 rootProject.name = "android-kaiteki"
 
-pluginManagement {
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
-        google()
         mavenCentral()
+        google()
     }
-    resolutionStrategy {
-        eachPlugin {
-            if (requested.id.namespace == "com.android") {
-                useModule("com.android.tools.build:gradle:${requested.version}")
-            }
+
+    versionCatalogs {
+        val magicCatalogs: String by settings
+
+        create("lib") {
+            from("com.kroegerama.magic-catalogs:base:$magicCatalogs")
+        }
+        create("androidx") {
+            from("com.kroegerama.magic-catalogs:androidx:$magicCatalogs")
         }
     }
 }

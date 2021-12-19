@@ -1,5 +1,5 @@
 object P {
-    const val projectVersion = "4.1.3"
+    const val projectVersion = "4.1.4"
 
     const val projectGroupId = "com.kroegerama.android-kaiteki"
 

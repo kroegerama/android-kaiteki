@@ -2,10 +2,19 @@ package com.kroegerama.kaiteki.recyclerview
 
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 
+@Deprecated(
+    "Use ViewBindingListAdapter() instead.",
+    ReplaceWith(
+        "ViewBindingListAdapter<T, VB>(\nbindingInflater,\ncreateDefaultDiffCallback { TODO() },\nrootClickListener\n)",
+        "com.kroegerama.kaiteki.recyclerview.ViewBindingListAdapter",
+        "com.kroegerama.kaiteki.recyclerview.createDefaultDiffCallback"
+    )
+)
 abstract class ViewBindingBaseAdapter<T, VB : ViewBinding>(
     protected val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> VB,
     private val items: MutableList<T> = ArrayList(),

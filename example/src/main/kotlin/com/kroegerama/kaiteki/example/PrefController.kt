@@ -1,13 +1,8 @@
 package com.kroegerama.kaiteki.example
 
 import android.content.SharedPreferences
-import com.kroegerama.kaiteki.booleanField
-import com.kroegerama.kaiteki.enumField
-import com.kroegerama.kaiteki.floatField
-import com.kroegerama.kaiteki.intField
-import com.kroegerama.kaiteki.longField
-import com.kroegerama.kaiteki.stringField
-import com.kroegerama.kaiteki.stringSetField
+import com.kroegerama.kaiteki.*
+import com.kroegerama.kaiteki.architecture.intFlow
 
 class PrefController(
     private val preferences: SharedPreferences
@@ -21,13 +16,17 @@ class PrefController(
     var myNewFloat by preferences.floatField()
     var myNewEnum by preferences.enumField<TestEnum>()
 
+    val intFlow = preferences.intFlow("myNewIntKey")
+
     enum class TestEnum {
         One, Two, Three;
-        val next get() = when(this){
-            One -> Two
-            Two -> Three
-            Three -> One
-        }
+
+        val next
+            get() = when (this) {
+                One -> Two
+                Two -> Three
+                Three -> One
+            }
     }
 
 }

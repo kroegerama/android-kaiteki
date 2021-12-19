@@ -36,7 +36,13 @@ sealed class RetrofitResource<out TSuccess> {
 
     fun getOrNull(): TSuccess? = (this as? Success)?.data
 
-    fun <E> map(mapFun: (TSuccess?) -> E?) = if (this is Success) Success(mapFun(data), rawResponse) else this
+    fun <E> map(mapFun: (TSuccess?) -> E?): RetrofitResource<E> = when (this) {
+        Cancelled -> Cancelled
+        is Error -> Error(throwable)
+        is NoSuccess -> NoSuccess(code,errorBody,rawResponse)
+        is Running -> Running(currentRetry)
+        is Success -> Success(mapFun(data), rawResponse)
+    }
 
     inline fun success(block: Success<TSuccess>.() -> Unit): RetrofitResource<TSuccess> {
         if (this is Success) {

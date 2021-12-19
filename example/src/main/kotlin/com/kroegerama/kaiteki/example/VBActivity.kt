@@ -3,8 +3,11 @@ package com.kroegerama.kaiteki.example
 import android.content.Context
 import android.util.Log
 import androidx.activity.viewModels
+import com.kroegerama.kaiteki.architecture.collectLatestWhenStarted
 import com.kroegerama.kaiteki.baseui.ViewBindingActivity
 import com.kroegerama.kaiteki.example.databinding.AcMainBinding
+import com.kroegerama.kaiteki.launchWhenStarted
+import kotlinx.coroutines.delay
 
 class VBActivity : ViewBindingActivity<AcMainBinding>(AcMainBinding::inflate) {
 
@@ -30,6 +33,21 @@ class VBActivity : ViewBindingActivity<AcMainBinding>(AcMainBinding::inflate) {
         Log.d(TAG, prefs.myNewBoolean.toString())
         Log.d(TAG, prefs.myNewFloat.toString())
         Log.d(TAG, prefs.myNewEnum.toString())
+
+        prefs.intFlow.collectLatestWhenStarted(this@VBActivity) {
+            Log.d(TAG, ">>> $it")
+        }
+
+        launchWhenStarted {
+            delay(1000)
+            prefs.myNewInt = 10
+            delay(500)
+            prefs.myNewInt = 0
+            delay(500)
+            prefs.myNewInt = null
+            delay(500)
+            prefs.myNewInt = 5
+        }
     }
 
     companion object {

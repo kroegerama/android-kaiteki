@@ -4,7 +4,7 @@ object Plugins {
 
 object Android {
     const val minSdk = 21
-    const val compileSdk = 30
+    const val compileSdk = 31
     const val targetSdk = 30
 }
 

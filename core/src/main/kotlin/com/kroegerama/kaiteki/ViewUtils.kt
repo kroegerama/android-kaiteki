@@ -6,6 +6,7 @@ import androidx.core.graphics.Insets
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.doOnAttach
+import androidx.core.view.updatePadding
 import androidx.core.widget.doOnTextChanged
 import com.google.android.material.textfield.TextInputLayout
 
@@ -50,6 +51,19 @@ fun View.doOnApplyWindowInsets(
     doOnAttach {
         requestApplyInsets()
     }
+}
+
+fun View.addWindowInsetsPadding(
+    top: Boolean = false,
+    bottom: Boolean = false,
+    block: ((v: View, originalPadding: Insets) -> Unit)? = null
+) = doOnApplyWindowInsets { v, originalPadding ->
+    val systemBars = getInsets(WindowInsetsCompat.Type.systemBars())
+    v.updatePadding(
+        top = originalPadding.top + (systemBars.top.takeIf { top } ?: 0),
+        bottom = originalPadding.bottom + (systemBars.bottom.takeIf { bottom } ?: 0)
+    )
+    block?.invoke(v, originalPadding)
 }
 
 fun View.scale(scale: Float) {

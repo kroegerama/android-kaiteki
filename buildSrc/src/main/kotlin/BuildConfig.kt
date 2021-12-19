@@ -1,20 +1,11 @@
 import com.android.build.gradle.BaseExtension
+import com.android.build.gradle.api.AndroidSourceDirectorySet
 import org.gradle.api.Action
 import org.gradle.api.Project
 import org.gradle.api.publish.PublishingExtension
-import org.gradle.api.publish.maven.MavenPom
-import org.gradle.api.publish.maven.MavenPomDeveloperSpec
-import org.gradle.api.publish.maven.MavenPomLicenseSpec
-import org.gradle.api.publish.maven.MavenPomScm
-import org.gradle.api.publish.maven.MavenPublication
+import org.gradle.api.publish.maven.*
 import org.gradle.api.tasks.bundling.Jar
-import org.gradle.kotlin.dsl.configure
-import org.gradle.kotlin.dsl.create
-import org.gradle.kotlin.dsl.get
-import org.gradle.kotlin.dsl.getByType
-import org.gradle.kotlin.dsl.provideDelegate
-import org.gradle.kotlin.dsl.task
-import org.gradle.kotlin.dsl.the
+import org.gradle.kotlin.dsl.*
 import org.gradle.plugins.signing.SigningExtension
 
 @Suppress("UnstableApiUsage")
@@ -32,10 +23,11 @@ object BuildConfig {
                 create<MavenPublication>("maven") {
                     val sourcesJar = project.task<Jar>("sourcesJar") {
                         archiveClassifier.set("sources")
+
                         project.the<BaseExtension>().sourceSets.forEach {
                             from(it.java.srcDirs)
+                            from((it.kotlin as AndroidSourceDirectorySet).srcDirs)
                         }
-//                        from(project.the<BaseExtension>().sourceSets["main"].java.srcDirs)
                     }
                     from(components["release"])
 
@@ -46,7 +38,7 @@ object BuildConfig {
             repositories {
                 maven {
                     name = "sonatype"
-                    setUrl("https://oss.sonatype.org/service/local/staging/deploy/maven2/")
+                    setUrl("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
 
                     credentials {
                         username = nexusUsername
@@ -57,7 +49,7 @@ object BuildConfig {
         }
 
         configure<SigningExtension> {
-            sign(convention.getByType<PublishingExtension>().publications)
+            sign(extensions.getByType<PublishingExtension>().publications)
             if (signingKey != null && signingPassword != null) {
                 useInMemoryPgpKeys(signingKey, signingPassword)
             }

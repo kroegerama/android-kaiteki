@@ -28,22 +28,17 @@ private class PreferencesLiveData<T>(
     }
 }
 
-fun SharedPreferences.intLiveData(key: String, defValue: Int): LiveData<Int> {
-    return PreferencesLiveData(this, key, defValue, ::getInt)
-}
+fun SharedPreferences.intLiveData(key: String, defValue: Int): LiveData<Int> =
+    PreferencesLiveData(this, key, defValue, ::getInt)
 
-fun SharedPreferences.longLiveData(key: String, defValue: Long): LiveData<Long> {
-    return PreferencesLiveData(this, key, defValue, ::getLong)
-}
+fun SharedPreferences.longLiveData(key: String, defValue: Long): LiveData<Long> =
+    PreferencesLiveData(this, key, defValue, ::getLong)
 
-fun SharedPreferences.floatLiveData(key: String, defValue: Float): LiveData<Float> {
-    return PreferencesLiveData(this, key, defValue, ::getFloat)
-}
+fun SharedPreferences.floatLiveData(key: String, defValue: Float): LiveData<Float> =
+    PreferencesLiveData(this, key, defValue, ::getFloat)
 
-fun SharedPreferences.booleanLiveData(key: String, defValue: Boolean): LiveData<Boolean> {
-    return PreferencesLiveData(this, key, defValue, ::getBoolean)
-}
+fun SharedPreferences.booleanLiveData(key: String, defValue: Boolean): LiveData<Boolean> =
+    PreferencesLiveData(this, key, defValue, ::getBoolean)
 
-fun SharedPreferences.stringLiveData(key: String, defValue: String): LiveData<String> {
-    return PreferencesLiveData(this, key, defValue) { k, dV -> getString(k, dV) ?: dV }
-}
+fun SharedPreferences.stringLiveData(key: String, defValue: String): LiveData<String> =
+    PreferencesLiveData(this, key, defValue) { k, dV -> getString(k, dV) ?: dV }

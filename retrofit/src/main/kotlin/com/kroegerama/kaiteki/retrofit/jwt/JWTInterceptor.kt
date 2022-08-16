@@ -20,7 +20,7 @@ class JWTInterceptor<T>(
         suspend fun getCurrentToken(): T?
         suspend fun getNewToken(tokenSet: T): retrofit2.Response<T>
         suspend fun onNewToken(newToken: T)
-        suspend fun onRefreshFailure()
+        suspend fun onRefreshFailure(refreshError: RefreshError)
     }
 
     private val lock = ConditionVariable(true)
@@ -33,12 +33,16 @@ class JWTInterceptor<T>(
         return jwt.isExpired.also { Timber.d("Token expired: $it") }
     }
 
-    private fun refreshToken(): Boolean = runBlocking {
-        val currentToken = callbacks.getCurrentToken() ?: return@runBlocking false
+    private fun refreshToken(): RefreshError? = runBlocking {
+        val currentToken: T = callbacks.getCurrentToken() ?: return@runBlocking RefreshError.Failure(IllegalStateException("Current Token is null."))
         val refreshResponse = retrofitCall(retryCount = 3) { callbacks.getNewToken(currentToken) }
-        val newToken = refreshResponse.getOrNull() ?: return@runBlocking false
+        val newToken = refreshResponse.noSuccess {
+            return@runBlocking RefreshError.NoSuccess(code)
+        }.error {
+            return@runBlocking RefreshError.Failure(throwable)
+        }.getOrNull() ?: return@runBlocking RefreshError.Failure(IllegalStateException("Got null response."))
         callbacks.onNewToken(newToken)
-        true
+        null
     }
 
     override fun intercept(chain: Interceptor.Chain): Response {
@@ -49,9 +53,10 @@ class JWTInterceptor<T>(
         if (isRefreshing.compareAndSet(false, true)) {
             Timber.d("close lock...")
             lock.close()
-            if (!refreshToken()) {
+            val refreshError = refreshToken()
+            if (refreshError != null) {
                 runBlocking {
-                    callbacks.onRefreshFailure()
+                    callbacks.onRefreshFailure(refreshError)
                 }
             }
             Timber.d("open lock...")
@@ -64,13 +69,20 @@ class JWTInterceptor<T>(
             if (!opened) {
                 // timeout while refreshing token in another thread...
                 Timber.d("timeout... force token refresh...")
-                if (!refreshToken()) {
+                val refreshError = refreshToken()
+                if (refreshError != null) {
                     runBlocking {
-                        callbacks.onRefreshFailure()
+                        callbacks.onRefreshFailure(refreshError)
                     }
                 }
             }
         }
         return chain.proceed(request)
     }
+
+    sealed class RefreshError {
+        data class NoSuccess(val code: Int) : RefreshError()
+        data class Failure(val t: Throwable) : RefreshError()
+    }
+
 }

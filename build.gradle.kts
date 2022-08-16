@@ -15,6 +15,10 @@ val clean by tasks.creating(Delete::class) {
     delete(rootProject.buildDir)
 }
 
+tasks.wrapper {
+    distributionType = Wrapper.DistributionType.ALL
+}
+
 configure<NexusPublishExtension> {
     val nexusStagingProfileId: String? by project
     val nexusUsername: String? by project

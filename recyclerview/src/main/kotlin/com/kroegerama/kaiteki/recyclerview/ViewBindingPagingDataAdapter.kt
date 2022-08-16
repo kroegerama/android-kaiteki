@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 
 abstract class ViewBindingPagingDataAdapter<T : Any, VB : ViewBinding>(
@@ -42,5 +43,7 @@ abstract class ViewBindingPagingDataAdapter<T : Any, VB : ViewBinding>(
     override fun onBindViewHolder(holder: ViewBindingBaseViewHolder<VB>, position: Int) = with(holder) {
         binding.update(this, itemView.context, itemViewType, getItem(position))
     }
+
+    protected fun RecyclerView.ViewHolder.getCurrentItem(): T? = getItem(bindingAdapterPosition)
 
 }

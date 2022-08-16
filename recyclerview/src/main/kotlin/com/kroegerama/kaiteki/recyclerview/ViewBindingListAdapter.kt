@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 
 abstract class ViewBindingListAdapter<T, VB : ViewBinding>(
@@ -38,5 +39,7 @@ abstract class ViewBindingListAdapter<T, VB : ViewBinding>(
     override fun onBindViewHolder(holder: ViewBindingBaseViewHolder<VB>, position: Int) = with(holder) {
         binding.update(this, itemView.context, itemViewType, getItem(position))
     }
+
+    protected fun RecyclerView.ViewHolder.getCurrentItem(): T? = getItem(bindingAdapterPosition)
 
 }

@@ -2,9 +2,88 @@ package com.kroegerama.kaiteki
 
 import android.content.SharedPreferences
 import androidx.core.content.edit
+import kotlin.properties.PropertyDelegateProvider
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 
+fun SharedPreferences.field(fallback: Long, keyNullable: String? = null) = PreferencesDelegateProvider(
+    prefs = this,
+    key = keyNullable,
+    fallback = fallback,
+    getter = { key -> getLong(key, fallback) },
+    setter = { key, value -> putLong(key, value) }
+)
+
+fun SharedPreferences.field(fallback: Int, keyNullable: String? = null) = PreferencesDelegateProvider(
+    prefs = this,
+    key = keyNullable,
+    fallback = fallback,
+    getter = { key -> getInt(key, fallback) },
+    setter = { key, value -> putInt(key, value) }
+)
+
+fun SharedPreferences.field(fallback: String, keyNullable: String? = null) = PreferencesDelegateProvider(
+    prefs = this,
+    key = keyNullable,
+    fallback = fallback,
+    getter = { key -> getString(key, fallback) ?: fallback },
+    setter = { key, value -> putString(key, value) }
+)
+
+fun SharedPreferences.field(fallback: Set<String>, keyNullable: String? = null) = PreferencesDelegateProvider(
+    prefs = this,
+    key = keyNullable,
+    fallback = fallback,
+    getter = { key -> getStringSet(key, fallback) },
+    setter = { key, value -> putStringSet(key, value) }
+)
+
+fun SharedPreferences.field(fallback: Boolean, keyNullable: String? = null) = PreferencesDelegateProvider(
+    prefs = this,
+    key = keyNullable,
+    fallback = fallback,
+    getter = { key -> getBoolean(key, fallback) },
+    setter = { key, value -> putBoolean(key, value) }
+)
+
+fun SharedPreferences.field(fallback: Float, keyNullable: String? = null) = PreferencesDelegateProvider(
+    prefs = this,
+    key = keyNullable,
+    fallback = fallback,
+    getter = { key -> getFloat(key, fallback) },
+    setter = { key, value -> putFloat(key, value) }
+)
+
+inline fun <reified T : Enum<T>> SharedPreferences.field(fallback: T, keyNullable: String? = null) = PreferencesDelegateProvider(
+    prefs = this,
+    key = keyNullable,
+    fallback = fallback,
+    getter = { key -> getInt(key, -1).let { if (it == -1) fallback else enumValues<T>()[it] } },
+    setter = { key, value -> putInt(key, value.ordinal) }
+)
+
+class PreferencesDelegateProvider<T>(
+    private val prefs: SharedPreferences,
+    private val key: String?,
+    private val fallback: T,
+    private val getter: SharedPreferences.(String) -> T,
+    private val setter: SharedPreferences.Editor.(String, T) -> Unit
+) : PropertyDelegateProvider<Any?, ReadWriteProperty<Any?, T>> {
+
+    override operator fun provideDelegate(thisRef: Any?, property: KProperty<*>) = object : ReadWriteProperty<Any?, T> {
+        private val actualKey = key ?: "${property.name}Key"
+        override fun getValue(thisRef: Any?, property: KProperty<*>): T = if (prefs.contains(actualKey)) prefs.getter(actualKey) else fallback
+        override fun setValue(thisRef: Any?, property: KProperty<*>, value: T) {
+            prefs.edit {
+                if (value == null) {
+                    remove(actualKey)
+                } else {
+                    setter(actualKey, value)
+                }
+            }
+        }
+    }
+}
 
 fun SharedPreferences.longField(key: String? = null): ReadWriteProperty<Any, Long?> =
     field(key, { k, v -> putLong(k, v) }, { k -> getLong(k, 0) }).map { this }
@@ -24,34 +103,13 @@ fun SharedPreferences.booleanField(key: String? = null): ReadWriteProperty<Any, 
 fun SharedPreferences.floatField(key: String? = null): ReadWriteProperty<Any, Float?> =
     field(key, { k, v -> putFloat(k, v) }, { k -> getFloat(k, 0f) }).map { this }
 
-inline fun <reified T : Enum<*>> SharedPreferences.enumField(key: String? = null): ReadWriteProperty<Any, T?> =
+inline fun <reified T : Enum<T>> SharedPreferences.enumField(key: String? = null): ReadWriteProperty<Any, T?> =
     field<T>(
         key,
         { k, v -> putInt(k, v.ordinal) },
         { k -> getInt(k, -1).let { ord -> if (ord == -1) null else enumValues<T>()[ord] } }
     ).map { this }
 
-private class MappedDelegate<In, Out, T>(
-    private val source: ReadWriteProperty<In, T>,
-    private val postWrite: ((Out, In) -> Unit)? = null,
-    private val mapper: (Out) -> In
-) : ReadWriteProperty<Out, T> {
-
-    override fun getValue(thisRef: Out, property: KProperty<*>): T =
-        source.getValue(mapper(thisRef), property)
-
-    override fun setValue(thisRef: Out, property: KProperty<*>, value: T) {
-        val mapped = mapper(thisRef)
-        source.setValue(mapped, property, value)
-        postWrite?.invoke(thisRef, mapped)
-    }
-}
-
-fun <In, Out, T> ReadWriteProperty<In, T>.map(
-    postWrite: ((Out, In) -> Unit)? = null,
-    mapper: (Out) -> In
-): ReadWriteProperty<Out, T> =
-    MappedDelegate(source = this, postWrite = postWrite, mapper = mapper)
 
 @PublishedApi
 internal fun getKey(customKey: String?, property: KProperty<*>) = customKey ?: "${property.name}Key"

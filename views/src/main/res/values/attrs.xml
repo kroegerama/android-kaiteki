@@ -11,4 +11,12 @@
         <attr name="drawStrokeWidth" format="dimension" />
     </declare-styleable>
 
+    <declare-styleable name="SwipeToDeleteView">
+        <attr name="swipeToDeleteText" format="string" />
+        <attr name="deleteActionText" format="string" />
+        <attr name="swipeThumbBackground" format="reference" />
+        <attr name="swipeThumbIcon" format="reference" />
+        <attr name="labelTextColor" format="color" />
+    </declare-styleable>
+
 </resources>

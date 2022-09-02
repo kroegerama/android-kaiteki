@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/swipeToDelete"
+    android:layout_width="match_parent"
+    android:layout_height="48dp"
+    app:layoutDescription="@xml/swipe_delete_scene"
+    tools:background="#ccc"
+    tools:layout_gravity="center_vertical"
+    tools:showPaths="true">
+
+    <Space
+        android:id="@+id/touchRegion"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="4dp" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tvSwipeToDelete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?textAppearanceLabelMedium"
+        android:textSize="13sp"
+        tools:text="Swipe to delete"
+        tools:textColor="#333" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tvDeleteAction"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?textAppearanceLabelMedium"
+        android:textSize="13sp"
+        tools:text="Deleting…"
+        tools:textColor="#333" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/btnSwipe"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:outlineProvider="background"
+        android:scaleType="centerInside"
+        tools:background="#333"
+        tools:srcCompat="@android:drawable/ic_delete" />
+
+</androidx.constraintlayout.motion.widget.MotionLayout>

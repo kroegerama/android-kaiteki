@@ -20,6 +20,7 @@ android {
     }
     buildFeatures {
         buildConfig = false
+        viewBinding = true
     }
 
     defaultConfig {
@@ -41,6 +42,12 @@ dependencies {
 
     implementation(androidx.appcompat)
     implementation(androidx.core)
+
+    implementation(androidx.constraintlayout)
+
+    implementation(lib.material)
+
+    implementation(project(":core"))
 }
 
 afterEvaluate(configurePublish())

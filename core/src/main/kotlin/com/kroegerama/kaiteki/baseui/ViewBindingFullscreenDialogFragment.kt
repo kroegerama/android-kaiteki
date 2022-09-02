@@ -19,7 +19,7 @@ abstract class ViewBindingFullscreenDialogFragment<VB : ViewBinding>(
 
     protected lateinit var binding: VB
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog = ComponentDialog(requireContext(), R.style.ThemeOverlay_Kaiteki_Material3_FullscreenDialog)
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog = ComponentDialog(requireContext(), themeResId)
 
     override fun getDialog(): ComponentDialog? {
         return super.getDialog() as? ComponentDialog
@@ -49,6 +49,7 @@ abstract class ViewBindingFullscreenDialogFragment<VB : ViewBinding>(
         }
     }
 
+    protected open val themeResId: Int = R.style.ThemeOverlay_Kaiteki_Material3_FullscreenDialog
     protected open fun VB.setupGUI() {}
     protected open val decorFitsSystemWindows = true
 }

@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.net.Uri
 import androidx.browser.customtabs.CustomTabColorSchemeParams
 import androidx.browser.customtabs.CustomTabsIntent
+import com.google.android.material.R
 import com.google.android.material.color.MaterialColors
 
 fun Context.openCustomChromeTab(
@@ -13,8 +14,20 @@ fun Context.openCustomChromeTab(
     block: CustomTabsIntent.Builder.() -> Unit = {
         setDefaultColorSchemeParams(
             CustomTabColorSchemeParams.Builder()
-                .setToolbarColor(MaterialColors.getColor(this@openCustomChromeTab, R.attr.colorPrimary, Color.WHITE))
-                .setSecondaryToolbarColor(MaterialColors.getColor(this@openCustomChromeTab, R.attr.colorPrimaryVariant, Color.WHITE))
+                .setToolbarColor(
+                    MaterialColors.getColor(
+                        this@openCustomChromeTab,
+                        R.attr.colorPrimary,
+                        Color.WHITE
+                    )
+                )
+                .setSecondaryToolbarColor(
+                    MaterialColors.getColor(
+                        this@openCustomChromeTab,
+                        R.attr.colorPrimaryVariant,
+                        Color.WHITE
+                    )
+                )
                 .build()
         )
     }

@@ -1,5 +1,6 @@
 package com.kroegerama.kaiteki
 
+import android.text.Editable
 import android.view.KeyEvent
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
@@ -26,3 +27,5 @@ fun EditText.onImeActionGo(listener: (CharSequence) -> Unit) = onImeAction(Edito
 var EditText.string: String
     get() = text?.toString().orEmpty()
     set(value) = setText(value)
+
+val Editable?.string get() = this?.toString()

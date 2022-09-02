@@ -51,6 +51,8 @@ dependencies {
     implementation(androidx.preference)
     implementation(androidx.recyclerview)
     implementation(androidx.exifinterface)
+
+    implementation(lib.coil)
 }
 
 afterEvaluate(configurePublish())

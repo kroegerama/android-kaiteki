@@ -1,10 +1,12 @@
 package com.kroegerama.kaiteki
 
-import android.annotation.TargetApi
 import android.content.Context
-import android.os.Build
+import android.graphics.Color
+import androidx.annotation.AttrRes
+import androidx.annotation.ColorInt
 import androidx.annotation.DimenRes
 import androidx.annotation.DrawableRes
+import com.google.android.material.color.MaterialColors
 
 val Context.selectableItemBackground
     @DrawableRes
@@ -17,7 +19,6 @@ val Context.selectableItemBackground
 
 val Context.selectableItemBackgroundBorderless
     @DrawableRes
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     get() =
         obtainStyledAttributes(intArrayOf(android.R.attr.selectableItemBackgroundBorderless)).run {
             val backgroundResource = getResourceId(0, 0)
@@ -48,3 +49,7 @@ val Context.listPreferredItemHeightLarge
         recycle()
         sizeRes
     }
+
+@ColorInt
+fun Context.getThemeColor(@AttrRes attrRes: Int, @ColorInt fallback: Int = Color.MAGENTA): Int =
+    MaterialColors.getColor(this, attrRes, fallback)

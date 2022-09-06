@@ -23,12 +23,11 @@ data class UiError(
 
 inline fun <T> MutableStateFlow<UiState<T>>.updateUiState(block: UiStateContext<T>.() -> Unit) {
     update { currentValue ->
-        UiStateContext(currentValue.creator, currentValue).apply(block).build()
+        UiStateContext(currentValue).apply(block).build()
     }
 }
 
 class UiStateContext<T>(
-    private val creator: () -> T,
     uiState: UiState<T>
 ) {
 
@@ -60,7 +59,7 @@ class UiStateContext<T>(
     }
 
     @PublishedApi
-    internal fun build() = UiState(creator, isLoading, errors)
+    internal fun build() = UiState({ state }, isLoading, errors)
 }
 
 fun <T> Fragment.consumeState(

@@ -1,5 +1,6 @@
 package com.kroegerama.kaiteki
 
+import android.os.Build
 import android.view.View
 import androidx.core.view.doOnLayout
 import androidx.core.view.doOnPreDraw
@@ -10,6 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
+import java.io.Serializable
 
 inline fun <reified T> Fragment.callFirstListener(crossinline block: T.() -> Unit): Boolean {
     (targetFragment as? T)?.let {
@@ -61,3 +63,15 @@ fun Fragment.launchWhenViewResumed(block: suspend CoroutineScope.() -> Unit) = v
 fun <T> Fragment.collectLatestWithViewLifecycle(flow: Flow<T>, action: suspend (value: T) -> Unit) = launchWhenViewCreated {
     flow.flowWithLifecycle(viewLifecycleOwner.lifecycle).collectLatest(action)
 }
+
+inline fun <reified T : Serializable?> Fragment.argument(key: String, defaultValue: T): Lazy<T> = lazy {
+    requireArguments().run {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            getSerializable(key, T::class.java) ?: defaultValue
+        } else {
+            (getSerializable(key) as? T) ?: defaultValue
+        }
+    }
+}
+
+inline fun <reified T : Serializable?> Fragment.argument(key: String) = argument<T?>(key, null)

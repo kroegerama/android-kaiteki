@@ -2,19 +2,33 @@ package com.kroegerama.kaiteki.recyclerview.layout
 
 import android.content.Context
 import android.content.res.Resources
+import android.util.AttributeSet
 import android.util.TypedValue
 import androidx.annotation.DimenRes
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.kroegerama.kaiteki.recyclerview.R
 import kotlin.math.max
 
-class AutofitLayoutManager(
-    context: Context,
-    @DimenRes colWidthRes: Int,
-    @RecyclerView.Orientation orientation: Int = RecyclerView.VERTICAL,
-    reverseLayout: Boolean = false
-) : GridLayoutManager(context, 1, orientation, reverseLayout) {
+class AutofitLayoutManager : GridLayoutManager {
+
+    constructor(
+        context: Context,
+        @DimenRes colWidthRes: Int,
+        @RecyclerView.Orientation orientation: Int = RecyclerView.VERTICAL,
+        reverseLayout: Boolean = false
+    ) : super(context, 1, orientation, reverseLayout) {
+        val width = context.resources.getDimensionPixelSize(colWidthRes)
+        colWidth = if (width <= 0) MIN_WIDTH else width
+    }
+
+    @JvmOverloads
+    constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0, defStyleRes: Int = 0) : super(context, 1) {
+        context.obtainStyledAttributes(intArrayOf(R.attr.autofitLayoutManagerColWidth)).use { arr ->
+            colWidth = arr.getDimensionPixelSize(0, MIN_WIDTH).coerceAtLeast(MIN_WIDTH)
+        }
+    }
 
     private var colWidth: Int = 0
         set(value) {
@@ -23,11 +37,6 @@ class AutofitLayoutManager(
                 colWidthChanged = true
             }
         }
-
-    init {
-        val width = context.resources.getDimensionPixelSize(colWidthRes)
-        colWidth = if (width <= 0) MIN_WIDTH else width
-    }
 
     private var colWidthChanged: Boolean = false
 

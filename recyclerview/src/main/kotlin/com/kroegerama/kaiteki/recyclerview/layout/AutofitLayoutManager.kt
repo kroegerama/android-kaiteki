@@ -23,11 +23,15 @@ class AutofitLayoutManager : GridLayoutManager {
         colWidth = if (width <= 0) MIN_WIDTH else width
     }
 
-    @JvmOverloads
-    constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0, defStyleRes: Int = 0) : super(context, 1) {
-        context.obtainStyledAttributes(intArrayOf(R.attr.autofitLayoutManagerColWidth)).use { arr ->
-            colWidth = arr.getDimensionPixelSize(0, MIN_WIDTH).coerceAtLeast(MIN_WIDTH)
-        }
+    constructor(
+        context: Context,
+        attrs: AttributeSet? = null,
+        defStyleAttr: Int = 0,
+        defStyleRes: Int = 0
+    ) : super(context, 1) {
+        val arr = context.obtainStyledAttributes(intArrayOf(R.attr.autofitLayoutManagerColWidth))
+        colWidth = arr.getDimensionPixelSize(0, MIN_WIDTH).coerceAtLeast(MIN_WIDTH)
+        arr.recycle()
     }
 
     private var colWidth: Int = 0

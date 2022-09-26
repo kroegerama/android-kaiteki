@@ -3,6 +3,7 @@ package com.kroegerama.kaiteki.retrofit
 import com.kroegerama.kaiteki.retrofit.pagination.RetryFun
 import okhttp3.Response
 import okhttp3.ResponseBody
+import kotlin.Error
 
 sealed class RetrofitResource<out TSuccess> {
 
@@ -36,10 +37,10 @@ sealed class RetrofitResource<out TSuccess> {
 
     fun getOrNull(): TSuccess? = (this as? Success)?.data
 
-    fun <E> map(mapFun: (TSuccess?) -> E?): RetrofitResource<E> = when (this) {
+    inline fun <E> map(mapFun: (TSuccess?) -> E?): RetrofitResource<E> = when (this) {
         Cancelled -> Cancelled
         is Error -> Error(throwable)
-        is NoSuccess -> NoSuccess(code,errorBody,rawResponse)
+        is NoSuccess -> NoSuccess(code, errorBody, rawResponse)
         is Running -> Running(currentRetry)
         is Success -> Success(mapFun(data), rawResponse)
     }

@@ -53,7 +53,7 @@ fun <T, R> Call<T>.map(mapFunc: (T?) -> R?): Call<R> {
     }
 }
 
-fun <T, R> Response<T>.map(mapFunc: (T?) -> R?): Response<R> = if (isSuccessful) {
+inline fun <T, R> Response<T>.map(mapFunc: (T?) -> R?): Response<R> = if (isSuccessful) {
     Response.success(code(), mapFunc(body()))
 } else {
     Response.error(errorBody()!!, raw())

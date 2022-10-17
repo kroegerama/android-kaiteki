@@ -2,17 +2,18 @@ package com.kroegerama.kaiteki.baseui
 
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.CallSuper
-import androidx.annotation.MenuRes
 import androidx.annotation.StringRes
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
+import androidx.lifecycle.Lifecycle
 import androidx.viewbinding.ViewBinding
 import com.kroegerama.kaiteki.FragmentNavigator
+import com.kroegerama.kaiteki.MenuProviderOwner
+import com.kroegerama.kaiteki.findMenuHost
 
 abstract class ViewBindingFragment<VB : ViewBinding>(
     protected val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> VB
@@ -20,9 +21,6 @@ abstract class ViewBindingFragment<VB : ViewBinding>(
 
     @StringRes
     open val title: Int = 0
-
-    @MenuRes
-    protected open val optionsMenu: Int = 0
 
     private var _binding: VB? = null
 
@@ -44,8 +42,10 @@ abstract class ViewBindingFragment<VB : ViewBinding>(
     @CallSuper
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if (optionsMenu != 0) {
-            setHasOptionsMenu(true)
+
+        when (this) {
+            is MenuProviderOwner -> findMenuHost()?.addMenuProvider(menuProvider, viewLifecycleOwner, Lifecycle.State.STARTED)
+            is MenuProvider -> findMenuHost()?.addMenuProvider(this, viewLifecycleOwner, Lifecycle.State.STARTED)
         }
         binding.setupGUI()
         savedInstanceState?.let(::loadState)
@@ -62,14 +62,6 @@ abstract class ViewBindingFragment<VB : ViewBinding>(
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         saveState(outState)
-    }
-
-    @CallSuper
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
-        if (optionsMenu != 0) {
-            inflater.inflate(optionsMenu, menu)
-        }
     }
 
     protected open fun prepare() {}

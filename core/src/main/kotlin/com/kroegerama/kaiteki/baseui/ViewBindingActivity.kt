@@ -2,18 +2,16 @@ package com.kroegerama.kaiteki.baseui
 
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.Menu
 import androidx.annotation.CallSuper
-import androidx.annotation.MenuRes
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.MenuProvider
+import androidx.lifecycle.Lifecycle
 import androidx.viewbinding.ViewBinding
+import com.kroegerama.kaiteki.MenuProviderOwner
 
 abstract class ViewBindingActivity<VB : ViewBinding>(
     protected val bindingInflater: (LayoutInflater) -> VB
 ) : AppCompatActivity() {
-
-    @MenuRes
-    protected open val optionsMenu: Int = 0
 
     protected val binding by lazy { bindingInflater(layoutInflater) }
 
@@ -27,6 +25,11 @@ abstract class ViewBindingActivity<VB : ViewBinding>(
         super.onCreate(savedInstanceState)
 
         setContentView(binding.root)
+
+        when (this) {
+            is MenuProviderOwner -> addMenuProvider(menuProvider, this, Lifecycle.State.STARTED)
+            is MenuProvider -> addMenuProvider(this, this, Lifecycle.State.STARTED)
+        }
         binding.setupGUI()
 
         savedInstanceState?.let(::loadState)
@@ -37,18 +40,6 @@ abstract class ViewBindingActivity<VB : ViewBinding>(
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         saveState(outState)
-    }
-
-    @CallSuper
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        val superResult = super.onCreateOptionsMenu(menu)
-        val ownResult = optionsMenu.let {
-            if (it > 0) {
-                menuInflater.inflate(it, menu)
-                true
-            } else false
-        }
-        return superResult || ownResult
     }
 
     protected open fun prepare() {}

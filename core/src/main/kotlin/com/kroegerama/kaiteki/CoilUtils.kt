@@ -5,7 +5,11 @@ import android.graphics.drawable.Animatable
 import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.view.View
+import android.widget.ImageView
 import androidx.annotation.RequiresApi
+import coil.ImageLoader
+import coil.imageLoader
+import coil.load
 import coil.request.ImageRequest
 import com.google.android.material.R
 import com.google.android.material.progressindicator.BaseProgressIndicator
@@ -45,4 +49,15 @@ fun ImageRequest.Builder.progress(view: View): ImageRequest.Builder {
         onCancel = { hide() },
         onSuccess = { _, _ -> hide() }
     )
+}
+
+inline fun ImageView.loadWithProgress(
+    data: Any?,
+    imageLoader: ImageLoader = context.imageLoader,
+    builder: ImageRequest.Builder.() -> Unit = {}
+) = load(data, imageLoader) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        progress(this@loadWithProgress)
+    }
+    apply(builder)
 }

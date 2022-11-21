@@ -3,7 +3,9 @@ package com.kroegerama.kaiteki.retrofit.jwt
 import android.os.ConditionVariable
 import com.kroegerama.kaiteki.retrofit.retrofitCall
 import com.kroegerama.kaiteki.tryOrNull
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import okhttp3.Interceptor
 import okhttp3.Request
 import okhttp3.Response
@@ -27,21 +29,27 @@ class JWTInterceptor<T>(
     private val isRefreshing = AtomicBoolean(false)
 
     private fun isExpired(): Boolean {
-        val token = runBlocking { callbacks.getCurrentToken()?.let(callbacks::getJWT) } ?: return false.also { Timber.d("Token is null") }
+        val token = runBlocking(Dispatchers.Default) {
+            callbacks.getCurrentToken()?.let(callbacks::getJWT)
+        } ?: return false.also { Timber.d("Token is null") }
         val jwt = tryOrNull { JWT(token) } ?: return false.also { Timber.d("Token cannot be parsed") }
         jwt.expiresAt?.let { Timber.d("Token expires $it") }
         return jwt.isExpired.also { Timber.d("Token expired: $it") }
     }
 
-    private fun refreshToken(): RefreshError? = runBlocking {
+    private fun refreshToken(): RefreshError? = runBlocking(Dispatchers.Default) {
         val currentToken: T = callbacks.getCurrentToken() ?: return@runBlocking RefreshError.Failure(IllegalStateException("Current Token is null."))
-        val refreshResponse = retrofitCall(retryCount = 3) { callbacks.getNewToken(currentToken) }
+        val refreshResponse = retrofitCall(retryCount = 3) {
+            callbacks.getNewToken(currentToken)
+        }
         val newToken = refreshResponse.noSuccess {
             return@runBlocking RefreshError.NoSuccess(code)
         }.error {
             return@runBlocking RefreshError.Failure(throwable)
         }.getOrNull() ?: return@runBlocking RefreshError.Failure(IllegalStateException("Got null response."))
-        callbacks.onNewToken(newToken)
+        withContext(Dispatchers.Main) {
+            callbacks.onNewToken(newToken)
+        }
         null
     }
 
@@ -55,7 +63,7 @@ class JWTInterceptor<T>(
             lock.close()
             val refreshError = refreshToken()
             if (refreshError != null) {
-                runBlocking {
+                runBlocking(Dispatchers.Main) {
                     callbacks.onRefreshFailure(refreshError)
                 }
             }
@@ -71,7 +79,7 @@ class JWTInterceptor<T>(
                 Timber.d("timeout... force token refresh...")
                 val refreshError = refreshToken()
                 if (refreshError != null) {
-                    runBlocking {
+                    runBlocking(Dispatchers.Main) {
                         callbacks.onRefreshFailure(refreshError)
                     }
                 }

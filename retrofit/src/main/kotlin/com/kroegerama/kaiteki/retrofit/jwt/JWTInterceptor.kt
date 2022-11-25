@@ -1,87 +1,88 @@
 package com.kroegerama.kaiteki.retrofit.jwt
 
-import android.os.ConditionVariable
-import com.kroegerama.kaiteki.retrofit.retrofitCall
 import com.kroegerama.kaiteki.tryOrNull
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import okhttp3.Interceptor
 import okhttp3.Request
 import okhttp3.Response
-import timber.log.Timber
+import retrofit2.Call
 import java.util.concurrent.atomic.AtomicBoolean
 
 class JWTInterceptor<T>(
     private val callbacks: Callbacks<T>
 ) : Interceptor {
 
+    override fun intercept(chain: Interceptor.Chain): Response = runBlocking {
+        interceptSuspending(chain)
+    }
+
     interface Callbacks<T> {
         fun getJWT(tokenSet: T): String?
         fun needsToken(request: Request): Boolean
         suspend fun getCurrentToken(): T?
-        suspend fun getNewToken(tokenSet: T): retrofit2.Response<T>
         suspend fun onNewToken(newToken: T)
         suspend fun onRefreshFailure(refreshError: RefreshError)
+        fun createNewTokenCall(tokenSet: T): Call<T>
     }
 
-    private val lock = ConditionVariable(true)
+    private val mutex = Mutex(locked = false)
     private val isRefreshing = AtomicBoolean(false)
 
-    private fun isExpired(): Boolean {
-        val token = runBlocking(Dispatchers.Default) {
-            callbacks.getCurrentToken()?.let(callbacks::getJWT)
-        } ?: return false.also { Timber.d("Token is null") }
-        val jwt = tryOrNull { JWT(token) } ?: return false.also { Timber.d("Token cannot be parsed") }
-        jwt.expiresAt?.let { Timber.d("Token expires $it") }
-        return jwt.isExpired.also { Timber.d("Token expired: $it") }
+    private suspend fun getJWT(tokenSet: T): String? = withContext(Dispatchers.Main) { callbacks.getJWT(tokenSet) }
+    private suspend fun needsToken(request: Request): Boolean = withContext(Dispatchers.Main) { callbacks.needsToken(request) }
+    private suspend fun getCurrentToken(): T? = withContext(Dispatchers.Main) { callbacks.getCurrentToken() }
+    private suspend fun onNewToken(newToken: T) = withContext(Dispatchers.Main) { callbacks.onNewToken(newToken) }
+    private suspend fun onRefreshFailure(refreshError: RefreshError) = withContext(Dispatchers.Main) { callbacks.onRefreshFailure(refreshError) }
+    private suspend fun getNewToken(tokenSet: T): retrofit2.Response<T> =
+        withContext(Dispatchers.IO) { callbacks.createNewTokenCall(tokenSet).execute() }
+
+    private suspend fun isExpired(): Boolean {
+        val token = getCurrentToken()?.let { getJWT(it) } ?: return false
+        val jwt = tryOrNull { JWT(token) } ?: return false
+        return jwt.isExpired
     }
 
-    private fun refreshToken(): RefreshError? = runBlocking(Dispatchers.Default) {
-        val currentToken: T = callbacks.getCurrentToken() ?: return@runBlocking RefreshError.Failure(IllegalStateException("Current Token is null."))
-        val refreshResponse = retrofitCall(retryCount = 3) {
-            callbacks.getNewToken(currentToken)
+    private suspend fun refreshToken(): RefreshError? {
+        val currentToken: T = getCurrentToken() ?: return RefreshError.Failure(IllegalStateException("Current Token is null."))
+        val refreshResponse = runCatching {
+            getNewToken(currentToken)
+        }.onFailure {
+            if (it is CancellationException) throw it
+        }.getOrElse {
+            return RefreshError.Failure(it)
         }
-        val newToken = refreshResponse.noSuccess {
-            return@runBlocking RefreshError.NoSuccess(code)
-        }.error {
-            return@runBlocking RefreshError.Failure(throwable)
-        }.getOrNull() ?: return@runBlocking RefreshError.Failure(IllegalStateException("Got null response."))
-        withContext(Dispatchers.Main) {
-            callbacks.onNewToken(newToken)
+        if (!refreshResponse.isSuccessful) {
+            return RefreshError.NoSuccess(refreshResponse.code())
         }
-        null
+        val newToken = refreshResponse.body() ?: return RefreshError.Failure(IllegalStateException("Got null response."))
+        onNewToken(newToken)
+        return null
     }
 
-    override fun intercept(chain: Interceptor.Chain): Response {
+    private suspend fun interceptSuspending(chain: Interceptor.Chain): Response {
         val request = chain.request()
-        if (!callbacks.needsToken(request)) return chain.proceed(request)
+        if (!needsToken(request)) return chain.proceed(request)
         if (!isExpired()) return chain.proceed(request)
 
         if (isRefreshing.compareAndSet(false, true)) {
-            Timber.d("close lock...")
-            lock.close()
-            val refreshError = refreshToken()
-            if (refreshError != null) {
-                runBlocking(Dispatchers.Main) {
-                    callbacks.onRefreshFailure(refreshError)
-                }
-            }
-            Timber.d("open lock...")
-            lock.open()
-            isRefreshing.set(false)
-        } else {
-            Timber.d("wait for open...")
-            val opened = lock.block(2000)
-            Timber.d("opened $opened")
-            if (!opened) {
-                // timeout while refreshing token in another thread...
-                Timber.d("timeout... force token refresh...")
+            mutex.withLock {
                 val refreshError = refreshToken()
                 if (refreshError != null) {
-                    runBlocking(Dispatchers.Main) {
-                        callbacks.onRefreshFailure(refreshError)
-                    }
+                    onRefreshFailure(refreshError)
+                }
+            }
+            isRefreshing.set(false)
+        } else {
+            val timedOut = withTimeoutOrNull(2000) {
+                mutex.withLock { }
+            } == null
+            if (timedOut) {
+                // timeout while refreshing token in another thread...
+                val refreshError = refreshToken()
+                if (refreshError != null) {
+                    onRefreshFailure(refreshError)
                 }
             }
         }

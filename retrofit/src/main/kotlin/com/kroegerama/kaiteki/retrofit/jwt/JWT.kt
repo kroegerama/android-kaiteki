@@ -1,14 +1,9 @@
 package com.kroegerama.kaiteki.retrofit.jwt
 
 import android.util.Base64
-import com.squareup.moshi.JsonAdapter
-import com.squareup.moshi.JsonDataException
-import com.squareup.moshi.JsonReader
-import com.squareup.moshi.JsonWriter
-import com.squareup.moshi.Moshi
-import com.squareup.moshi.Types
+import com.squareup.moshi.*
 import java.nio.charset.Charset
-import java.util.Date
+import java.util.*
 
 class JWT(
     val token: String
@@ -41,7 +36,7 @@ class JWT(
         get() {
             val now = Date().time / 1000
             val expValid = payload.exp.let { exp ->
-                exp == null || now <= exp
+                exp == null || now <= exp - EXP_SAFETY_SEC
             }
             val iatValid = payload.iat.let { iat ->
                 iat == null || now >= iat - IAT_LENIENCE_SEC
@@ -52,6 +47,7 @@ class JWT(
     override fun toString() = token
 
     companion object {
+        const val EXP_SAFETY_SEC = 60
         const val IAT_LENIENCE_SEC = 60
 
         private val moshi by lazy {

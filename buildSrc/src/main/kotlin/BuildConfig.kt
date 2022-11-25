@@ -56,7 +56,7 @@ object BuildConfig {
         }
     }
 
-    private fun createPomAction() = Action<MavenPom> {
+    fun createPomAction() = Action<MavenPom> {
         name.set(P.projectName)
         description.set(P.projectDescription)
         url.set(P.projectUrl)

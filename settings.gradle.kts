@@ -25,5 +25,6 @@ include(":core")
 include(":retrofit")
 include(":recyclerview")
 include(":views")
+include(":lint")
 
 include(":example")

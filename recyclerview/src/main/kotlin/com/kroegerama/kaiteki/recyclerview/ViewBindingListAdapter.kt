@@ -33,13 +33,14 @@ abstract class ViewBindingListAdapter<T, VB : ViewBinding>(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewBindingBaseViewHolder.create(parent, bindingInflater).apply {
         binding.prepare()
-        binding.injectListeners(this, viewType) { getItem(bindingAdapterPosition) }
+        binding.injectListeners(this, viewType) { getCurrentItem() }
     }
 
     override fun onBindViewHolder(holder: ViewBindingBaseViewHolder<VB>, position: Int) = with(holder) {
         binding.update(this, itemView.context, itemViewType, getItem(position))
     }
 
-    protected fun RecyclerView.ViewHolder.getCurrentItem(): T? = getItem(bindingAdapterPosition)
+    protected fun RecyclerView.ViewHolder.getCurrentItem(): T? =
+        bindingAdapterPosition.takeUnless { it == RecyclerView.NO_POSITION }?.let(::getItem)
 
 }

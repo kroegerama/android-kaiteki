@@ -35,9 +35,10 @@ class KaitekiSwipeCallback(
     ) = false
 
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+        val position = viewHolder.bindingAdapterPosition.takeUnless { it == RecyclerView.NO_POSITION } ?: return
         when (direction) {
-            ItemTouchHelper.START -> swipeToStartItem?.onSwipe?.invoke(viewHolder.bindingAdapterPosition)
-            ItemTouchHelper.END -> swipeToEndItem?.onSwipe?.invoke(viewHolder.bindingAdapterPosition)
+            ItemTouchHelper.START -> swipeToStartItem?.onSwipe?.invoke(position)
+            ItemTouchHelper.END -> swipeToEndItem?.onSwipe?.invoke(position)
         }
     }
 

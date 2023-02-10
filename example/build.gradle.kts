@@ -29,9 +29,17 @@ android {
         }
     }
 
+    lintOptions {
+//        enable("HiltViewModelAnnotation")
+    }
+
     buildFeatures {
         viewBinding = true
     }
+}
+
+kotlin {
+    jvmToolchain(11)
 }
 
 dependencies {
@@ -50,5 +58,6 @@ dependencies {
     implementation(project(":retrofit"))
     implementation(project(":views"))
 
-    debugImplementation(Libs.leakCanary)
+//    debugImplementation(Libs.leakCanary)
+    lintChecks(project(":lint"))
 }

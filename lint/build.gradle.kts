@@ -10,14 +10,19 @@ plugins {
 
 dependencies {
     compileOnly(lib.kotlin)
-    compileOnly("com.android.tools.lint:lint-api:30.3.1")
+    compileOnly("com.android.tools.lint:lint-api:30.4.1")
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_11
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(11))
+    }
     withSourcesJar()
     withJavadocJar()
+}
+
+kotlin {
+    jvmToolchain(11)
 }
 
 val nexusUsername: String? by project

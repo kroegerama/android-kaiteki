@@ -9,6 +9,7 @@ plugins {
 
 android {
     compileSdk = Android.compileSdk
+    namespace = "com.kroegerama.kaiteki.views"
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
@@ -25,7 +26,6 @@ android {
 
     defaultConfig {
         minSdk = Android.minSdk
-        targetSdk = Android.targetSdk
     }
 
     buildTypes {
@@ -34,6 +34,10 @@ android {
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
+}
+
+kotlin {
+    jvmToolchain(11)
 }
 
 dependencies {

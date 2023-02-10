@@ -9,6 +9,7 @@ plugins {
 
 android {
     compileSdk = Android.compileSdk
+    namespace = "com.kroegerama.kaiteki.recyclerview"
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
@@ -24,7 +25,6 @@ android {
 
     defaultConfig {
         minSdk = Android.minSdk
-        targetSdk = Android.targetSdk
     }
 
     buildTypes {
@@ -37,6 +37,10 @@ android {
     buildFeatures {
         viewBinding = true
     }
+}
+
+kotlin {
+    jvmToolchain(11)
 }
 
 dependencies {

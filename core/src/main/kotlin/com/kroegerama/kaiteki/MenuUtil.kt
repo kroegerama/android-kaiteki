@@ -3,6 +3,7 @@ package com.kroegerama.kaiteki
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import androidx.activity.ComponentActivity
 import androidx.annotation.IdRes
 import androidx.annotation.MenuRes
 import androidx.core.view.MenuHost
@@ -17,7 +18,14 @@ fun Fragment.findMenuHost(): MenuHost? {
     return when (this) {
         is MenuHostOwner -> menuHost
         is MenuHost -> this
-        else -> parentFragment?.findMenuHost() ?: activity
+        else -> parentFragment?.findMenuHost() ?: activity?.findMenuHost()
+    }
+}
+
+fun ComponentActivity.findMenuHost(): MenuHost {
+    return when (this) {
+        is MenuHostOwner -> menuHost
+        else -> this
     }
 }
 

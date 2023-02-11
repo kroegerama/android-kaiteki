@@ -20,9 +20,10 @@ import kotlin.math.abs
 import kotlin.math.round
 
 
-class KaitekiSwipeCallback(
+open class KaitekiSwipeCallback(
     private val swipeToStartItem: SwipeItem? = null,
-    private val swipeToEndItem: SwipeItem? = null
+    private val swipeToEndItem: SwipeItem? = null,
+    private val allowSwipe: (viewHolder: RecyclerView.ViewHolder) -> Boolean = { true }
 ) : ItemTouchHelper.SimpleCallback(
     0,
     (if (swipeToStartItem != null) ItemTouchHelper.START else 0) or
@@ -40,6 +41,11 @@ class KaitekiSwipeCallback(
             ItemTouchHelper.START -> swipeToStartItem?.onSwipe?.invoke(position)
             ItemTouchHelper.END -> swipeToEndItem?.onSwipe?.invoke(position)
         }
+    }
+
+    override fun getSwipeDirs(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder): Int {
+        if (!allowSwipe(viewHolder)) return 0
+        return super.getSwipeDirs(recyclerView, viewHolder)
     }
 
     override fun onChildDraw(

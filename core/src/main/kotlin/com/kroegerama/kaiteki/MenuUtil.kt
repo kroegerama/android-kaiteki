@@ -48,6 +48,7 @@ fun menuProvider(
 
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
         menuInflater.inflate(menuRes, menu)
+        prepareMenu(menu)
     }
 
     override fun onPrepareMenu(menu: Menu) = prepareMenu(menu)

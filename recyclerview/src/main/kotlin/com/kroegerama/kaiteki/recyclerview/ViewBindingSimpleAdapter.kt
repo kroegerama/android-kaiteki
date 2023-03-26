@@ -2,7 +2,6 @@ package com.kroegerama.kaiteki.recyclerview
 
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
@@ -79,19 +78,4 @@ abstract class ViewBindingBaseAdapter<T, VB : ViewBinding>(
         }
     }
 
-}
-
-open class ViewBindingBaseViewHolder<VB : ViewBinding>(val binding: VB) : RecyclerView.ViewHolder(binding.root) {
-    companion object {
-        fun <VB : ViewBinding> create(
-            parent: ViewGroup,
-            bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> VB
-        ): ViewBindingBaseViewHolder<VB> = ViewBindingBaseViewHolder(
-            bindingInflater.invoke(
-                LayoutInflater.from(parent.context),
-                parent,
-                false
-            )
-        )
-    }
 }

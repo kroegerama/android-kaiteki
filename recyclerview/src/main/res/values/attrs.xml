@@ -2,5 +2,6 @@
 <resources>
 
     <attr name="autofitLayoutManagerColWidth" format="dimension" />
+    <item name="viewBindingViewHolderCurrentJob" type="id" />
 
 </resources>

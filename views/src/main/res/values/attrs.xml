@@ -19,4 +19,17 @@
         <attr name="labelTextColor" format="color" />
     </declare-styleable>
 
+    <declare-styleable name="ReadonlyTextInputView">
+        <attr name="iconEmptyText" format="reference" />
+        <attr name="iconFilledText" format="reference" />
+        <attr name="android:text" />
+    </declare-styleable>
+
+    <declare-styleable name="ViewPagerDotView">
+        <attr name="dotColorInactive" format="color" />
+        <attr name="dotColorActive" format="color" />
+        <attr name="dotSize" format="dimension" />
+        <attr name="dotGap" format="dimension" />
+    </declare-styleable>
+
 </resources>

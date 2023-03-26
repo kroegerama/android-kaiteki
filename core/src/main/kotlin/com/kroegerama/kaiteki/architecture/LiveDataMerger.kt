@@ -2,7 +2,7 @@ package com.kroegerama.kaiteki.architecture
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.Transformations
+import androidx.lifecycle.map
 
 object LiveDataMerger {
 
@@ -82,19 +82,19 @@ object LiveDataMerger {
     fun <T, A, B> split(
         source: LiveData<T>,
         split: (T?) -> Pair<A?, B?>
-    ): Pair<LiveData<A>, LiveData<B>> {
-        val resultA: LiveData<A> = Transformations.map(source) { split(it).first }
-        val resultB: LiveData<B> = Transformations.map(source) { split(it).second }
+    ): Pair<LiveData<A?>, LiveData<B?>?> {
+        val resultA: LiveData<A?> = source.map { split(it).first }
+        val resultB: LiveData<B?> = source.map { split(it).second }
         return Pair(resultA, resultB)
     }
 
     fun <T, A, B, C> split(
         source: LiveData<T>,
         split: (T?) -> Triple<A?, B?, C?>
-    ): Triple<LiveData<A>, LiveData<B>, LiveData<C>> {
-        val resultA: LiveData<A> = Transformations.map(source) { split(it).first }
-        val resultB: LiveData<B> = Transformations.map(source) { split(it).second }
-        val resultC: LiveData<C> = Transformations.map(source) { split(it).third }
+    ): Triple<LiveData<A?>, LiveData<B?>, LiveData<C?>?> {
+        val resultA: LiveData<A?> = source.map { split(it).first }
+        val resultB: LiveData<B?> = source.map { split(it).second }
+        val resultC: LiveData<C?> = source.map { split(it).third }
         return Triple(resultA, resultB, resultC)
     }
 }

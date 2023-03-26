@@ -23,9 +23,8 @@ suspend fun <T> retrofitFlowCall(
     repeat(retryCount + 1) { counter ->
         val response = try {
             withContext(Dispatchers.IO) { block.invoke() }
-        } catch (c: CancellationException) {
-            return RetrofitResource.Cancelled
         } catch (e: Exception) {
+            if (e is CancellationException) throw e
             return RetrofitResource.Error(e)
         }
         if (response.isSuccessful) {

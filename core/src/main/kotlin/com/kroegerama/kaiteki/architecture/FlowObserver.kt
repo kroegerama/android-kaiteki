@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
-@Deprecated("use collectLatestWhenLifecycleState instead", ReplaceWith("collectLatestWhenLifecycleState(lifecycleOwner) { block() }"))
+@Deprecated("use collectLatestWhenLifecycleState instead", ReplaceWith("launchAndCollectLatestWithLifecycleState(lifecycleOwner) { block() }"))
 fun <T> Flow<T>.collectLatestWhenStarted(
     lifecycleOwner: LifecycleOwner,
     block: suspend (T) -> Unit

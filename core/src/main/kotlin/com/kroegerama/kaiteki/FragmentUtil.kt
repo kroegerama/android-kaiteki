@@ -90,7 +90,7 @@ fun Fragment.launchWhenViewResumed(block: suspend CoroutineScope.() -> Unit) = v
 
 @Deprecated(
     "use `launchAndCollectOnViewLifecycleState` instead",
-    replaceWith = ReplaceWith("launchAndCollectOnViewLifecycleState(flow) { action(it) }")
+    replaceWith = ReplaceWith("launchAndCollectLatestWithLifecycleState(flow) { action(it) }")
 )
 fun <T> Fragment.collectLatestWithViewLifecycle(flow: Flow<T>, action: suspend (value: T) -> Unit) = launchWhenViewCreated {
     flow.flowWithLifecycle(viewLifecycleOwner.lifecycle).collectLatest(action)

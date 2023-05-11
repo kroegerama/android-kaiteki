@@ -40,6 +40,20 @@ fun View.scale(scale: Float) {
 
 fun ViewPropertyAnimator.scale(scale: Float): ViewPropertyAnimator = scaleX(scale).scaleY(scale)
 
+fun TextInputLayout.clearError() {
+    error = null
+    isErrorEnabled = false
+}
+
 fun TextInputLayout.clearErrorOnInput() {
-    editText!!.doOnTextChanged { _, _, _, _ -> error = null }
+    editText!!.doOnTextChanged { _, _, _, _ ->
+        clearError()
+    }
+    setErrorIconOnClickListener {
+        clearError()
+    }
+}
+
+fun <T : TextInputLayout> Collection<T>.clearErrorOnInput() = forEach { til ->
+    til.clearErrorOnInput()
 }

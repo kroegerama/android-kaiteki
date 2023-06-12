@@ -16,6 +16,7 @@
         <attr name="deleteActionText" format="string" />
         <attr name="swipeThumbBackground" format="reference" />
         <attr name="swipeThumbIcon" format="reference" />
+        <attr name="swipeThumbIconTint" format="color" />
         <attr name="labelTextColor" format="color" />
     </declare-styleable>
 

@@ -1,6 +1,7 @@
 package com.kroegerama.kaiteki.views
 
 import android.content.Context
+import android.content.res.ColorStateList
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout
@@ -27,6 +28,11 @@ class SwipeToDeleteView @JvmOverloads constructor(
             binding.btnSwipe.background = value
         }
     var swipeThumbIcon by binding.btnSwipe
+    var swipeThumbIconTint
+        get() = binding.btnSwipe.imageTintList?.defaultColor
+        set(value) {
+            binding.btnSwipe.imageTintList = value?.let(ColorStateList::valueOf)
+        }
     var labelTextColor
         get() = binding.tvSwipeToDelete.currentTextColor
         set(value) {
@@ -40,6 +46,11 @@ class SwipeToDeleteView @JvmOverloads constructor(
             deleteActionText = getText(R.styleable.SwipeToDeleteView_deleteActionText)
             swipeThumbBackground = getDrawable(R.styleable.SwipeToDeleteView_swipeThumbBackground)
             swipeThumbIcon = getDrawable(R.styleable.SwipeToDeleteView_swipeThumbIcon)
+            swipeThumbIconTint = if (hasValue(R.styleable.SwipeToDeleteView_swipeThumbIconTint)) {
+                getColor(R.styleable.SwipeToDeleteView_swipeThumbIconTint, 0)
+            } else {
+                null
+            }
             labelTextColor = getColor(R.styleable.SwipeToDeleteView_labelTextColor, labelTextColor)
         }
         binding.swipeToDelete.addTransitionListener(this)

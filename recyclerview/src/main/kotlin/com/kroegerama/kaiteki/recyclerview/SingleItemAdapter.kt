@@ -5,17 +5,10 @@ import android.view.ViewGroup
 import androidx.annotation.CallSuper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.launch
 
 abstract class SingleItemAdapter<T, VB : ViewBinding>(
     private val singleItemInflater: (LayoutInflater, ViewGroup?, Boolean) -> VB
 ) : RecyclerView.Adapter<ViewBindingBaseViewHolder<VB>>() {
-
-    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
 
     var value: T? = null
         set(value) {
@@ -50,24 +43,10 @@ abstract class SingleItemAdapter<T, VB : ViewBinding>(
 
     @CallSuper
     override fun onBindViewHolder(holder: ViewBindingBaseViewHolder<VB>, position: Int) {
-        val job = holder.itemView.getTag(R.id.viewBindingViewHolderCurrentJob) as? Job
-        job?.cancel()
-        holder.itemView.setTag(
-            R.id.viewBindingViewHolderCurrentJob,
-            scope.launch {
-                holder.binding.update(value ?: return@launch)
-                holder.itemView.setTag(R.id.viewBindingViewHolderCurrentJob, null)
-            }
-        )
+                holder.binding.update(value ?: return)
     }
 
-    @CallSuper
-    override fun onViewRecycled(holder: ViewBindingBaseViewHolder<VB>) {
-        val job = holder.itemView.getTag(R.id.viewBindingViewHolderCurrentJob) as? Job
-        job?.cancel()
-    }
-
-    open suspend fun VB.update(value: T) {}
+    open fun VB.update(value: T) {}
 
     override fun getItemCount(): Int = if (value != null && visible) 1 else 0
 }

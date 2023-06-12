@@ -8,11 +8,6 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.launch
 
 abstract class ViewBindingListAdapter<T, VB : ViewBinding>(
     private val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> VB,
@@ -20,9 +15,7 @@ abstract class ViewBindingListAdapter<T, VB : ViewBinding>(
     protected val rootClickListener: ((item: T?) -> Unit)? = null
 ) : ListAdapter<T, ViewBindingBaseViewHolder<VB>>(diffCallback) {
 
-    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
-
-    open suspend fun VB.update(
+    open fun VB.update(
         viewHolder: ViewBindingBaseViewHolder<VB>,
         context: Context,
         viewType: Int,
@@ -47,21 +40,7 @@ abstract class ViewBindingListAdapter<T, VB : ViewBinding>(
 
     @CallSuper
     override fun onBindViewHolder(holder: ViewBindingBaseViewHolder<VB>, position: Int) {
-        val job = holder.itemView.getTag(R.id.viewBindingViewHolderCurrentJob) as? Job
-        job?.cancel()
-        holder.itemView.setTag(
-            R.id.viewBindingViewHolderCurrentJob,
-            scope.launch {
-                holder.binding.update(holder, holder.itemView.context, holder.itemViewType, getItem(position))
-                holder.itemView.setTag(R.id.viewBindingViewHolderCurrentJob, null)
-            }
-        )
-    }
-
-    @CallSuper
-    override fun onViewRecycled(holder: ViewBindingBaseViewHolder<VB>) {
-        val job = holder.itemView.getTag(R.id.viewBindingViewHolderCurrentJob) as? Job
-        job?.cancel()
+        holder.binding.update(holder, holder.itemView.context, holder.itemViewType, getItem(position))
     }
 
     protected fun RecyclerView.ViewHolder.getCurrentItem(): T? =

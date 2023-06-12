@@ -1,10 +1,7 @@
-import BuildConfig.configurePublish
-
 plugins {
     com.android.library
     `kotlin-android`
     `maven-publish`
-    signing
 }
 
 android {
@@ -12,11 +9,11 @@ android {
     namespace = "com.kroegerama.kaiteki.recyclerview"
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_11.toString()
+        jvmTarget = JavaVersion.VERSION_17.toString()
         moduleName = "android.kaiteki.recyclerview"
     }
     buildFeatures {
@@ -37,15 +34,23 @@ android {
     buildFeatures {
         viewBinding = true
     }
+
+    publishing {
+        singleVariant("release") {
+            withJavadocJar()
+            withSourcesJar()
+        }
+    }
 }
 
 kotlin {
-    jvmToolchain(11)
+    jvmToolchain(17)
 }
 
 dependencies {
     implementation(lib.kotlin)
 
+    implementation(androidx.bundles.lifecycle)
     implementation(androidx.paging.runtime)
 
     implementation(androidx.appcompat)
@@ -53,5 +58,3 @@ dependencies {
     implementation(androidx.recyclerview)
 //    implementation(Libs.androidxViewBinding)
 }
-
-afterEvaluate(configurePublish())

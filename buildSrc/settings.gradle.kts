@@ -1,5 +1,3 @@
-enableFeaturePreview("VERSION_CATALOGS")
-
 file("../gradle.properties").inputStream().use { input ->
     java.util.Properties().apply { load(input) }
 }.run {

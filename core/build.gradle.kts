@@ -1,10 +1,7 @@
-import BuildConfig.configurePublish
-
 plugins {
     com.android.library
     `kotlin-android`
     `maven-publish`
-    signing
 }
 
 android {
@@ -12,11 +9,11 @@ android {
     namespace = "com.kroegerama.kaiteki"
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_11.toString()
+        jvmTarget = JavaVersion.VERSION_17.toString()
         moduleName = "android.kaiteki.core"
     }
     buildFeatures {
@@ -29,15 +26,22 @@ android {
     }
 
     buildTypes {
-        getByName("release") {
+        release {
             isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+        }
+    }
+
+    publishing {
+        singleVariant("release") {
+            withJavadocJar()
+            withSourcesJar()
         }
     }
 }
 
 kotlin {
-    jvmToolchain(11)
+    jvmToolchain(17)
 }
 
 dependencies {
@@ -58,5 +62,3 @@ dependencies {
 
     implementation(lib.coil)
 }
-
-afterEvaluate(configurePublish())

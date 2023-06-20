@@ -56,6 +56,15 @@ class SwipeToDeleteView @JvmOverloads constructor(
         binding.swipeToDelete.addTransitionListener(this)
     }
 
+    override fun setEnabled(enabled: Boolean) {
+        super.setEnabled(enabled)
+        binding.root.enableTransition(R.id.transitionSwipeDelete, enabled)
+    }
+
+    override fun isEnabled(): Boolean {
+        return super.isEnabled() && binding.root.getTransition(R.id.transitionSwipeDelete).isEnabled
+    }
+
     fun reset() {
         binding.swipeToDelete.apply {
             getTransition(R.id.transitionSwipeDelete).isEnabled = true

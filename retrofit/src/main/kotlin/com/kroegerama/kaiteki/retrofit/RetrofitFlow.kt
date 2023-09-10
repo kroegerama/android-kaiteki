@@ -1,12 +1,12 @@
 package com.kroegerama.kaiteki.retrofit
 
+import com.kroegerama.kaiteki.flow.UpdatableFlow
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.onSubscription
 import kotlinx.coroutines.launch
@@ -76,11 +76,4 @@ fun <T> CoroutineScope.retrofitFlow(
             launched = true
         }
     }, ::updateFun)
-}
-
-class UpdatableFlow<T>(
-    flow: SharedFlow<T>,
-    private val updateFun: () -> Unit
-) : SharedFlow<T> by flow {
-    fun update() = updateFun.invoke()
 }

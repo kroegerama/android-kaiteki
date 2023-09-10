@@ -1,17 +1,12 @@
-repositories {
-    google()
-    mavenCentral()
-    gradlePluginPortal()
-}
-
 plugins {
     `kotlin-dsl`
 }
 
+repositories {
+    mavenCentral()
+    google()
+}
+
 dependencies {
     implementation(gradleApi())
-    implementation(plg.kotlin)
-    implementation(plg.android)
-
-    implementation("io.github.gradle-nexus:publish-plugin:1.1.0")
 }

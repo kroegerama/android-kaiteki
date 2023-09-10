@@ -1,6 +1,6 @@
 plugins {
-    com.android.application
-    `kotlin-android`
+    alias(magic.plugins.android.application)
+    alias(magic.plugins.kotlin.android)
 }
 
 android {
@@ -30,9 +30,11 @@ android {
         }
     }
 
-    lintOptions {
-//        enable("HiltViewModelAnnotation")
-    }
+//    lint {
+//        enable += listOf(
+//            "AndroidEntryPointAnnotation", "HiltViewModelAnnotation"
+//        )
+//    }
 
     buildFeatures {
         viewBinding = true
@@ -44,9 +46,9 @@ kotlin {
 }
 
 dependencies {
-    implementation(lib.kotlin)
+    implementation(magic.kotlin.stdlib.jdk8)
 
-    implementation(lib.material)
+    implementation(magic.material)
 
     implementation(androidx.appcompat)
     implementation(androidx.core)
@@ -60,5 +62,5 @@ dependencies {
     implementation(project(":views"))
 
 //    debugImplementation(Libs.leakCanary)
-    lintChecks(project(":lint"))
+//    lintChecks(project(":lint"))
 }

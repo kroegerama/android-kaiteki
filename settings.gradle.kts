@@ -1,5 +1,10 @@
-rootProject.name = "android-kaiteki"
-
+pluginManagement {
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
@@ -10,14 +15,16 @@ dependencyResolutionManagement {
     versionCatalogs {
         val magicCatalogs: String by settings
 
-        create("lib") {
-            from("com.kroegerama.magic-catalogs:base:$magicCatalogs")
+        create("magic") {
+            from("com.kroegerama.magic-catalogs:magic:$magicCatalogs")
         }
         create("androidx") {
             from("com.kroegerama.magic-catalogs:androidx:$magicCatalogs")
         }
     }
 }
+
+rootProject.name = "android-kaiteki"
 
 include(":core")
 include(":retrofit")

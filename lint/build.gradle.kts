@@ -2,15 +2,15 @@ import BuildConfig.createPomAction
 
 plugins {
     `java-library`
-    kotlin
-    com.android.lint
+    alias(magic.plugins.kotlin.jvm)
+    id("com.android.lint")
     `maven-publish`
     signing
 }
 
 dependencies {
-    compileOnly(lib.kotlin)
-    compileOnly("com.android.tools.lint:lint-api:31.0.2")
+    compileOnly(magic.kotlin.stdlib.jdk8)
+    compileOnly("com.android.tools.lint:lint-api:31.1.1")
 }
 
 java {

@@ -1,6 +1,6 @@
 plugins {
-    com.android.library
-    `kotlin-android`
+    alias(magic.plugins.android.library)
+    alias(magic.plugins.kotlin.android)
     `maven-publish`
 }
 
@@ -45,13 +45,13 @@ kotlin {
 }
 
 dependencies {
-    implementation(lib.kotlin)
-    implementation(lib.coroutines.android)
+    implementation(magic.kotlin.stdlib.jdk8)
+    implementation(magic.kotlinx.coroutines.android)
 
     implementation(androidx.bundles.lifecycle)
     implementation(androidx.bundles.navigation)
 
-    implementation(lib.material)
+    implementation(magic.material)
 
     implementation(androidx.appcompat)
     implementation(androidx.browser)
@@ -60,5 +60,5 @@ dependencies {
     implementation(androidx.recyclerview)
     implementation(androidx.exifinterface)
 
-    implementation(lib.coil)
+    implementation(magic.coil)
 }

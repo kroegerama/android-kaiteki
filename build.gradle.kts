@@ -1,7 +1,12 @@
 import BuildConfig.createPomAction
 
 plugins {
-    id(Plugins.nexusPublish)
+    alias(magic.plugins.android.application) apply false
+    alias(magic.plugins.android.library) apply false
+    alias(magic.plugins.kotlin.android) apply false
+    alias(magic.plugins.kotlin.jvm) apply false
+
+    id("io.github.gradle-nexus.publish-plugin") version "1.1.0"
     id("signing")
     id("maven-publish")
 }

@@ -3,7 +3,6 @@ package com.kroegerama.kaiteki.recyclerview
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.*
-import kotlinx.coroutines.flow.Flow
 
 const val DEFAULT_PAGE_SIZE = 20
 
@@ -29,13 +28,4 @@ fun <Key : Any, Value : Any> ViewModel.pager(
         pagingSourceFactory().also { result.dataSource = it }
     }.flow.cachedIn(viewModelScope)
     return result
-}
-
-class PagerInfo<T : Any> {
-    lateinit var flow: Flow<PagingData<T>>
-    var dataSource: PagingSource<*, T>? = null
-
-    fun invalidate() {
-        dataSource?.invalidate()
-    }
 }

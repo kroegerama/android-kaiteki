@@ -2,10 +2,14 @@ package com.kroegerama.kaiteki.example
 
 import android.content.Context
 import com.kroegerama.kaiteki.example.databinding.ListItemBinding
-import com.kroegerama.kaiteki.recyclerview.ViewBindingBaseAdapter
 import com.kroegerama.kaiteki.recyclerview.ViewBindingBaseViewHolder
+import com.kroegerama.kaiteki.recyclerview.ViewBindingListAdapter
+import com.kroegerama.kaiteki.recyclerview.createDefaultDiffCallback
 
-class VBAdapter : ViewBindingBaseAdapter<String, ListItemBinding>(ListItemBinding::inflate) {
+class VBAdapter : ViewBindingListAdapter<String, ListItemBinding>(
+    ListItemBinding::inflate,
+    diffCallback = createDefaultDiffCallback { it }
+) {
     override fun ListItemBinding.update(
         viewHolder: ViewBindingBaseViewHolder<ListItemBinding>,
         context: Context,
@@ -15,5 +19,4 @@ class VBAdapter : ViewBindingBaseAdapter<String, ListItemBinding>(ListItemBindin
         edTest.text = item ?: context.getString(android.R.string.untitled)
     }
 
-    override fun compareItems(checkContent: Boolean, a: String, b: String) = a == b
 }

@@ -4,6 +4,7 @@ import com.kroegerama.kaiteki.baseui.ViewBindingFragment
 import com.kroegerama.kaiteki.callFirstListener
 import com.kroegerama.kaiteki.example.databinding.FragExampleBinding
 
+@Suppress("DEPRECATION")
 class VBFragment : ViewBindingFragment<FragExampleBinding>(
     FragExampleBinding::inflate
 ) {

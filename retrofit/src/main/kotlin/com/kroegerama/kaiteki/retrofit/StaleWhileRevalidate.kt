@@ -135,7 +135,9 @@ class StaleWhileRevalidate(
 
     @PublishedApi
     internal fun Call<*>.keyHash(): String {
-        val relevantContent = request().url.toString() + request().headers.toString()
+        val relevantContent = request().run {
+            url.toString() + headers.toString()
+        }
         val md5Bytes = digest.digest(relevantContent.toByteArray(Charsets.UTF_8))
         return md5Bytes.joinToString("") {
             "%02x".format(it)

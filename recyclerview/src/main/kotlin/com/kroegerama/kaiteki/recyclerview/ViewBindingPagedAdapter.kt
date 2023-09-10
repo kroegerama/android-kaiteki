@@ -1,3 +1,4 @@
+@file:Suppress("DEPRECATION")
 package com.kroegerama.kaiteki.recyclerview
 
 import android.content.Context

@@ -53,11 +53,11 @@ open class LiveEvent<T> : MutableLiveData<T> {
             pending = true
         }
 
-        override fun onChanged(t: W) {
+        override fun onChanged(value: W) {
             if (!pending) return
 
             pending = false
-            delegate.onChanged(t)
+            delegate.onChanged(value)
         }
     }
 }

@@ -36,7 +36,7 @@ fun View.addWindowInsetsPadding(
     block?.invoke(v, originalPadding)
 }
 
-fun View.handleSystemBarsInsets(top: Boolean = false, bottom: Boolean = false) = doOnApplyWindowInsets { v, originalPadding ->
+fun View.handleSystemBarsInsets(top: Boolean = false, bottom: Boolean = false) = doOnApplyWindowInsets { _, originalPadding ->
     val sysBars = getInsets(WindowInsetsCompat.Type.systemBars())
     val imeVisible = isVisible(WindowInsetsCompat.Type.ime())
     updatePadding(
@@ -49,7 +49,7 @@ fun MaterialCardView.handleSystemBarsInsets(top: Boolean = false, bottom: Boolea
     val originalPadding = Insets.of(
         contentPaddingLeft, contentPaddingTop, contentPaddingRight, contentPaddingBottom
     )
-    ViewCompat.setOnApplyWindowInsetsListener(this) { v, insets ->
+    ViewCompat.setOnApplyWindowInsetsListener(this) { _, insets ->
         val sysBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
         val imeVisible = insets.isVisible(WindowInsetsCompat.Type.ime())
 

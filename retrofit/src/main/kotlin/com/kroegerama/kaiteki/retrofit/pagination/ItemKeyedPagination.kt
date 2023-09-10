@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package com.kroegerama.kaiteki.retrofit.pagination
 
 import androidx.lifecycle.MutableLiveData

@@ -65,6 +65,14 @@ inline fun <reified T : Fragment> AppCompatActivity.findFragmentById(@IdRes id: 
 inline fun <reified T : Fragment> AppCompatActivity.findFragmentByTag(tag: String) =
     supportFragmentManager.findFragmentByTag(tag) as T
 
+@Suppress("DEPRECATION")
+@Deprecated("see LifecycleScope.launchWhenCreated", ReplaceWith("lifecycleScope.launchWhenCreated(block)", "androidx.lifecycle.lifecycleScope"))
 fun AppCompatActivity.launchWhenCreated(block: suspend CoroutineScope.() -> Unit) = lifecycleScope.launchWhenCreated(block)
+
+@Suppress("DEPRECATION")
+@Deprecated("see LifecycleScope.launchWhenStarted", ReplaceWith("lifecycleScope.launchWhenStarted(block)", "androidx.lifecycle.lifecycleScope"))
 fun AppCompatActivity.launchWhenStarted(block: suspend CoroutineScope.() -> Unit) = lifecycleScope.launchWhenStarted(block)
+
+@Suppress("DEPRECATION")
+@Deprecated("see LifecycleScope.launchWhenResumed", ReplaceWith("lifecycleScope.launchWhenResumed(block)", "androidx.lifecycle.lifecycleScope"))
 fun AppCompatActivity.launchWhenResumed(block: suspend CoroutineScope.() -> Unit) = lifecycleScope.launchWhenResumed(block)

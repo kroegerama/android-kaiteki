@@ -46,6 +46,7 @@ abstract class ViewBindingDialogFragment<VB : ViewBinding>(
         savedInstanceState?.let(::loadState)
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         run()

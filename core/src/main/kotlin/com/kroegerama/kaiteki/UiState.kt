@@ -5,8 +5,15 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.flowWithLifecycle
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.coroutines.flow.*
-import java.util.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.mapNotNull
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import java.util.UUID
 
 data class UiState<T>(
     val creator: () -> T,
@@ -69,17 +76,17 @@ fun <T> Fragment.consumeState(
     consumeError: (UiError) -> Unit,
     errorSnackBarDecorator: Snackbar.() -> Unit = {}
 ) {
-    launchWhenViewCreated {
+    viewLifecycleScope.launch {
         state.map { it.state }.distinctUntilChanged().flowWithLifecycle(viewLifecycleOwner.lifecycle).collectLatest { state ->
             updateUi(state)
         }
     }
-    launchWhenViewCreated {
+    viewLifecycleScope.launch {
         state.map { it.isLoading }.distinctUntilChanged().flowWithLifecycle(viewLifecycleOwner.lifecycle).collectLatest { loading ->
             loading(loading)
         }
     }
-    launchWhenViewCreated {
+    viewLifecycleScope.launch {
         state.mapNotNull { it.errors.firstOrNull() }.distinctUntilChanged().flowWithLifecycle(viewLifecycleOwner.lifecycle)
             .collectLatest { error ->
                 snackBar(error.error) {

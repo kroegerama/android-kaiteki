@@ -1,4 +1,4 @@
-@file:Suppress("DeprecatedCallableAddReplaceWith")
+@file:Suppress("DeprecatedCallableAddReplaceWith","DEPRECATION")
 
 package com.kroegerama.kaiteki.retrofit.pagination
 
@@ -29,6 +29,7 @@ object DefaultPageProvider : PageProvider {
     override fun getPreviousPage(currentPage: Int, currentSize: Int, requestedSize: Int): Int? = null
 }
 
+@Deprecated("switch to Paging 3")
 val DefaultPageConfig by lazy { PagedList.Config.Builder().setPageSize(10).setPrefetchDistance(20).build() }
 
 @Deprecated("switch to Paging 3")
@@ -54,7 +55,6 @@ class PagedListing<T : Any>(
         loadResponse.value?.retry()
     }
 }
-
 
 @Deprecated("switch to Paging 3")
 fun <T : Any> LiveData<out PagedListing<T>>.pagedList() = switchMap { it.pagedList }

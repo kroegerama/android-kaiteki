@@ -64,6 +64,7 @@ inline fun <reified T : Serializable?> Fragment.argument(key: String, defaultVal
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             getSerializable(key, T::class.java) ?: defaultValue
         } else {
+            @Suppress("DEPRECATION")
             (getSerializable(key) as? T) ?: defaultValue
         }
     }
@@ -79,15 +80,19 @@ inline fun <reified T : Fragment> Fragment.requireParentFragmentWithType(): T {
     return currentFrag
 }
 
+@Suppress("DEPRECATION")
 @Deprecated("see LifecycleCoroutineScope", ReplaceWith("viewLifecycleScope.launchWhenCreated(block)"))
 fun Fragment.launchWhenViewCreated(block: suspend CoroutineScope.() -> Unit) = viewLifecycleScope.launchWhenCreated(block)
 
+@Suppress("DEPRECATION")
 @Deprecated("see LifecycleCoroutineScope", ReplaceWith("viewLifecycleScope.launchWhenStarted(block)"))
 fun Fragment.launchWhenViewStarted(block: suspend CoroutineScope.() -> Unit) = viewLifecycleScope.launchWhenStarted(block)
 
+@Suppress("DEPRECATION")
 @Deprecated("see LifecycleCoroutineScope", ReplaceWith("viewLifecycleScope.launchWhenResumed(block)"))
 fun Fragment.launchWhenViewResumed(block: suspend CoroutineScope.() -> Unit) = viewLifecycleScope.launchWhenResumed(block)
 
+@Suppress("DEPRECATION")
 @Deprecated(
     "use `launchAndCollectOnViewLifecycleState` instead",
     replaceWith = ReplaceWith("launchAndCollectLatestWithLifecycleState(flow) { action(it) }")
@@ -96,6 +101,7 @@ fun <T> Fragment.collectLatestWithViewLifecycle(flow: Flow<T>, action: suspend (
     flow.flowWithLifecycle(viewLifecycleOwner.lifecycle).collectLatest(action)
 }
 
+@Suppress("DEPRECATION")
 @Deprecated("Use fragmentResultListener instead")
 inline fun <reified T> Fragment.callFirstListener(crossinline block: T.() -> Unit): Boolean {
     (targetFragment as? T)?.let {

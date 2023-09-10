@@ -1,12 +1,17 @@
 package com.kroegerama.kaiteki.architecture
 
 import android.os.Bundle
+import android.util.Log
 import androidx.annotation.IdRes
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDirections
+import androidx.navigation.NavGraph
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavOptions
 import androidx.navigation.Navigator
+import androidx.navigation.fragment.DialogFragmentNavigator
+import androidx.navigation.fragment.FragmentNavigator
 import androidx.navigation.fragment.findNavController
 
 private val navLabelArgRegex by lazy { """[{](\S+?)[}]""".toRegex() }
@@ -46,3 +51,30 @@ fun Fragment.navigate(
     directions: NavDirections,
     navigatorExtras: Navigator.Extras
 ) = findNavController().navigate(directions, navigatorExtras)
+
+private fun NavDestination.findClassName(): String? = when (this) {
+    is FragmentNavigator.Destination -> className
+    is DialogFragmentNavigator.Destination -> className
+    is NavGraph -> findStartDestination().findClassName()
+    else -> null
+}
+
+fun Fragment.navigateSafe(
+    directions: NavDirections,
+    navOptions: NavOptions? = null,
+    navigatorExtras: Navigator.Extras? = null
+) {
+    val navController = findNavController()
+    val currentClassName = navController.currentDestination?.findClassName()
+
+    var currentFragmentInHierarchy: Fragment? = this
+    while (currentFragmentInHierarchy != null) {
+        if (currentFragmentInHierarchy.javaClass.name == currentClassName) {
+            Log.d("NavUtil", "navigate because $currentClassName was in hierarchy")
+            navController.navigate(directions.actionId, directions.arguments, navOptions, navigatorExtras)
+            return
+        }
+        currentFragmentInHierarchy = currentFragmentInHierarchy.parentFragment
+    }
+    Log.w("NavUtil", "ignored navigation to $directions; own destination was ${javaClass.name}, but currentDestination was $currentClassName")
+}

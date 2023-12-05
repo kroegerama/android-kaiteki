@@ -91,7 +91,11 @@ suspend inline fun <reified E, reified T> Retrofit.arrowCall(
                 if (throwable is IOException) {
                     IOError(throwable)
                 } else {
-                    UnexpectedError(throwable)
+                    HttpError(
+                        code = response.code(),
+                        message = response.message(),
+                        body = errorBody
+                    )
                 }
             )
         }

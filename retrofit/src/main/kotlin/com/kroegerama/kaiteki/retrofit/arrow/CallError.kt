@@ -25,3 +25,18 @@ data class IOError(
 data class UnexpectedError(
     val cause: Throwable
 ) : CallError
+
+data class ThrowableCallError(
+    val delegate: CallError
+) : Throwable(
+    message = when (delegate) {
+        is HttpError -> "HTTP ${delegate.code}"
+        is IOError -> delegate.cause.message
+        is UnexpectedError -> delegate.cause.message
+    },
+    cause = when (delegate) {
+        is HttpError -> null
+        is IOError -> delegate.cause
+        is UnexpectedError -> delegate.cause
+    }
+)

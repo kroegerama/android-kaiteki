@@ -10,9 +10,13 @@ import androidx.paging.PagingState
 import androidx.paging.cachedIn
 import com.kroegerama.kaiteki.flow.UpdatableFlow
 import com.kroegerama.kaiteki.flow.updatable
+import com.kroegerama.kaiteki.retrofit.arrow.HttpError
+import com.kroegerama.kaiteki.retrofit.arrow.IOError
+import com.kroegerama.kaiteki.retrofit.arrow.ThrowableCallError
+import com.kroegerama.kaiteki.retrofit.arrow.UnexpectedError
 import kotlinx.coroutines.CancellationException
 import retrofit2.Response
-import timber.log.Timber
+import java.io.IOException
 
 abstract class PageSizeDataSource<R : Any, T : Any> : PagingSource<Int, T>() {
 
@@ -29,7 +33,15 @@ abstract class PageSizeDataSource<R : Any, T : Any> : PagingSource<Int, T>() {
         val response = makeCall(page, size)
 
         if (!response.isSuccessful) {
-            LoadResult.Error(IllegalStateException("Response code was ${response.code()}"))
+            LoadResult.Error(
+                ThrowableCallError(
+                    HttpError(
+                        code = response.code(),
+                        message = response.message(),
+                        body = response.errorBody()
+                    )
+                )
+            )
         } else {
             val responseBody = response.body()!!
             val data = responseBody.extractData()
@@ -44,8 +56,14 @@ abstract class PageSizeDataSource<R : Any, T : Any> : PagingSource<Int, T>() {
         if (e is CancellationException) {
             throw e
         }
-        Timber.w(e)
-        LoadResult.Error(e)
+        LoadResult.Error(
+            ThrowableCallError(
+                when (e) {
+                    is IOException -> IOError(e)
+                    else -> UnexpectedError(e)
+                }
+            )
+        )
     }
 
     abstract suspend fun makeCall(page: Int, size: Int): Response<out R>

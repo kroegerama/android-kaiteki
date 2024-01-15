@@ -16,6 +16,10 @@ fun <T> Flow<T>.collectLatestWhenStarted(
     lifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) { collectLatest(block) }
 }
 
+//@Deprecated(
+//    "use observeWithLifecycle instead",
+//    ReplaceWith("this.observeWithLifecycle(lifecycleOwner) { block() }", "com.kroegerama.kaiteki.flow.observeWithLifecycle")
+//)
 fun <T> Flow<T>.launchAndCollectLatestWithLifecycleState(
     lifecycleOwner: LifecycleOwner,
     state: Lifecycle.State = Lifecycle.State.STARTED,
@@ -24,6 +28,10 @@ fun <T> Flow<T>.launchAndCollectLatestWithLifecycleState(
     lifecycleOwner.repeatOnLifecycle(state) { collectLatest(block) }
 }
 
+//@Deprecated(
+//    "use observeWithLifecycle instead",
+//    ReplaceWith("this.observeWithLifecycle(lifecycleOwner) { block() }", "com.kroegerama.kaiteki.flow.observeWithLifecycle")
+//)
 fun <T> Flow<T>.launchAndCollectWithLifecycleState(
     lifecycleOwner: LifecycleOwner,
     state: Lifecycle.State = Lifecycle.State.STARTED,

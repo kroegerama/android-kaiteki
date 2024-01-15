@@ -38,12 +38,22 @@ fun Fragment.postponeUntilLayout(target: View = requireView()) {
 
 val Fragment.viewLifecycleScope get() = viewLifecycleOwner.lifecycleScope
 
+//@Suppress("DEPRECATION")
+//@Deprecated(
+//    "use observeFlow instead",
+//    ReplaceWith("this.observeFlow(flow) { block() }", "com.kroegerama.kaiteki.flow.observeFlow")
+//)
 fun <T> Fragment.launchAndCollectLatestWithViewLifecycleState(
     flow: Flow<T>,
     state: Lifecycle.State = Lifecycle.State.STARTED,
     block: suspend (T) -> Unit
 ) = flow.launchAndCollectLatestWithLifecycleState(viewLifecycleOwner, state, block)
 
+//@Suppress("DEPRECATION")
+//@Deprecated(
+//    "use observeFlow instead",
+//    ReplaceWith("this.observeFlow(flow) { block() }", "com.kroegerama.kaiteki.flow.observeFlow")
+//)
 fun <T> Fragment.launchAndCollectWithViewLifecycleState(
     flow: Flow<T>,
     state: Lifecycle.State = Lifecycle.State.STARTED,

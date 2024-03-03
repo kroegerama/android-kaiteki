@@ -2,6 +2,8 @@ package com.kroegerama.kaiteki
 
 import android.content.Context
 import android.graphics.Color
+import android.util.TypedValue
+import androidx.annotation.AnyRes
 import androidx.annotation.AttrRes
 import androidx.annotation.ColorInt
 import androidx.annotation.DimenRes
@@ -53,3 +55,8 @@ val Context.listPreferredItemHeightLarge
 @ColorInt
 fun Context.getThemeColor(@AttrRes attrRes: Int, @ColorInt fallback: Int = Color.MAGENTA): Int =
     MaterialColors.getColor(this, attrRes, fallback)
+
+@AnyRes
+fun Context.resolveResourceIdAttribute(@AttrRes attrRes: Int): Int = TypedValue().apply {
+    theme.resolveAttribute(attrRes, this, true)
+}.resourceId

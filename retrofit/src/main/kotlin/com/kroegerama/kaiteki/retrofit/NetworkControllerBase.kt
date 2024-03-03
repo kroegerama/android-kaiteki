@@ -14,10 +14,14 @@ import com.kroegerama.kaiteki.retrofit.arrow.catchingCall
 import com.kroegerama.kaiteki.retrofit.arrow.handleResponse
 import com.kroegerama.kaiteki.retrofit.datasource.SimpleDataSource
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.shareIn
 import retrofit2.Response
 import retrofit2.Retrofit
@@ -71,6 +75,17 @@ abstract class NetworkControllerBase<ErrorType, Api> {
         handleResponse<T>(response)
     }
 
+    inline fun <reified T> apiFlow(
+        crossinline loading: (Boolean) -> Unit = { },
+        crossinline block: suspend Api.() -> Response<out T>
+    ): Flow<Either<TypedCallError<ErrorType>, T>> = flow {
+        emit(apiCall(block))
+    }.onStart {
+        loading(true)
+    }.onCompletion {
+        loading(false)
+    }
+
     inline fun <reified T> simpleDataSource(
         scope: CoroutineScope,
         eager: Boolean = false,
@@ -94,7 +109,6 @@ abstract class NetworkControllerBase<ErrorType, Api> {
             refreshFun = refresh
         )
     }
-
 
     inline fun <reified T> ViewModel.simpleDataSource(
         eager: Boolean = false,

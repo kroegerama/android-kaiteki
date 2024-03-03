@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <style name="ThemeOverlay.Kaiteki.Material3.FullscreenDialog" parent="ThemeOverlay.Material3.Dialog">
         <item name="android:windowBackground">?android:attr/colorBackground</item>
@@ -19,6 +19,24 @@
         <item name="android:windowNoTitle">true</item>
 
         <item name="materialButtonStyle">?materialButtonStyle</item>
+    </style>
+
+    <style name="ThemeOverlay.Kaiteki.ProgressDialog" parent="ThemeOverlay.Material3.MaterialAlertDialog">
+        <item name="android:windowMinWidthMajor">0%</item>
+        <item name="android:windowMinWidthMinor">0%</item>
+        <item name="android:windowAnimationStyle">@style/ProgressWindowAnimation</item>
+        <item name="android:backgroundDimAmount">.25</item>
+        <item name="alertDialogStyle">@style/MaterialAlertDialog.Kaiteki.Progress</item>
+    </style>
+
+    <style name="MaterialAlertDialog.Kaiteki.Progress" parent="MaterialAlertDialog.Material3">
+        <item name="shapeAppearance">?shapeAppearanceCornerLarge</item>
+        <item name="shapeAppearanceOverlay">@null</item>
+    </style>
+
+    <style name="ProgressWindowAnimation">
+        <item name="android:windowEnterAnimation">@anim/progress_fade_in</item>
+        <item name="android:windowExitAnimation">@anim/progress_fade_out</item>
     </style>
 
 </resources>

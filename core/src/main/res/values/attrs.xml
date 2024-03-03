@@ -3,4 +3,7 @@
 
     <item name="view_attached_scope" type="id" />
 
+    <attr name="progressDialogThemeOverlay" format="reference" />
+    <attr name="progressDialogCenterIcon" format="reference" />
+
 </resources>

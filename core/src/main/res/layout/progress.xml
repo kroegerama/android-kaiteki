@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="24dp"
+    tools:background="#eee"
+    tools:layout_gravity="center">
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tvTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:textAlignment="center"
+        android:textAppearance="?textAppearanceLabelSmall"
+        app:textAllCaps="true"
+        tools:text="@tools:sample/lorem" />
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="center"
+            app:srcCompat="?progressDialogCenterIcon"
+            tools:srcCompat="@tools:sample/avatars" />
+
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:indeterminate="true"
+            app:indicatorColor="?colorPrimary"
+            app:indicatorSize="86dp"
+            app:trackColor="@color/primary_10"
+            app:trackCornerRadius="2dp"
+            app:trackThickness="4dp"
+            tools:indeterminate="false"
+            tools:progress="50" />
+
+    </FrameLayout>
+
+</LinearLayout>

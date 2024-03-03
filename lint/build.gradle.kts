@@ -10,7 +10,7 @@ plugins {
 
 dependencies {
     compileOnly(magic.kotlin.stdlib.jdk8)
-    compileOnly("com.android.tools.lint:lint-api:31.1.1")
+    compileOnly("com.android.tools.lint:lint-api:31.3.0")
 }
 
 java {

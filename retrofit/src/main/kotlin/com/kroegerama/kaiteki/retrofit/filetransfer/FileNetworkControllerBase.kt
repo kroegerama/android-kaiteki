@@ -95,9 +95,9 @@ abstract class FileNetworkControllerBase {
         )
     }
 
-    private suspend fun uploadFile(
+    suspend fun uploadFile(
         targetUrl: String,
-        method: String,
+        method: String = "PUT",
         bodyBuilder: () -> RequestBody
     ) = either {
         val request = Request.Builder()

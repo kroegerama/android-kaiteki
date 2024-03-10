@@ -1,5 +1,6 @@
 package com.kroegerama.kaiteki.retrofit.arrow
 
+import androidx.paging.PagingSource
 import okhttp3.ResponseBody
 import java.io.IOException
 
@@ -46,3 +47,6 @@ data class ThrowableCallError(
         is UnexpectedError -> delegate.cause
     }
 )
+
+fun CallError.throwable() = ThrowableCallError(this)
+fun <Key : Any, Value : Any> CallError.loadResultError() = PagingSource.LoadResult.Error<Key, Value>(throwable())

@@ -12,8 +12,8 @@ import com.kroegerama.kaiteki.flow.UpdatableFlow
 import com.kroegerama.kaiteki.flow.updatable
 import com.kroegerama.kaiteki.retrofit.arrow.HttpError
 import com.kroegerama.kaiteki.retrofit.arrow.IOError
-import com.kroegerama.kaiteki.retrofit.arrow.ThrowableCallError
 import com.kroegerama.kaiteki.retrofit.arrow.UnexpectedError
+import com.kroegerama.kaiteki.retrofit.arrow.loadResultError
 import kotlinx.coroutines.CancellationException
 import retrofit2.Response
 import java.io.IOException
@@ -33,15 +33,11 @@ abstract class PageSizeDataSource<R : Any, T : Any> : PagingSource<Int, T>() {
         val response = makeCall(page, size)
 
         if (!response.isSuccessful) {
-            LoadResult.Error(
-                ThrowableCallError(
-                    HttpError(
-                        code = response.code(),
-                        message = response.message(),
-                        body = response.errorBody()
-                    )
-                )
-            )
+            HttpError(
+                code = response.code(),
+                message = response.message(),
+                body = response.errorBody()
+            ).loadResultError()
         } else {
             val responseBody = response.body()!!
             val data = responseBody.extractData()
@@ -56,14 +52,10 @@ abstract class PageSizeDataSource<R : Any, T : Any> : PagingSource<Int, T>() {
         if (e is CancellationException) {
             throw e
         }
-        LoadResult.Error(
-            ThrowableCallError(
-                when (e) {
-                    is IOException -> IOError(e)
-                    else -> UnexpectedError(e)
-                }
-            )
-        )
+        when (e) {
+            is IOException -> IOError(e)
+            else -> UnexpectedError(e)
+        }.loadResultError()
     }
 
     abstract suspend fun makeCall(page: Int, size: Int): Response<out R>

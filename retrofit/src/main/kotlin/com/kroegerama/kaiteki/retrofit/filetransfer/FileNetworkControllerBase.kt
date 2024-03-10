@@ -42,9 +42,11 @@ abstract class FileNetworkControllerBase {
         val body = ensureNotNull(response.body) { UnexpectedError(IllegalStateException("empty response")) }
         catch(
             block = {
-                target.sink().buffer().use { out ->
-                    body.source().use { `in` ->
-                        out.writeAll(`in`)
+                withContext(Dispatchers.IO) {
+                    target.sink().buffer().use { out ->
+                        body.source().use { `in` ->
+                            out.writeAll(`in`)
+                        }
                     }
                 }
             },

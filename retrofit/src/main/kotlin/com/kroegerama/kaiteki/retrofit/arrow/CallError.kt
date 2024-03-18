@@ -22,7 +22,14 @@ data class TypedHttpError<out E : Any>(
     val message: String,
     val body: E,
     override val cause: Throwable = RuntimeException("HTTP $code")
-) : TypedCallError<E>
+) : TypedCallError<E> {
+    fun asHttpError() = HttpError(
+        code = code,
+        message = message,
+        body = null,
+        cause = cause
+    )
+}
 
 data class IOError(
     override val cause: IOException
@@ -36,11 +43,10 @@ data class UnexpectedError(
     override val code: Int? = null
 }
 
-data class TypedCallErrorException(
-    val delegate: TypedCallError<*>
+data class CallErrorException(
+    val delegate: CallError
 ) : RuntimeException(
     when (delegate) {
-        is TypedHttpError -> "HTTP ${delegate.code}"
         is HttpError -> "HTTP ${delegate.code}"
         is IOError -> delegate.cause.run { localizedMessage ?: message ?: javaClass.simpleName }
         is UnexpectedError -> delegate.cause.run { localizedMessage ?: message ?: javaClass.simpleName }
@@ -48,5 +54,12 @@ data class TypedCallErrorException(
     delegate.cause
 )
 
-fun TypedCallError<*>.exception() = TypedCallErrorException(this)
+fun TypedCallError<*>.exception() = CallErrorException(
+    when (this) {
+        is TypedHttpError -> asHttpError()
+        is HttpError -> this
+        is IOError -> this
+        is UnexpectedError -> this
+    }
+)
 fun <Key : Any, Value : Any> TypedCallError<*>.loadResultError() = PagingSource.LoadResult.Error<Key, Value>(exception())

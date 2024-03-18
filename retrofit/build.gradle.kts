@@ -51,6 +51,7 @@ dependencies {
 
     implementation(magic.retrofit)
 
+    implementation(androidx.fragment)
     implementation(androidx.lifecycle.livedata)
     implementation(androidx.paging.runtime)
 

@@ -33,6 +33,9 @@ abstract class NetworkErrorHandlingBase<ErrorResponse : Any, SpecificError>(
     protected abstract fun MutableMap<SpecificError, Int>.initSpecificErrors()
     abstract fun ErrorResponse.getSpecific(): SpecificError?
 
+    @StringRes
+    open fun Throwable.getErrorNameRes(): Int? = null
+
     private val specificErrorRegistry by lazy {
         mutableMapOf<SpecificError, Int>().apply {
             initSpecificErrors()
@@ -52,13 +55,20 @@ abstract class NetworkErrorHandlingBase<ErrorResponse : Any, SpecificError>(
     fun Context.getNetworkErrorMessage(networkError: CallError): String =
         when (networkError) {
             is HttpError -> getString(networkErrorHttpRes, networkError.code)
-            is IOError -> getString(networkErrorIoRes, networkError.cause.fallbackDescription)
-            is UnexpectedError -> getString(networkErrorUnexpectedRes, networkError.cause.fallbackDescription)
+            is IOError -> networkError.cause.getErrorNameRes()?.let(::getString) ?: getString(
+                networkErrorIoRes,
+                networkError.cause.fallbackDescription
+            )
+
+            is UnexpectedError -> networkError.cause.getErrorNameRes()?.let(::getString) ?: getString(
+                networkErrorUnexpectedRes,
+                networkError.cause.fallbackDescription
+            )
         }
 
     fun Context.getNetworkErrorMessage(throwable: Throwable): String = when (throwable) {
         is CallErrorException -> getNetworkErrorMessage(throwable.delegate)
-        else -> getString(networkErrorUnexpectedRes, throwable.fallbackDescription)
+        else -> throwable.getErrorNameRes()?.let(::getString) ?: getString(networkErrorUnexpectedRes, throwable.fallbackDescription)
     }
 
     fun Context.handleError(

@@ -1,6 +1,7 @@
 package com.kroegerama.kaiteki
 
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
@@ -134,7 +135,9 @@ fun <T> Fragment.prepareLaunchWithProgress(
         viewLifecycleState.isAtLeast(Lifecycle.State.CREATED)
     },
     block = block
-)
+).also {
+    view?.closeKeyboard()
+}
 
 @ProgressDSL
 fun <T> Fragment.launchWithProgress(
@@ -154,7 +157,9 @@ fun <T> AppCompatActivity.prepareLaunchWithProgress(
     title = title,
     checkAllowPost = { lifecycle.currentState.isAtLeast(Lifecycle.State.CREATED) },
     block = block
-)
+).also {
+    findViewById<View>(android.R.id.content)?.closeKeyboard()
+}
 
 @ProgressDSL
 fun <T> AppCompatActivity.launchWithProgress(

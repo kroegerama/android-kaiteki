@@ -19,7 +19,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.shareIn
@@ -86,17 +88,20 @@ abstract class NetworkControllerBase<ErrorType, Api> {
         loading(false)
     }
 
-    inline fun <reified T> simpleDataSource(
+    inline fun <reified T, P> simpleDataSource(
         scope: CoroutineScope,
+        parameterFlow: Flow<P>,
         eager: Boolean = false,
-        crossinline block: suspend Api.() -> Response<out T>
+        crossinline block: suspend Api.(parameter: P) -> Response<out T>
     ): SimpleDataSource<Either<TypedCallError<ErrorType>, T>> {
         val refreshKey = MutableStateFlow(0)
         val loadingFlow = MutableStateFlow(false)
+
+        val sourceFlow = combine(refreshKey, parameterFlow, ::Pair)
         val dataFlow = channelFlow {
-            refreshKey.collectLatest {
+            sourceFlow.collectLatest { (_, parameter) ->
                 loadingFlow.value = true
-                send(apiCall { block(api) })
+                send(apiCall { block(api, parameter) })
                 loadingFlow.value = false
             }
         }.shareIn(scope, if (eager) SharingStarted.Eagerly else SharingStarted.Lazily, 1)
@@ -109,6 +114,22 @@ abstract class NetworkControllerBase<ErrorType, Api> {
             refreshFun = refresh
         )
     }
+
+    inline fun <reified T> simpleDataSource(
+        scope: CoroutineScope,
+        eager: Boolean = false,
+        crossinline block: suspend Api.() -> Response<out T>
+    ): SimpleDataSource<Either<TypedCallError<ErrorType>, T>> = simpleDataSource(
+        scope,
+        flowOf(Unit),
+        eager
+    ) { block(api) }
+
+    inline fun <reified T, P> ViewModel.simpleDataSource(
+        parameterFlow: Flow<P>,
+        eager: Boolean = false,
+        crossinline block: suspend Api.(parameter: P) -> Response<out T>
+    ) = simpleDataSource(viewModelScope, parameterFlow, eager, block)
 
     inline fun <reified T> ViewModel.simpleDataSource(
         eager: Boolean = false,

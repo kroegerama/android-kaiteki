@@ -1,25 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
 
-    <style name="ThemeOverlay.Kaiteki.Material3.FullscreenDialog" parent="ThemeOverlay.Material3.Dialog">
-        <item name="android:windowBackground">?android:attr/colorBackground</item>
-        <item name="android:backgroundDimEnabled">false</item>
-        <item name="android:windowElevation">0dp</item>
-        <item name="android:windowIsFloating">false</item>
-        <item name="android:windowNoTitle">true</item>
-
-        <item name="materialButtonStyle">?materialButtonStyle</item>
+    <style name="ThemeOverlay.Kaiteki.Material3.FullscreenDialog" parent="Base.ThemeOverlay.AppCompat">
+        <item name="android:windowAnimationStyle">@style/MaterialAlertDialog.Material3.Animation</item>
     </style>
 
-    <style name="ThemeOverlay.Kaiteki.MaterialComponents.FullscreenDialog" parent="ThemeOverlay.MaterialComponents.Dialog">
-        <item name="android:windowBackground">?android:attr/colorBackground</item>
-        <item name="android:backgroundDimEnabled">false</item>
-        <item name="android:windowElevation">0dp</item>
-        <item name="android:windowIsFloating">false</item>
-        <item name="android:windowNoTitle">true</item>
-
-        <item name="materialButtonStyle">?materialButtonStyle</item>
-    </style>
+    <style name="ThemeOverlay.Kaiteki.MaterialComponents.FullscreenDialog" parent="Base.ThemeOverlay.AppCompat" />
 
     <style name="ThemeOverlay.Kaiteki.ProgressDialog" parent="ThemeOverlay.Material3.MaterialAlertDialog">
         <item name="android:windowMinWidthMajor">0%</item>

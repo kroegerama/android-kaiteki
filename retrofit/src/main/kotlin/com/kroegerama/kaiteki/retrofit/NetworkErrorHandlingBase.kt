@@ -24,8 +24,6 @@ abstract class NetworkErrorHandlingBase<ErrorResponse : Any, SpecificError>(
     private val networkErrorIoRes: Int,
     @StringRes
     private val networkErrorUnexpectedRes: Int,
-    @StringRes
-    private val networkErrorDefaultRes: Int,
     @StyleRes
     private val alertDialogTheme: Int = 0,
 ) {
@@ -42,7 +40,7 @@ abstract class NetworkErrorHandlingBase<ErrorResponse : Any, SpecificError>(
         }
     }
 
-    private val SpecificError.nameRes get() = specificErrorRegistry[this] ?: networkErrorDefaultRes
+    private val SpecificError.nameRes get() = specificErrorRegistry[this]
 
     private val Throwable.fallbackDescription: String get() = localizedMessage ?: message ?: javaClass.simpleName
 

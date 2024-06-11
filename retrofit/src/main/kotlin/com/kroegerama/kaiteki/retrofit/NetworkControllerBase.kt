@@ -14,7 +14,9 @@ import com.kroegerama.kaiteki.retrofit.arrow.catchingCall
 import com.kroegerama.kaiteki.retrofit.arrow.handleResponse
 import com.kroegerama.kaiteki.retrofit.datasource.SimpleDataSource
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.channelFlow
@@ -25,6 +27,7 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.shareIn
+import kotlinx.coroutines.flow.update
 import retrofit2.Response
 import retrofit2.Retrofit
 import java.io.IOException
@@ -95,18 +98,18 @@ abstract class NetworkControllerBase<ErrorType, Api> {
         crossinline block: suspend Api.(parameter: P) -> Response<out T>
     ): SimpleDataSource<Either<TypedCallError<ErrorType>, T>> {
         val refreshKey = MutableStateFlow(0)
-        val loadingFlow = MutableStateFlow(false)
+        val loadingFlow = MutableSharedFlow<Boolean>(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
 
         val sourceFlow = combine(refreshKey, parameterFlow, ::Pair)
         val dataFlow = channelFlow {
             sourceFlow.collectLatest { (_, parameter) ->
-                loadingFlow.value = true
+                loadingFlow.emit(true)
                 send(apiCall { block(api, parameter) })
-                loadingFlow.value = false
+                loadingFlow.emit(false)
             }
         }.shareIn(scope, if (eager) SharingStarted.Eagerly else SharingStarted.Lazily, 1)
 
-        val refresh: () -> Unit = { refreshKey.value++ }
+        val refresh: () -> Unit = { refreshKey.update { it + 1 } }
 
         return SimpleDataSource(
             flow = dataFlow,

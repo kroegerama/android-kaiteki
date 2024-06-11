@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.firstOrNull
 
 data class SimpleDataSource<T>(
     val flow: SharedFlow<T>,
-    val loading: StateFlow<Boolean>,
+    val loading: SharedFlow<Boolean>,
     private val refreshFun: () -> Unit
 ) {
 

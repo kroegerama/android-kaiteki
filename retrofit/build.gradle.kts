@@ -33,7 +33,7 @@ android {
 
     publishing {
         singleVariant("release") {
-//            withJavadocJar()
+            withJavadocJar()
             withSourcesJar()
         }
     }

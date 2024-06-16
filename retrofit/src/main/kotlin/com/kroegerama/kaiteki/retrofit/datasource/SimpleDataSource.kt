@@ -3,7 +3,6 @@ package com.kroegerama.kaiteki.retrofit.datasource
 import androidx.fragment.app.Fragment
 import com.kroegerama.kaiteki.prepareLaunchWithProgress
 import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.firstOrNull
 
 data class SimpleDataSource<T>(

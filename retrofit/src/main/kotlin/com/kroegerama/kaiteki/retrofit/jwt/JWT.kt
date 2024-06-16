@@ -1,9 +1,14 @@
 package com.kroegerama.kaiteki.retrofit.jwt
 
 import android.util.Base64
-import com.squareup.moshi.*
+import com.squareup.moshi.JsonAdapter
+import com.squareup.moshi.JsonDataException
+import com.squareup.moshi.JsonReader
+import com.squareup.moshi.JsonWriter
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.Types
 import java.nio.charset.Charset
-import java.util.*
+import java.util.Date
 
 class JWT(
     val token: String

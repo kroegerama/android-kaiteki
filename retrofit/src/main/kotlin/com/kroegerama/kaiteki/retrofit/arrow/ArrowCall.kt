@@ -6,7 +6,6 @@ import arrow.core.raise.Raise
 import arrow.core.raise.catch
 import arrow.core.raise.either
 import retrofit2.Response
-import retrofit2.Retrofit
 import java.io.IOException
 
 @PublishedApi

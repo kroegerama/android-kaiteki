@@ -1,9 +1,7 @@
 package com.kroegerama.kaiteki.retrofit
 
-import com.kroegerama.kaiteki.retrofit.pagination.RetryFun
 import okhttp3.Response
 import okhttp3.ResponseBody
-import kotlin.Error
 
 sealed class RetrofitResource<out TSuccess> {
 
@@ -101,7 +99,7 @@ sealed class RetrofitResource<out TSuccess> {
 
 data class RetryableRetrofitResource<out T>(
     val resource: RetrofitResource<T>,
-    private val retryFun: RetryFun?
+    private val retryFun: (() -> Unit)?
 ) {
     fun retry() = retryFun?.invoke()
 }

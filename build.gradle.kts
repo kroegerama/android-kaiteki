@@ -1,8 +1,8 @@
 import BuildConfig.createPomAction
 
 plugins {
-    alias(magic.plugins.android.application) apply false
-    alias(magic.plugins.android.library) apply false
+    id("com.android.application") apply false
+    id("com.android.library") apply false
     alias(magic.plugins.kotlin.android) apply false
     alias(magic.plugins.kotlin.jvm) apply false
 

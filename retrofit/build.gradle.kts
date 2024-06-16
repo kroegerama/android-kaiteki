@@ -1,5 +1,5 @@
 plugins {
-    alias(magic.plugins.android.library)
+    id("com.android.library")
     alias(magic.plugins.kotlin.android)
     `maven-publish`
 }
@@ -33,7 +33,7 @@ android {
 
     publishing {
         singleVariant("release") {
-            withJavadocJar()
+//            withJavadocJar()
             withSourcesJar()
         }
     }

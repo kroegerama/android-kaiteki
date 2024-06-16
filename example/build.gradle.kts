@@ -1,5 +1,5 @@
 plugins {
-    alias(magic.plugins.android.application)
+    id("com.android.application")
     alias(magic.plugins.kotlin.android)
 }
 

@@ -4,7 +4,13 @@ pluginManagement {
         mavenCentral()
         gradlePluginPortal()
     }
+    plugins {
+        val agp: String by settings
+        id("com.android.application") version agp
+        id("com.android.library") version agp
+    }
 }
+
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
@@ -29,6 +35,7 @@ rootProject.name = "android-kaiteki"
 include(":core")
 include(":retrofit")
 include(":recyclerview")
+include(":paging")
 include(":views")
 include(":lint")
 

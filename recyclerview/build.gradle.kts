@@ -1,5 +1,5 @@
 plugins {
-    alias(magic.plugins.android.library)
+    id("com.android.library")
     alias(magic.plugins.kotlin.android)
     `maven-publish`
 }
@@ -37,7 +37,7 @@ android {
 
     publishing {
         singleVariant("release") {
-            withJavadocJar()
+//            withJavadocJar()
             withSourcesJar()
         }
     }
@@ -51,12 +51,10 @@ dependencies {
     implementation(magic.kotlin.stdlib.jdk8)
 
     implementation(androidx.bundles.lifecycle)
-    implementation(androidx.paging.runtime)
 
     implementation(androidx.appcompat)
     implementation(androidx.core)
     implementation(androidx.recyclerview)
 
     implementation(magic.material)
-//    implementation(Libs.androidxViewBinding)
 }

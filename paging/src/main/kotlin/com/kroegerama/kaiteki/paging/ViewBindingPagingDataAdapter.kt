@@ -1,4 +1,4 @@
-package com.kroegerama.kaiteki.recyclerview
+package com.kroegerama.kaiteki.paging
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -8,6 +8,7 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
+import com.kroegerama.kaiteki.recyclerview.ViewBindingBaseViewHolder
 
 abstract class ViewBindingPagingDataAdapter<T : Any, VB : ViewBinding>(
     @Suppress("MemberVisibilityCanBePrivate")

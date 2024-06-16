@@ -1,4 +1,4 @@
-package com.kroegerama.kaiteki.recyclerview
+package com.kroegerama.kaiteki.paging
 
 import androidx.paging.PagingData
 import androidx.paging.PagingSource

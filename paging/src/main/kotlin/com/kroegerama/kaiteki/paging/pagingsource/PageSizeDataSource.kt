@@ -1,4 +1,4 @@
-package com.kroegerama.kaiteki.retrofit.datasource
+package com.kroegerama.kaiteki.paging.pagingsource
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

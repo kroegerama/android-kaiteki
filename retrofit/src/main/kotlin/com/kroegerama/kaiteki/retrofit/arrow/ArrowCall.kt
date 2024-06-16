@@ -32,13 +32,14 @@ internal inline fun <reified T> Raise<CallError>.handleResponse(
     }
 
     if (response.code() == 204) {
-        if (Unit !is T) {
-            raise(
-                UnexpectedError(
-                    IllegalStateException("Response code is ${response.code()} and body is null but <T> is ${T::class}. <T> needs to be Unit.")
-                )
-            )
+        if (Unit is T) {
+            return Unit
         }
+        raise(
+            UnexpectedError(
+                IllegalStateException("Response code is ${response.code()} and body is null but <T> is ${T::class}. <T> needs to be Unit.")
+            )
+        )
     }
 
     raise(

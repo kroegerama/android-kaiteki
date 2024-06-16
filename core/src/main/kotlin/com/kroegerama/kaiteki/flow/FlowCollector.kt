@@ -25,33 +25,33 @@ annotation class FlowCollectorDsl
  * @see flowWithLifecycle
  */
 @FlowCollectorDsl
-inline fun <reified T> Flow<T>.observeWithLifecycle(
+fun <T> Flow<T>.observeWithLifecycle(
     lifecycleOwner: LifecycleOwner,
     minActiveState: Lifecycle.State = Lifecycle.State.STARTED,
-    noinline action: suspend (T) -> Unit
+    action: suspend (T) -> Unit
 ): Job = lifecycleOwner.lifecycleScope.launch {
     flowWithLifecycle(lifecycleOwner.lifecycle, minActiveState).collect(action)
 }
 
 @FlowCollectorDsl
-inline fun <reified T> Flow<T>.observeWithLifecycle(
+fun <T> Flow<T>.observeWithLifecycle(
     fragment: Fragment,
     minActiveState: Lifecycle.State = Lifecycle.State.STARTED,
-    noinline action: suspend (T) -> Unit
+    action: suspend (T) -> Unit
 ): Job = observeWithLifecycle(fragment.viewLifecycleOwner, minActiveState, action)
 
 @FlowCollectorDsl
-inline fun <reified T> LifecycleOwner.observeFlow(
+fun <T> LifecycleOwner.observeFlow(
     flow: Flow<T>,
     minActiveState: Lifecycle.State = Lifecycle.State.STARTED,
-    noinline action: suspend (T) -> Unit
+    action: suspend (T) -> Unit
 ): Job = flow.observeWithLifecycle(this, minActiveState, action)
 
 @FlowCollectorDsl
-inline fun <reified T> Fragment.observeFlow(
+fun <T> Fragment.observeFlow(
     flow: Flow<T>,
     minActiveState: Lifecycle.State = Lifecycle.State.STARTED,
-    noinline action: suspend (T) -> Unit
+    action: suspend (T) -> Unit
 ): Job = flow.observeWithLifecycle(viewLifecycleOwner, minActiveState, action)
 
 @Suppress("DeprecatedCallableAddReplaceWith")
@@ -96,9 +96,9 @@ value class MultipleFlowCollectorContext @PublishedApi internal constructor(
         block: (@FlowCollectorDsl MultipleFlowCollectorContext).() -> Unit
     ): Job = error("Not allowed in this context")
 
-    inline fun <reified T> observe(
+    fun <T> observe(
         flow: Flow<T>,
-        noinline action: suspend (T) -> Unit
+        action: suspend (T) -> Unit
     ) {
         scope.launch {
             flow.collect(action)
@@ -119,9 +119,9 @@ value class MultipleFlowCollectorContext @PublishedApi internal constructor(
  * @see Lifecycle.repeatOnLifecycle
  */
 @FlowCollectorDsl
-inline fun LifecycleOwner.observeMultipleFlows(
+fun LifecycleOwner.observeMultipleFlows(
     minActiveState: Lifecycle.State = Lifecycle.State.STARTED,
-    crossinline block: (@FlowCollectorDsl MultipleFlowCollectorContext).() -> Unit
+    block: (@FlowCollectorDsl MultipleFlowCollectorContext).() -> Unit
 ): Job = lifecycleScope.launch {
     repeatOnLifecycle(minActiveState) {
         block(
@@ -136,7 +136,7 @@ inline fun LifecycleOwner.observeMultipleFlows(
  * @see LifecycleOwner.observeMultipleFlows
  */
 @FlowCollectorDsl
-inline fun Fragment.observeMultipleFlows(
+fun Fragment.observeMultipleFlows(
     minActiveState: Lifecycle.State = Lifecycle.State.STARTED,
-    crossinline block: (@FlowCollectorDsl MultipleFlowCollectorContext).() -> Unit
+    block: (@FlowCollectorDsl MultipleFlowCollectorContext).() -> Unit
 ): Job = viewLifecycleOwner.observeMultipleFlows(minActiveState, block)

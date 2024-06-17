@@ -51,7 +51,13 @@ dependencies {
     implementation(magic.kotlin.stdlib.jdk8)
     implementation(magic.kotlinx.coroutines.android)
 
+    implementation(androidx.bundles.lifecycle)
+
+    implementation(androidx.appcompat)
+    implementation(androidx.core)
     implementation(androidx.paging.runtime)
+    implementation(androidx.recyclerview)
+
     implementation(androidx.swiperefreshlayout)
 
     implementation(magic.retrofit)

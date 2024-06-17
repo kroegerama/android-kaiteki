@@ -9,8 +9,6 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import arrow.core.Either
 import com.kroegerama.kaiteki.flow.observeMultipleFlows
-import com.kroegerama.kaiteki.retrofit.arrow.TypedCallError
-import com.kroegerama.kaiteki.retrofit.arrow.exception
 import com.kroegerama.kaiteki.retrofit.datasource.SimpleDataSource
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -29,10 +27,10 @@ abstract class PagingControllerBase<
         NoDataAdapter,
         LoadStateAdapter,
         ErrorAdapter,
-        ErrorResponseType> where NoDataAdapter : RecyclerView.Adapter<*>,
-                                 NoDataAdapter : PagingControllerBase.NoData<EmptyConfig>,
-                                 LoadStateAdapter : androidx.paging.LoadStateAdapter<*>,
-                                 ErrorAdapter : androidx.paging.LoadStateAdapter<*> {
+        CallError> where NoDataAdapter : RecyclerView.Adapter<*>,
+                         NoDataAdapter : PagingControllerBase.NoData<EmptyConfig>,
+                         LoadStateAdapter : androidx.paging.LoadStateAdapter<*>,
+                         ErrorAdapter : androidx.paging.LoadStateAdapter<*> {
 
     fun RecyclerView.setupPagingAdapterWithRetryRefresh(
         lifecycleOwner: LifecycleOwner,
@@ -93,7 +91,7 @@ abstract class PagingControllerBase<
     fun RecyclerView.setupListAdapterWithRetryRefresh(
         lifecycleOwner: LifecycleOwner,
         listAdapter: ListAdapter<*, *>,
-        errorFlow: Flow<TypedCallError<ErrorResponseType>?>,
+        errorFlow: Flow<CallError?>,
         refreshingFlow: Flow<Boolean>,
         refreshFun: () -> Unit,
         swipeRefreshLayout: SwipeRefreshLayout? = parent as? SwipeRefreshLayout,
@@ -138,7 +136,7 @@ abstract class PagingControllerBase<
                 ) { callError, refreshing, itemCount ->
                     when {
                         refreshing -> LoadState.Loading
-                        callError != null -> LoadState.Error(callError.exception())
+                        callError != null -> LoadState.Error(callError.throwable())
                         else -> LoadState.NotLoading(true)
                     } to itemCount
                 }.conflate()
@@ -155,7 +153,7 @@ abstract class PagingControllerBase<
     fun <T> RecyclerView.setupListAdapterWithRetryRefresh(
         lifecycleOwner: LifecycleOwner,
         listAdapter: ListAdapter<*, *>,
-        simpleDataSource: SimpleDataSource<Either<TypedCallError<ErrorResponseType>, T>>,
+        simpleDataSource: SimpleDataSource<Either<CallError, T>>,
         swipeRefreshLayout: SwipeRefreshLayout? = parent as? SwipeRefreshLayout,
         emptyConfigFlow: Flow<EmptyConfig> = flowOf(emptyConfig()),
         additionalHeaderAdapter: RecyclerView.Adapter<out RecyclerView.ViewHolder>? = null,
@@ -195,6 +193,7 @@ abstract class PagingControllerBase<
     abstract fun noDataAdapter(): NoDataAdapter
     abstract fun loadStateAdapter(retryFun: () -> Unit): LoadStateAdapter
     abstract fun errorAdapter(retryFun: () -> Unit): ErrorAdapter
+    abstract fun CallError.throwable(): Throwable
 
     interface NoData<EmptyConfig> {
         var visible: Boolean

@@ -10,6 +10,7 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
+        isCoreLibraryDesugaringEnabled = true
     }
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_17.toString()
@@ -60,6 +61,8 @@ dependencies {
     implementation(project(":recyclerview"))
     implementation(project(":retrofit"))
     implementation(project(":views"))
+
+    coreLibraryDesugaring(magic.desugar)
 
 //    debugImplementation(Libs.leakCanary)
 //    lintChecks(project(":lint"))

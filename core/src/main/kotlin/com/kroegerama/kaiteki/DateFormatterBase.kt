@@ -55,11 +55,11 @@ abstract class DateFormatterBase(
 
     fun Temporal.formatFancy(
         useDuration: Boolean = false,
-        durationSwitchOverHours: Long = 12
+        durationSwitchOver: Duration = Duration.ofHours(12)
     ): String = buildString {
         if (useDuration) {
             val age = Duration.between(OffsetDateTime.now(), this@formatFancy)
-            if (age.abs() < Duration.ofHours(durationSwitchOverHours)) {
+            if (age.abs() < durationSwitchOver) {
                 append(age.formatFancy())
                 return@buildString
             }
@@ -76,33 +76,39 @@ abstract class DateFormatterBase(
         append(formatTime())
     }
 
-    fun Duration.formatFancy(): String {
-        val days = toDays()
-        if (days.absoluteValue > 1) {
+    fun Duration.formatFancy(
+        daysSwitchOver: Duration = Duration.ofDays(1),
+        hoursSwitchOver: Duration = Duration.ofHours(2),
+        minutesSwitchOver: Duration = Duration.ofMinutes(2)
+    ): String {
+        val abs = abs()
+
+        if (abs >= daysSwitchOver) {
+            val days = toDays()
             return if (days < 0) {
                 getPlural(daysAgoRes, days.absoluteValue)
             } else {
                 getPlural(inDaysRes, days.absoluteValue)
             }
         }
-        val hours = toHours()
-        if (hours.absoluteValue > 2) {
+        if (abs >= hoursSwitchOver) {
+            val hours = toHours()
             return if (hours < 0) {
                 getPlural(hoursAgoRes, hours.absoluteValue)
             } else {
                 getPlural(inHoursRes, hours.absoluteValue)
             }
         }
-        val minutes = toMinutes()
-        if (minutes.absoluteValue > 2) {
+        if (abs >= minutesSwitchOver) {
+            val minutes = toMinutes()
             return if (minutes < 0) {
                 getPlural(minutesAgoRes, minutes.absoluteValue)
             } else {
                 getPlural(inMinutesRes, minutes.absoluteValue)
             }
         }
-        val seconds = toSeconds()
         return if (seconds <= 0) {
+            val seconds = toSeconds()
             getPlural(secondsAgoRes, seconds.absoluteValue)
         } else {
             getPlural(inSecondsRes, seconds.absoluteValue)

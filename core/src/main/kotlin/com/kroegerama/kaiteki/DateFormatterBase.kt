@@ -55,12 +55,21 @@ abstract class DateFormatterBase(
 
     fun Temporal.formatFancy(
         useDuration: Boolean = false,
-        durationSwitchOver: Duration = Duration.ofHours(12)
+        durationSwitchOver: Duration = defaultDurationSwitchOver,
+        daysSwitchOver: Duration = defaultDaysSwitchOver,
+        hoursSwitchOver: Duration = defaultHoursSwitchOver,
+        minutesSwitchOver: Duration = defaultMinutesSwitchOver
     ): String = buildString {
         if (useDuration) {
             val age = Duration.between(OffsetDateTime.now(), this@formatFancy)
             if (age.abs() < durationSwitchOver) {
-                append(age.formatFancy())
+                append(
+                    age.formatFancy(
+                        daysSwitchOver = daysSwitchOver,
+                        hoursSwitchOver = hoursSwitchOver,
+                        minutesSwitchOver = minutesSwitchOver
+                    )
+                )
                 return@buildString
             }
         }
@@ -77,9 +86,9 @@ abstract class DateFormatterBase(
     }
 
     fun Duration.formatFancy(
-        daysSwitchOver: Duration = Duration.ofDays(1),
-        hoursSwitchOver: Duration = Duration.ofHours(2),
-        minutesSwitchOver: Duration = Duration.ofMinutes(2)
+        daysSwitchOver: Duration = defaultDaysSwitchOver,
+        hoursSwitchOver: Duration = defaultHoursSwitchOver,
+        minutesSwitchOver: Duration = defaultMinutesSwitchOver
     ): String {
         val abs = abs()
 
@@ -130,6 +139,13 @@ abstract class DateFormatterBase(
         append(start.formatDate())
         append(" \u2012 ")
         append(endInclusive.formatDate())
+    }
+
+    companion object {
+        val defaultDurationSwitchOver: Duration = Duration.ofHours(12)
+        val defaultDaysSwitchOver: Duration = Duration.ofDays(1)
+        val defaultHoursSwitchOver: Duration = Duration.ofHours(2)
+        val defaultMinutesSwitchOver: Duration = Duration.ofMinutes(2)
     }
 
 }

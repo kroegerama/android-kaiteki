@@ -26,7 +26,7 @@ abstract class DateFormatterBase(
     @PluralsRes protected val inMinutesRes: Int,
     @PluralsRes protected val secondsAgoRes: Int,
     @PluralsRes protected val inSecondsRes: Int,
-    protected val dateTimeDelimiter: String = " • ",
+    private val defaultDateTimeDelimiter: String = " • ",
     protected val contextProvider: () -> Context
 ) {
 
@@ -42,7 +42,7 @@ abstract class DateFormatterBase(
         else -> this
     }
 
-    fun Temporal.formatDateTime(): String = buildString {
+    fun Temporal.formatDateTime(dateTimeDelimiter: String = defaultDateTimeDelimiter): String = buildString {
         append(formatDate())
         append(dateTimeDelimiter)
         append(formatTime())
@@ -58,7 +58,8 @@ abstract class DateFormatterBase(
         durationSwitchOver: Duration = defaultDurationSwitchOver,
         daysSwitchOver: Duration = defaultDaysSwitchOver,
         hoursSwitchOver: Duration = defaultHoursSwitchOver,
-        minutesSwitchOver: Duration = defaultMinutesSwitchOver
+        minutesSwitchOver: Duration = defaultMinutesSwitchOver,
+        dateTimeDelimiter: String = defaultDateTimeDelimiter
     ): String = buildString {
         if (useDuration) {
             val age = Duration.between(OffsetDateTime.now(), this@formatFancy)

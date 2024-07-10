@@ -6,6 +6,7 @@ import androidx.annotation.StyleRes
 import androidx.fragment.app.Fragment
 import arrow.core.Either
 import com.kroegerama.kaiteki.architecture.popBackStack
+import com.kroegerama.kaiteki.materialAlertDialog
 import com.kroegerama.kaiteki.retrofit.arrow.CallError
 import com.kroegerama.kaiteki.retrofit.arrow.CallErrorException
 import com.kroegerama.kaiteki.retrofit.arrow.HttpError
@@ -13,7 +14,6 @@ import com.kroegerama.kaiteki.retrofit.arrow.IOError
 import com.kroegerama.kaiteki.retrofit.arrow.TypedCallError
 import com.kroegerama.kaiteki.retrofit.arrow.TypedHttpError
 import com.kroegerama.kaiteki.retrofit.arrow.UnexpectedError
-import com.kroegerama.kaiteki.showMaterialAlertDialog
 
 abstract class NetworkErrorHandlingBase<ErrorResponse : Any, SpecificError>(
     @StringRes
@@ -69,16 +69,27 @@ abstract class NetworkErrorHandlingBase<ErrorResponse : Any, SpecificError>(
         else -> throwable.getErrorNameRes()?.let(::getString) ?: getString(networkErrorUnexpectedRes, throwable.fallbackDescription)
     }
 
+    private val visibleErrorDialogs = mutableSetOf<Int>()
+
     fun Context.handleError(
         networkError: TypedCallError<ErrorResponse>,
         dismissListener: () -> Unit = { }
     ) {
+        val networkErrorHash = System.identityHashCode(networkError)
+        if (networkErrorHash in visibleErrorDialogs) return
+
         val message = getNetworkErrorMessage(networkError)
-        showMaterialAlertDialog(theme = alertDialogTheme) {
+        materialAlertDialog(theme = alertDialogTheme) {
             setTitle(networkErrorTitleRes)
             setMessage(message)
             setPositiveButton(android.R.string.ok, null)
-            setOnDismissListener { dismissListener() }
+            setOnDismissListener {
+                visibleErrorDialogs -= networkErrorHash
+                dismissListener()
+            }
+        }.apply {
+            visibleErrorDialogs += networkErrorHash
+            show()
         }
     }
 

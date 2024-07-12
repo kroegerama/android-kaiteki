@@ -1,7 +1,6 @@
 package com.kroegerama.kaiteki.architecture
 
 import android.os.Bundle
-import android.util.Log
 import androidx.annotation.IdRes
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavDestination
@@ -13,8 +12,10 @@ import androidx.navigation.Navigator
 import androidx.navigation.fragment.DialogFragmentNavigator
 import androidx.navigation.fragment.FragmentNavigator
 import androidx.navigation.fragment.findNavController
+import java.util.logging.Logger
 
 private val navLabelArgRegex by lazy { """[{](\S+?)[}]""".toRegex() }
+private val logger = Logger.getLogger("NavUtils")
 
 fun NavDestination.labelWithArgs(args: Bundle?): CharSequence? = with(label) {
     if (isNullOrBlank() || args == null || !contains('{') || !contains('}')) return this
@@ -70,11 +71,11 @@ fun Fragment.navigateSafe(
     var currentFragmentInHierarchy: Fragment? = this
     while (currentFragmentInHierarchy != null) {
         if (currentFragmentInHierarchy.javaClass.name == currentClassName) {
-            Log.d("NavUtil", "navigate because $currentClassName was in hierarchy")
+            logger.info("navigate because $currentClassName was in hierarchy")
             navController.navigate(directions.actionId, directions.arguments, navOptions, navigatorExtras)
             return
         }
         currentFragmentInHierarchy = currentFragmentInHierarchy.parentFragment
     }
-    Log.w("NavUtil", "ignored navigation to $directions; own destination was ${javaClass.name}, but currentDestination was $currentClassName")
+    logger.warning("ignored navigation to $directions; own destination was ${javaClass.name}, but currentDestination was $currentClassName")
 }

@@ -2,9 +2,12 @@ package com.kroegerama.kaiteki
 
 import android.content.Context
 import android.graphics.Typeface
-import android.util.Log
 import android.util.TypedValue
 import androidx.core.content.res.ResourcesCompat
+import java.util.logging.Level
+import java.util.logging.Logger
+
+private val logger = Logger.getLogger("FontUtils")
 
 enum class TypefaceStyle(val value: Int) {
     NORMAL(Typeface.NORMAL),
@@ -23,7 +26,7 @@ fun Context.getThemeTypeface(style: TypefaceStyle): Typeface {
         val family = ResourcesCompat.getFont(this, res)
         return Typeface.create(family, style.value)
     } catch (e: Exception) {
-        Log.w("Font", "Using FontFamily fallback", e)
+        logger.log(Level.WARNING, "Using FontFamily fallback", e)
     }
 
     return Typeface.defaultFromStyle(style.value)

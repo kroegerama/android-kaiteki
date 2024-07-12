@@ -1,11 +1,13 @@
 package com.kroegerama.kaiteki.architecture
 
 import android.content.SharedPreferences
-import android.util.Log
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.channels.trySendBlocking
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import java.util.logging.Logger
+
+private val logger = Logger.getLogger("PreferencesFlow")
 
 private fun <T> SharedPreferences.flow(
     key: String,
@@ -14,7 +16,7 @@ private fun <T> SharedPreferences.flow(
     fun getOrNull() = if (contains(key)) getter() else null
 
     val listener = SharedPreferences.OnSharedPreferenceChangeListener { _, callbackKey ->
-        Log.d("PrefsFlow", "KEY $callbackKey")
+        logger.info("KEY $callbackKey")
         if (callbackKey == key) {
             trySendBlocking(getOrNull())
         }

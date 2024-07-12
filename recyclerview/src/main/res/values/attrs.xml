@@ -3,4 +3,8 @@
 
     <attr name="autofitLayoutManagerColWidth" format="dimension" />
 
+    <declare-styleable name="AutofitLayoutManager">
+        <attr name="autofitLayoutManagerColWidth" />
+    </declare-styleable>
+
 </resources>

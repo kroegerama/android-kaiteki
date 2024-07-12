@@ -11,6 +11,7 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
+        isCoreLibraryDesugaringEnabled = true
     }
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_17.toString()
@@ -56,9 +57,10 @@ dependencies {
     implementation(androidx.paging.runtime)
 
     implementation(magic.bundles.moshi)
-    implementation(magic.timber)
 
     implementation(magic.bundles.arrow)
 
     implementation(project(":core"))
+
+    coreLibraryDesugaring(magic.desugar)
 }

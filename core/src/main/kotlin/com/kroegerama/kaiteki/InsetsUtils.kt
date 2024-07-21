@@ -92,7 +92,7 @@ fun View.doOnApplyWindowInsetsRelative(
 fun <T : View> T.handleWindowInsets(
     edge: WindowInsetsEdge,
     typeMask: Int = WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.displayCutout() or WindowInsetsCompat.Type.ime(),
-    consumer: (WindowInsetsCompat) -> WindowInsetsCompat = { WindowInsetsCompat.CONSUMED },
+    consumer: WindowInsetsCompat.(insets: Insets) -> WindowInsetsCompat = noopInsetsConsumer,
     paddingUpdater: T.(start: Int, top: Int, end: Int, bottom: Int) -> Unit = View::setPaddingRelative
 ) {
     if (this is ViewGroup && clipToPadding) {
@@ -114,14 +114,14 @@ fun <T : View> T.handleWindowInsets(
             bars.bottom.takeIf(edge.bottom) + originalPadding.bottom
         )
 
-        consumer(this)
+        consumer(bars)
     }
 }
 
 fun MaterialCardView.handleWindowInsets(
     edge: WindowInsetsEdge,
     typeMask: Int = WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.displayCutout() or WindowInsetsCompat.Type.ime(),
-    consumer: (WindowInsetsCompat) -> WindowInsetsCompat = { WindowInsetsCompat.CONSUMED },
+    consumer: WindowInsetsCompat.(insets: Insets) -> WindowInsetsCompat = noopInsetsConsumer
 ) = handleWindowInsets(edge, typeMask, consumer) { start, top, end, bottom ->
     val isRtl = getLayoutDirection() == View.LAYOUT_DIRECTION_RTL
     setContentPadding(
@@ -131,6 +131,8 @@ fun MaterialCardView.handleWindowInsets(
         bottom
     )
 }
+
+val noopInsetsConsumer: WindowInsetsCompat.(insets: Insets) -> WindowInsetsCompat = { this }
 
 data class RelativePadding(
     val start: Int,
@@ -147,6 +149,22 @@ data class WindowInsetsEdge(
     val end: Boolean = false,
     val bottom: Boolean = false
 ) {
+    fun insetsConsumer(view: View): WindowInsetsCompat.(insets: Insets) -> WindowInsetsCompat = { insets ->
+        val isRtl = view.getLayoutDirection() == View.LAYOUT_DIRECTION_RTL
+        inset(this, insets, isRtl)
+    }
+
+    fun inset(original: WindowInsetsCompat, insets: Insets, isRtl: Boolean): WindowInsetsCompat {
+        val left = if (isRtl) end else start
+        val right = if (isRtl) start else end
+        return original.inset(
+            if (left) insets.left else 0,
+            if (top) insets.top else 0,
+            if (right) insets.right else 0,
+            if (bottom) insets.bottom else 0
+        )
+    }
+
     companion object {
         val Start = WindowInsetsEdge(
             start = true,

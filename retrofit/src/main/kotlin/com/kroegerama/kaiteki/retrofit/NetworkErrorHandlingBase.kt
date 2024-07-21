@@ -34,6 +34,8 @@ abstract class NetworkErrorHandlingBase<ErrorResponse : Any, SpecificError>(
     @StringRes
     open fun Throwable.getErrorNameRes(): Int? = null
 
+    open fun ignoreError(error: TypedCallError<ErrorResponse>) = false
+
     private val specificErrorRegistry by lazy {
         mutableMapOf<SpecificError, Int>().apply {
             initSpecificErrors()
@@ -75,6 +77,8 @@ abstract class NetworkErrorHandlingBase<ErrorResponse : Any, SpecificError>(
         networkError: TypedCallError<ErrorResponse>,
         dismissListener: () -> Unit = { }
     ) {
+        if (ignoreError(networkError)) return
+
         val networkErrorHash = System.identityHashCode(networkError)
         if (networkErrorHash in visibleErrorDialogs) return
 

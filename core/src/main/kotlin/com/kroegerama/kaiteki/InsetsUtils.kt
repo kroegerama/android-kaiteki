@@ -2,10 +2,16 @@ package com.kroegerama.kaiteki
 
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewGroup.MarginLayoutParams
 import androidx.core.graphics.Insets
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.doOnAttach
+import androidx.core.view.marginBottom
+import androidx.core.view.marginEnd
+import androidx.core.view.marginStart
+import androidx.core.view.marginTop
+import androidx.core.view.updateLayoutParams
 import androidx.core.view.updatePadding
 import com.google.android.material.card.MaterialCardView
 import java.util.logging.Logger
@@ -77,10 +83,28 @@ fun MaterialCardView.handleSystemBarsInsets(top: Boolean = false, bottom: Boolea
     }
 }
 
-fun View.doOnApplyWindowInsetsRelative(
+val NoopInsetsConsumer: WindowInsetsCompat.(insets: Insets) -> WindowInsetsCompat = { this }
+
+val MarginReader: View.() -> RelativePadding = { RelativePadding(marginStart, marginTop, marginEnd, marginBottom) }
+val PaddingReader: View.() -> RelativePadding = ::RelativePadding
+
+val MarginUpdater: View.(start: Int, top: Int, end: Int, bottom: Int) -> Unit = { start, top, end, bottom ->
+    updateLayoutParams<MarginLayoutParams> {
+        marginStart = start
+        topMargin = top
+        marginEnd = end
+        bottomMargin = bottom
+    }
+}
+val PaddingUpdater: View.(start: Int, top: Int, end: Int, bottom: Int) -> Unit = View::setPaddingRelative
+
+val DefaultTypeMask = WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.displayCutout() or WindowInsetsCompat.Type.ime()
+
+fun <T : View> T.doOnApplyWindowInsetsRelative(
+    paddingReader: T.() -> RelativePadding = PaddingReader,
     block: WindowInsetsCompat.(v: View, originalPadding: RelativePadding) -> WindowInsetsCompat
 ) {
-    val originalPadding = RelativePadding(this)
+    val originalPadding = paddingReader()
     ViewCompat.setOnApplyWindowInsetsListener(this) { v, insets ->
         insets.block(v, originalPadding)
     }
@@ -91,9 +115,10 @@ fun View.doOnApplyWindowInsetsRelative(
 
 fun <T : View> T.handleWindowInsets(
     edge: WindowInsetsEdge,
-    typeMask: Int = WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.displayCutout() or WindowInsetsCompat.Type.ime(),
-    consumer: WindowInsetsCompat.(insets: Insets) -> WindowInsetsCompat = noopInsetsConsumer,
-    paddingUpdater: T.(start: Int, top: Int, end: Int, bottom: Int) -> Unit = View::setPaddingRelative
+    typeMask: Int = DefaultTypeMask,
+    insetsConsumer: WindowInsetsCompat.(insets: Insets) -> WindowInsetsCompat = NoopInsetsConsumer,
+    paddingReader: T.() -> RelativePadding = PaddingReader,
+    paddingUpdater: T.(start: Int, top: Int, end: Int, bottom: Int) -> Unit = PaddingUpdater
 ) {
     if (this is ViewGroup && clipToPadding) {
         logger.warning("applying window insets to $javaClass, but clipToPadding is true")
@@ -101,7 +126,7 @@ fun <T : View> T.handleWindowInsets(
     fun Int.takeIf(take: Boolean) = if (take) this else 0
     val isRtl = getLayoutDirection() == View.LAYOUT_DIRECTION_RTL
 
-    doOnApplyWindowInsetsRelative { _, originalPadding ->
+    doOnApplyWindowInsetsRelative(paddingReader = paddingReader) { _, originalPadding ->
         val bars = getInsets(typeMask)
         val barsStart = if (isRtl) bars.right else bars.left
         val barsEnd = if (isRtl) bars.left else bars.right
@@ -114,25 +139,34 @@ fun <T : View> T.handleWindowInsets(
             bars.bottom.takeIf(edge.bottom) + originalPadding.bottom
         )
 
-        consumer(bars)
+        insetsConsumer(bars)
     }
 }
 
 fun MaterialCardView.handleWindowInsets(
     edge: WindowInsetsEdge,
-    typeMask: Int = WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.displayCutout() or WindowInsetsCompat.Type.ime(),
-    consumer: WindowInsetsCompat.(insets: Insets) -> WindowInsetsCompat = noopInsetsConsumer
-) = handleWindowInsets(edge, typeMask, consumer) { start, top, end, bottom ->
-    val isRtl = getLayoutDirection() == View.LAYOUT_DIRECTION_RTL
-    setContentPadding(
-        if (isRtl) end else start,
-        top,
-        if (isRtl) start else end,
-        bottom
-    )
-}
-
-val noopInsetsConsumer: WindowInsetsCompat.(insets: Insets) -> WindowInsetsCompat = { this }
+    typeMask: Int = DefaultTypeMask,
+    insetsConsumer: WindowInsetsCompat.(insets: Insets) -> WindowInsetsCompat = NoopInsetsConsumer
+) = handleWindowInsets(
+    edge = edge,
+    typeMask = typeMask,
+    insetsConsumer = insetsConsumer,
+    paddingReader = {
+        val isRtl = getLayoutDirection() == View.LAYOUT_DIRECTION_RTL
+        val contentPaddingStart = if (isRtl) contentPaddingRight else contentPaddingLeft
+        val contentPaddingEnd = if (isRtl) contentPaddingLeft else contentPaddingRight
+        RelativePadding(contentPaddingStart, contentPaddingTop, contentPaddingEnd, contentPaddingBottom)
+    },
+    paddingUpdater = { start, top, end, bottom ->
+        val isRtl = getLayoutDirection() == View.LAYOUT_DIRECTION_RTL
+        setContentPadding(
+            if (isRtl) end else start,
+            top,
+            if (isRtl) start else end,
+            bottom
+        )
+    }
+)
 
 data class RelativePadding(
     val start: Int,

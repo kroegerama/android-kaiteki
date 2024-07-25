@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.transform
 
 open class SingleEventFlow<T : Any> : Flow<T> {
 
-    private val sharedFlow = MutableSharedFlow<T?>(1, 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
+    private val sharedFlow = MutableSharedFlow<T?>(1, 0, onBufferOverflow = BufferOverflow.DROP_OLDEST)
     private val collectorFlow = sharedFlow.filterNotNull().transform {
         sharedFlow.emit(null)
         emit(it)

@@ -48,6 +48,7 @@ abstract class ViewBindingPagingDataAdapter<T : Any, VB : ViewBinding>(
         holder.binding.update(holder, holder.itemView.context, holder.itemViewType, getItem(position))
     }
 
+    @Suppress("MemberVisibilityCanBePrivate")
     protected fun RecyclerView.ViewHolder.getCurrentItem(): T? =
         bindingAdapterPosition.takeUnless { it == RecyclerView.NO_POSITION }?.let(::getItem)
 

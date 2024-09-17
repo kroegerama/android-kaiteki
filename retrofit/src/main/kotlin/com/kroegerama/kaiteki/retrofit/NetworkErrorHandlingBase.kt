@@ -71,6 +71,9 @@ abstract class NetworkErrorHandlingBase<ErrorResponse : Any, SpecificError>(
         else -> throwable.getErrorNameRes()?.let(::getString) ?: getString(networkErrorUnexpectedRes, throwable.fallbackDescription)
     }
 
+    fun Context.getNetworkErrorMessage(resource: RetrofitResource<*>): String? =
+        resource.asCallError()?.let { getNetworkErrorMessage(it) }
+
     private val visibleErrorDialogs = mutableSetOf<Int>()
 
     fun Context.handleError(
@@ -97,16 +100,18 @@ abstract class NetworkErrorHandlingBase<ErrorResponse : Any, SpecificError>(
         }
     }
 
+    fun RetrofitResource<*>.asCallError(): CallError? = when (this) {
+        is RetrofitResource.Error -> UnexpectedError(cause = throwable)
+        is RetrofitResource.NoSuccess -> HttpError(code = code, message = "", body = errorBody)
+        is RetrofitResource.Running -> null
+        is RetrofitResource.Success -> null
+    }
+
     fun Context.handleError(
         resource: RetrofitResource<*>,
         dismissListener: () -> Unit = { }
     ) {
-        val error = when (resource) {
-            is RetrofitResource.Error -> UnexpectedError(cause = resource.throwable)
-            is RetrofitResource.NoSuccess -> HttpError(code = resource.code, message = "", body = resource.errorBody)
-            is RetrofitResource.Running -> return
-            is RetrofitResource.Success -> return
-        }
+        val error = resource.asCallError() ?: return
         handleError(error, dismissListener)
     }
 

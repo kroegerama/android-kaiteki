@@ -58,6 +58,13 @@ fun <Param, Key : Any, Value : Any> defaultPager(
     )
 }
 
+fun <Param, Key : Any, Value : Any> ViewModel.defaultPager(
+    parameterFlow: Flow<Param>,
+    pageSize: Int = DEFAULT_PAGE_SIZE,
+    initialLoadSize: Int = DEFAULT_PAGE_SIZE,
+    pagingSourceFactory: (Param) -> PagingSource<Key, Value>
+) = defaultPager(parameterFlow, viewModelScope, pageSize, initialLoadSize, pagingSourceFactory)
+
 fun <Key : Any, Value : Any> ViewModel.pager(
     pageSize: Int = DEFAULT_PAGE_SIZE,
     initialLoadSize: Int = DEFAULT_PAGE_SIZE,

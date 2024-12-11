@@ -9,7 +9,6 @@ import android.animation.AnimatorListenerAdapter
 import android.view.View
 import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.constraintlayout.motion.widget.TransitionAdapter
-import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.TimeoutCancellationException
@@ -40,7 +39,7 @@ suspend fun View.awaitNextLayout() = suspendCancellableCoroutine<Unit> { cont ->
 }
 
 suspend fun View.awaitLayout() {
-    if (ViewCompat.isLaidOut(this) && !isLayoutRequested) {
+    if (isLaidOut && !isLayoutRequested) {
         return
     }
     awaitNextLayout()

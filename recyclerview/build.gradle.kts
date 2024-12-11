@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 plugins {
     id("com.android.library")
     alias(magic.plugins.kotlin.android)
@@ -9,13 +11,7 @@ android {
     namespace = "com.kroegerama.kaiteki.recyclerview"
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
         isCoreLibraryDesugaringEnabled = true
-    }
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_17.toString()
-        moduleName = "android.kaiteki.recyclerview"
     }
     buildFeatures {
         buildConfig = false
@@ -23,6 +19,12 @@ android {
 
     defaultConfig {
         minSdk = Android.minSdk
+    }
+    testOptions {
+        targetSdk = Android.targetSdk
+    }
+    lint {
+        targetSdk = Android.targetSdk
     }
 
     buildTypes {
@@ -45,7 +47,14 @@ android {
 }
 
 kotlin {
-    jvmToolchain(17)
+    val jvmVersion: String by project
+    jvmToolchain {
+        languageVersion = JavaLanguageVersion.of(jvmVersion)
+    }
+    compilerOptions {
+        jvmTarget = JvmTarget.fromTarget(jvmVersion)
+        moduleName = "android.kaiteki.recyclerview"
+    }
 }
 
 dependencies {

@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 plugins {
     id("com.android.application")
     alias(magic.plugins.kotlin.android)
@@ -8,12 +10,7 @@ android {
     namespace = "com.kroegerama.kaiteki.example"
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
         isCoreLibraryDesugaringEnabled = true
-    }
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_17.toString()
     }
 
     defaultConfig {
@@ -43,7 +40,13 @@ android {
 }
 
 kotlin {
-    jvmToolchain(17)
+    val jvmVersion: String by project
+    jvmToolchain {
+        languageVersion = JavaLanguageVersion.of(jvmVersion)
+    }
+    compilerOptions {
+        jvmTarget = JvmTarget.fromTarget(jvmVersion)
+    }
 }
 
 dependencies {

@@ -1,4 +1,5 @@
 import BuildConfig.createPomAction
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     `java-library`
@@ -10,7 +11,7 @@ plugins {
 
 dependencies {
     compileOnly(magic.kotlin.stdlib.jdk8)
-    compileOnly("com.android.tools.lint:lint-api:31.5.0")
+    compileOnly("com.android.tools.lint:lint-api:31.7.2")
 }
 
 java {
@@ -22,7 +23,13 @@ java {
 }
 
 kotlin {
-    jvmToolchain(17)
+    val jvmVersion: String by project
+    jvmToolchain {
+        languageVersion = JavaLanguageVersion.of(jvmVersion)
+    }
+    compilerOptions {
+        jvmTarget = JvmTarget.fromTarget(jvmVersion)
+    }
 }
 
 val nexusUsername: String? by project

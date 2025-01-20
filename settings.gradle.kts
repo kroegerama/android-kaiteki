@@ -33,6 +33,7 @@ dependencyResolutionManagement {
 rootProject.name = "android-kaiteki"
 
 include(":core")
+include(":compose")
 include(":retrofit")
 include(":recyclerview")
 include(":paging")

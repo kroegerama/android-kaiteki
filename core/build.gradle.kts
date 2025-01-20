@@ -70,6 +70,9 @@ dependencies {
     implementation(androidx.recyclerview)
     implementation(androidx.exifinterface)
 
+    implementation(platform(androidx.compose.bom))
+    implementation("androidx.compose.runtime:runtime")
+
     implementation(magic.coil)
 
     coreLibraryDesugaring(magic.desugar)

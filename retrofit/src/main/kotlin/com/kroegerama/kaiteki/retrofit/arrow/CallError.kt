@@ -1,9 +1,11 @@
 package com.kroegerama.kaiteki.retrofit.arrow
 
+import androidx.compose.runtime.Immutable
 import androidx.paging.PagingSource
 import okhttp3.ResponseBody
 import java.io.IOException
 
+@Immutable
 sealed interface TypedCallError<out E> {
     val code: Int?
     val cause: Throwable

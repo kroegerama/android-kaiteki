@@ -65,6 +65,9 @@ dependencies {
     implementation(androidx.lifecycle.livedata)
     implementation(androidx.paging.runtime)
 
+    implementation(platform(androidx.compose.bom))
+    implementation("androidx.compose.runtime:runtime")
+
     implementation(magic.bundles.moshi)
 
     implementation(magic.bundles.arrow)

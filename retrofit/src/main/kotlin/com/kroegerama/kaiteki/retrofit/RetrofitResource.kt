@@ -1,8 +1,10 @@
 package com.kroegerama.kaiteki.retrofit
 
+import androidx.compose.runtime.Immutable
 import okhttp3.Response
 import okhttp3.ResponseBody
 
+@Immutable
 sealed class RetrofitResource<out TSuccess> {
 
     data class Running<out T>(
@@ -97,6 +99,7 @@ sealed class RetrofitResource<out TSuccess> {
 
 }
 
+@Immutable
 data class RetryableRetrofitResource<out T>(
     val resource: RetrofitResource<T>,
     private val retryFun: (() -> Unit)?

@@ -9,7 +9,7 @@ plugins {
 
 android {
     compileSdk = Android.compileSdk
-    namespace = "com.kroegerama.kaiteki"
+    namespace = "com.kroegerama.kaiteki.compose"
 
     compileOptions {
         isCoreLibraryDesugaringEnabled = true

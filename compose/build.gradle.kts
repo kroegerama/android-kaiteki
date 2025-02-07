@@ -58,9 +58,12 @@ kotlin {
 dependencies {
     implementation(magic.kotlin.stdlib.jdk8)
     implementation(magic.kotlinx.coroutines.android)
+    implementation(magic.kotlinx.immutableCollections)
 
     implementation(androidx.activity.compose)
     implementation(androidx.browser)
+    implementation(androidx.navigation.runtime)
+    implementation(androidx.hilt.navigation.compose)
 
     implementation(magic.arrow.core)
 

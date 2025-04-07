@@ -58,7 +58,7 @@ kotlin {
 dependencies {
     implementation(magic.kotlin.stdlib.jdk8)
     implementation(magic.kotlinx.coroutines.android)
-    implementation(magic.kotlinx.immutableCollections)
+    implementation(magic.kotlinx.collections.immutable)
 
     implementation(androidx.activity.compose)
     implementation(androidx.browser)

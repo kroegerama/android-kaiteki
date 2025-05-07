@@ -18,6 +18,7 @@ import kotlinx.coroutines.CancellationException
 import retrofit2.Response
 import java.io.IOException
 
+@Deprecated("use PageSizePagingSource instead")
 abstract class PageSizeDataSource<R : Any, T : Any> : PagingSource<Int, T>() {
 
     override fun getRefreshKey(state: PagingState<Int, T>): Int? {
@@ -74,17 +75,20 @@ abstract class PageSizeDataSource<R : Any, T : Any> : PagingSource<Int, T>() {
     }
 }
 
+@Deprecated("use PageSizePagingSource with pager instead")
 fun <T : Any> ViewModel.pageSizePager(
     pageSize: Int = 20,
     call: suspend (page: Int, size: Int) -> Response<out List<T>>
 ): UpdatableFlow<PagingData<T>> {
-    val source = PageSizeDataSource(call)
+    var currentSource: PageSizeDataSource<List<T>, T>? = null
     val pager = Pager(
         config = PagingConfig(pageSize = pageSize, initialLoadSize = pageSize)
     ) {
-        source
+        PageSizeDataSource(call).also {
+            currentSource = it
+        }
     }
     return pager.flow.cachedIn(viewModelScope).updatable {
-        source.invalidate()
+        currentSource?.invalidate()
     }
 }

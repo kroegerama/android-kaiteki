@@ -10,6 +10,7 @@ import kotlinx.coroutines.CancellationException
 import retrofit2.Response
 import java.io.IOException
 
+@Deprecated("use SinglePagePagingSource instead")
 abstract class SinglePageDataSource<R : Any, T : Any> : PagingSource<Int, T>() {
 
     override fun getRefreshKey(state: PagingState<Int, T>): Int? = null

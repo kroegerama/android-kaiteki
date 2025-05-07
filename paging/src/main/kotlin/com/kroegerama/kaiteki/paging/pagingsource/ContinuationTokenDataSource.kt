@@ -10,6 +10,7 @@ import kotlinx.coroutines.CancellationException
 import retrofit2.Response
 import java.io.IOException
 
+@Deprecated("use ContinuationTokenPagingSource instead")
 abstract class ContinuationTokenDataSource<Token : Any, R : Any, T : Any> : PagingSource<Token, T>() {
 
     override fun getRefreshKey(state: PagingState<Token, T>): Token? = null

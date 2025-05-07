@@ -15,6 +15,7 @@ import android.view.MotionEvent
 import android.view.View
 import androidx.core.content.withStyledAttributes
 import androidx.core.graphics.applyCanvas
+import androidx.core.graphics.createBitmap
 import androidx.core.graphics.withClip
 import androidx.core.graphics.withTranslation
 import kotlin.math.pow
@@ -142,17 +143,19 @@ class DrawView @JvmOverloads constructor(
         }
     }
 
-    fun getAsBitmap(transparent: Boolean = true, paint: Paint = pStroke): Bitmap =
-        Bitmap.createBitmap(width - paddingLeft - paddingRight, height - paddingTop - paddingBottom, Bitmap.Config.ARGB_8888).also { bmp ->
-            bmp.applyCanvas {
-                withTranslation(-paddingLeft.toFloat(), -paddingTop.toFloat()) {
-                    if (!transparent) {
-                        drawColor(Color.WHITE)
-                    }
-                    drawPaths(this, paint)
+    fun getAsBitmap(transparent: Boolean = true, paint: Paint = pStroke): Bitmap = createBitmap(
+        width = width - paddingLeft - paddingRight,
+        height = height - paddingTop - paddingBottom
+    ).also { bmp ->
+        bmp.applyCanvas {
+            withTranslation(-paddingLeft.toFloat(), -paddingTop.toFloat()) {
+                if (!transparent) {
+                    drawColor(Color.WHITE)
                 }
+                drawPaths(this, paint)
             }
         }
+    }
 
     public override fun onSaveInstanceState(): Parcelable? {
         val savedState = SavedState(super.onSaveInstanceState())

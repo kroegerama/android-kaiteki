@@ -67,8 +67,12 @@ abstract class BaseAdapter<T> : RecyclerView.Adapter<BaseViewHolder<T>>() {
     }
 
     fun clear() {
+        val count = items.size
+        if (count == 0) {
+            return
+        }
         items.clear()
-        notifyDataSetChanged()
+        notifyItemRangeRemoved(0, count)
     }
 
     fun getItems(): List<T> = ArrayList(items)

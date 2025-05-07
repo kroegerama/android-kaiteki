@@ -2,11 +2,11 @@ package com.kroegerama.kaiteki
 
 import android.graphics.Color
 import android.graphics.drawable.Animatable
-import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.view.View
 import android.widget.ImageView
 import androidx.annotation.RequiresApi
+import androidx.core.graphics.drawable.toDrawable
 import coil.ImageLoader
 import coil.imageLoader
 import coil.load
@@ -29,7 +29,7 @@ fun ImageRequest.Builder.progress(view: View): ImageRequest.Builder {
 
         setTint(view.context.getThemeColor(R.attr.colorPrimary))
     }
-    val wrapper = GravityDrawable(progressDrawable, ColorDrawable(Color.TRANSPARENT))
+    val wrapper = GravityDrawable(progressDrawable, Color.TRANSPARENT.toDrawable())
 
     val weakView = WeakReference(view)
 

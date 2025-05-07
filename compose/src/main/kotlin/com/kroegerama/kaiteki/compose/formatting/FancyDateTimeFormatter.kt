@@ -6,6 +6,7 @@ import android.icu.text.RelativeDateTimeFormatter.AbsoluteUnit
 import android.icu.util.ULocale
 import android.os.Build
 import android.text.format.DateFormat
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -37,6 +38,7 @@ import java.time.temporal.Temporal
 import java.util.Locale
 import kotlin.math.absoluteValue
 
+@RequiresApi(Build.VERSION_CODES.N)
 @Immutable
 class FancyDateTimeFormatter(
     private val locale: Locale,
@@ -201,6 +203,7 @@ data class FancyDateTimeFormatterSkeletons(
     fun createYearPattern(locale: Locale): String = DateFormat.getBestDateTimePattern(locale, year)
 }
 
+@RequiresApi(Build.VERSION_CODES.N)
 @Composable
 fun rememberFancyDateTimeFormatter(
     locale: Locale = LocalLocale.current,
@@ -221,6 +224,7 @@ fun rememberFancyDateTimeFormatter(
 }
 
 @Preview(showBackground = true)
+@RequiresApi(Build.VERSION_CODES.N)
 @Composable
 private fun FancyDateTimeFormatterPreview() {
     MaterialTheme {

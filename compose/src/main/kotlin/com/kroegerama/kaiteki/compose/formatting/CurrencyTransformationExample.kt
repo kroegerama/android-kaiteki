@@ -2,6 +2,8 @@ package com.kroegerama.kaiteki.compose.formatting
 
 import android.icu.text.DecimalFormat
 import android.icu.text.DecimalFormatSymbols
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,6 +20,7 @@ import com.kroegerama.kaiteki.compose.ExperimentalKaitekiComposeApi
 import java.util.Locale
 
 @Preview(showBackground = true)
+@RequiresApi(Build.VERSION_CODES.N)
 @ExperimentalKaitekiComposeApi
 @Composable
 private fun CurrencyTransformationExample() {

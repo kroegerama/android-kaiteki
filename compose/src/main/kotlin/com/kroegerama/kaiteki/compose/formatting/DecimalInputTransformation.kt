@@ -1,6 +1,8 @@
 package com.kroegerama.kaiteki.compose.formatting
 
 import android.icu.text.DecimalFormatSymbols
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.input.InputTransformation
 import androidx.compose.foundation.text.input.TextFieldBuffer
@@ -14,6 +16,7 @@ import com.kroegerama.kaiteki.compose.LocalLocale
 import java.util.Locale
 import kotlin.math.min
 
+@RequiresApi(Build.VERSION_CODES.N)
 @ExperimentalKaitekiComposeApi
 @Stable
 class DecimalInputTransformation(
@@ -97,6 +100,7 @@ class DecimalInputTransformation(
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.N)
 @ExperimentalKaitekiComposeApi
 @Composable
 fun rememberDecimalInputTransformation(

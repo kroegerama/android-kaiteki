@@ -3,6 +3,8 @@ package com.kroegerama.kaiteki.compose.formatting
 import android.icu.text.DecimalFormat
 import android.icu.text.DecimalFormatSymbols
 import android.icu.util.Currency
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.text.input.OutputTransformation
 import androidx.compose.foundation.text.input.TextFieldBuffer
 import androidx.compose.foundation.text.input.insert
@@ -13,6 +15,7 @@ import com.kroegerama.kaiteki.compose.ExperimentalKaitekiComposeApi
 import com.kroegerama.kaiteki.compose.LocalLocale
 import java.util.Locale
 
+@RequiresApi(Build.VERSION_CODES.N)
 @ExperimentalKaitekiComposeApi
 @Stable
 class CurrencyOutputTransformation(
@@ -53,6 +56,7 @@ class CurrencyOutputTransformation(
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.N)
 @ExperimentalKaitekiComposeApi
 @Composable
 fun rememberCurrencyOutputTransformation(

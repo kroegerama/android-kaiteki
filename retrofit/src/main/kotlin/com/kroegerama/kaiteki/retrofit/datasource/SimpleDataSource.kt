@@ -5,6 +5,7 @@ import com.kroegerama.kaiteki.prepareLaunchWithProgress
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.firstOrNull
 
+@Deprecated("use core SimpleDataSource instead")
 data class SimpleDataSource<T>(
     val flow: SharedFlow<T>,
     val loading: SharedFlow<Boolean>,
@@ -17,6 +18,7 @@ data class SimpleDataSource<T>(
 
     companion object {
 
+        @Deprecated("replace with core SimpleDataSource and custom progress handling")
         fun <T> Fragment.withSimpleDataSourceValue(
             dataSource: SimpleDataSource<T>,
             block: (T) -> Unit

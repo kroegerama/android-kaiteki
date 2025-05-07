@@ -20,7 +20,7 @@ android {
     }
 
     defaultConfig {
-        minSdk = Android.minSdkCompose
+        minSdk = Android.minSdk
     }
     testOptions {
         targetSdk = Android.targetSdk

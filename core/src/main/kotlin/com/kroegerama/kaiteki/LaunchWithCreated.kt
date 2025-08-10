@@ -15,15 +15,39 @@ fun LifecycleOwner.launchWithCreated(
     context: CoroutineContext = EmptyCoroutineContext,
     start: CoroutineStart = CoroutineStart.DEFAULT,
     block: suspend CoroutineScope.() -> Unit
+) = launchWithStateAtLeast(
+    state = Lifecycle.State.CREATED,
+    context = context,
+    start = start,
+    block = block
+)
+
+fun Fragment.launchWithViewCreated(
+    context: CoroutineContext = EmptyCoroutineContext,
+    start: CoroutineStart = CoroutineStart.DEFAULT,
+    block: suspend CoroutineScope.() -> Unit
+) = launchWithViewStateAtLeast(
+    state = Lifecycle.State.CREATED,
+    context = context,
+    start = start,
+    block = block
+)
+
+fun LifecycleOwner.launchWithStateAtLeast(
+    state: Lifecycle.State,
+    context: CoroutineContext = EmptyCoroutineContext,
+    start: CoroutineStart = CoroutineStart.DEFAULT,
+    block: suspend CoroutineScope.() -> Unit
 ) {
     lifecycleScope.launch {
-        lifecycle.withStateAtLeast(Lifecycle.State.CREATED) {
+        lifecycle.withStateAtLeast(state) {
             launch(context, start, block)
         }
     }
 }
 
-fun Fragment.launchWithViewCreated(
+fun Fragment.launchWithViewStateAtLeast(
+    state: Lifecycle.State,
     context: CoroutineContext = EmptyCoroutineContext,
     start: CoroutineStart = CoroutineStart.DEFAULT,
     block: suspend CoroutineScope.() -> Unit
@@ -32,7 +56,12 @@ fun Fragment.launchWithViewCreated(
         // when fragment lifecycle is created...
         lifecycle.withStateAtLeast(Lifecycle.State.STARTED) {
             // ...use the view lifecycle
-            viewLifecycleOwner.launchWithCreated(context, start, block)
+            viewLifecycleOwner.launchWithStateAtLeast(
+                state = state,
+                context = context,
+                start = start,
+                block = block
+            )
         }
     }
 }

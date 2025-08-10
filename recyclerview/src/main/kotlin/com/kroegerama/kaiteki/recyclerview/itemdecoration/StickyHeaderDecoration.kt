@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.graphics.withSave
 import androidx.core.graphics.withTranslation
-import androidx.core.view.ViewCompat
 import androidx.core.view.forEachIndexed
 import androidx.recyclerview.widget.RecyclerView
 
@@ -39,7 +38,7 @@ class StickyHeaderDecoration<VH : RecyclerView.ViewHolder>(
         val contactPoint = currentHeader.bottom
         val childInContact = getChildInContact(parent, contactPoint, headerPos)
 
-        headerRef?.let { ViewCompat.setClipBounds(it, null) }
+        headerRef?.let { it.clipBounds = null }
         if (childInContact != null && headerProvider.isHeader(
                 parent.getChildAdapterPosition(
                     childInContact
@@ -51,7 +50,7 @@ class StickyHeaderDecoration<VH : RecyclerView.ViewHolder>(
         }
 
         if (headerProvider.isHeader(topChildPosition)) {
-            headerRef = topChild.also { ViewCompat.setClipBounds(it, EMPTY_RECT) }
+            headerRef = topChild.also { it.clipBounds = EMPTY_RECT }
         }
         drawHeader(c, currentHeader)
     }

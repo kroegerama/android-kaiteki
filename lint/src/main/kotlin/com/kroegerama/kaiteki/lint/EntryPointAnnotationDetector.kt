@@ -1,7 +1,15 @@
 package com.kroegerama.kaiteki.lint
 
 import com.android.tools.lint.client.api.UElementHandler
-import com.android.tools.lint.detector.api.*
+import com.android.tools.lint.detector.api.Category
+import com.android.tools.lint.detector.api.Detector
+import com.android.tools.lint.detector.api.Implementation
+import com.android.tools.lint.detector.api.Incident
+import com.android.tools.lint.detector.api.Issue
+import com.android.tools.lint.detector.api.JavaContext
+import com.android.tools.lint.detector.api.LintFix
+import com.android.tools.lint.detector.api.Scope
+import com.android.tools.lint.detector.api.Severity
 import com.intellij.lang.jvm.JvmModifier
 import com.intellij.psi.util.InheritanceUtil
 import org.jetbrains.uast.UClass
@@ -22,7 +30,7 @@ class EntryPointAnnotationDetector : Detector(), Detector.UastScanner {
             if (FRAGMENT !in supers && ACTIVITY !in supers) return
 
             val fix = LintFix.create()
-                .annotate(ANNOTATION)
+                .annotate(ANNOTATION, context, node)
                 .build()
 
             val incident = Incident(ISSUE, BRIEF, context.getNameLocation(node), fix)

@@ -4,11 +4,6 @@ pluginManagement {
         mavenCentral()
         gradlePluginPortal()
     }
-    plugins {
-        val agp: String by settings
-        id("com.android.application") version agp
-        id("com.android.library") version agp
-    }
 }
 
 dependencyResolutionManagement {
@@ -16,17 +11,6 @@ dependencyResolutionManagement {
     repositories {
         mavenCentral()
         google()
-    }
-
-    versionCatalogs {
-        val magicCatalogs: String by settings
-
-        create("magic") {
-            from("com.kroegerama.magic-catalogs:magic:$magicCatalogs")
-        }
-        create("androidx") {
-            from("com.kroegerama.magic-catalogs:androidx:$magicCatalogs")
-        }
     }
 }
 

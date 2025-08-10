@@ -1,12 +1,13 @@
 import BuildConfig.createPomAction
 
 plugins {
-    id("com.android.application") apply false
-    id("com.android.library") apply false
-    alias(magic.plugins.kotlin.android) apply false
-    alias(magic.plugins.kotlin.jvm) apply false
+    alias(libs.plugins.android.application) apply false
+    alias(libs.plugins.android.library) apply false
+    alias(libs.plugins.kotlin.android) apply false
+    alias(libs.plugins.kotlin.jvm) apply false
+    alias(libs.plugins.kotlin.compose) apply false
 
-    id("io.github.gradle-nexus.publish-plugin") version "1.1.0"
+    alias(libs.plugins.nexus.publish)
     id("signing")
     id("maven-publish")
 }
@@ -21,9 +22,8 @@ tasks.wrapper {
     distributionType = Wrapper.DistributionType.ALL
 }
 
-val nexusStagingProfileId: String? by project
-val nexusUsername: String? by project
-val nexusPassword: String? by project
+val sonatypeUsername: String? by project
+val sonatypePassword: String? by project
 val signingKey: String? by project
 val signingPassword: String? by project
 
@@ -55,15 +55,14 @@ subprojects {
 }
 
 nexusPublishing {
-    packageGroup.set(group.toString())
-    repositories(Action {
+    packageGroup = group.toString()
+    repositories {
         sonatype {
-            stagingProfileId.set(nexusStagingProfileId)
-            username.set(nexusUsername)
-            password.set(nexusPassword)
+            username = sonatypeUsername
+            password = sonatypePassword
 
-            nexusUrl.set(uri("https://s01.oss.sonatype.org/service/local/"))
-            snapshotRepositoryUrl.set(uri("https://s01.oss.sonatype.org/content/repositories/snapshots/"))
+            nexusUrl = uri("https://ossrh-staging-api.central.sonatype.com/service/local/")
+            snapshotRepositoryUrl = uri("https://central.sonatype.com/repository/maven-snapshots/")
         }
-    })
+    }
 }

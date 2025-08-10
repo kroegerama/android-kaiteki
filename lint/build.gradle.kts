@@ -3,32 +3,30 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     `java-library`
-    alias(magic.plugins.kotlin.jvm)
+    alias(libs.plugins.kotlin.jvm)
     id("com.android.lint")
     `maven-publish`
     signing
 }
 
 dependencies {
-    compileOnly(magic.kotlin.stdlib.jdk8)
-    compileOnly("com.android.tools.lint:lint-api:31.9.2")
+    compileOnly(libs.kotlin.stdlib.jdk8)
+    compileOnly(libs.lint.api)
 }
 
 java {
-    toolchain {
-        languageVersion.set(JavaLanguageVersion.of(17))
-    }
     withSourcesJar()
     withJavadocJar()
 }
 
+tasks.withType<JavaCompile> {
+    options.release = 11
+}
+
 kotlin {
-    val jvmVersion: String by project
-    jvmToolchain {
-        languageVersion = JavaLanguageVersion.of(jvmVersion)
-    }
     compilerOptions {
-        jvmTarget = JvmTarget.fromTarget(jvmVersion)
+        jvmTarget = JvmTarget.JVM_11
+        freeCompilerArgs.add("-Xjdk-release=11")
     }
 }
 

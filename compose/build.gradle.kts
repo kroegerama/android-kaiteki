@@ -1,39 +1,43 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 
 plugins {
-    id("com.android.library")
-    alias(magic.plugins.kotlin.android)
-    alias(magic.plugins.kotlin.compose)
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.compose)
     `maven-publish`
 }
 
 android {
-    compileSdk = Android.compileSdk
+    compileSdk = Android.COMPILE_SDK
     namespace = "com.kroegerama.kaiteki.compose"
 
-    compileOptions {
-        isCoreLibraryDesugaringEnabled = true
-    }
     buildFeatures {
         buildConfig = false
         compose = true
     }
 
     defaultConfig {
-        minSdk = Android.minSdk
+        minSdk = Android.MIN_SDK
+        consumerProguardFiles("consumer-proguard-rules.pro")
     }
     testOptions {
-        targetSdk = Android.targetSdk
+        targetSdk = Android.TARGET_SDK
     }
     lint {
-        targetSdk = Android.targetSdk
+        targetSdk = Android.TARGET_SDK
     }
 
     buildTypes {
         release {
             isMinifyEnabled = false
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
+    }
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
+        isCoreLibraryDesugaringEnabled = true
     }
 
     publishing {
@@ -45,39 +49,37 @@ android {
 }
 
 kotlin {
-    val jvmVersion: String by project
-    jvmToolchain {
-        languageVersion = JavaLanguageVersion.of(jvmVersion)
-    }
     compilerOptions {
-        jvmTarget = JvmTarget.fromTarget(jvmVersion)
         moduleName = "android.kaiteki.compose"
+        jvmTarget = JvmTarget.JVM_11
+        apiVersion = KotlinVersion.KOTLIN_1_9
+        languageVersion = KotlinVersion.KOTLIN_1_9
     }
+    coreLibrariesVersion = "1.9.0"
 }
 
 dependencies {
-    implementation(magic.kotlin.stdlib.jdk8)
-    implementation(magic.kotlinx.coroutines.android)
-    implementation(magic.kotlinx.collections.immutable)
+    implementation(libs.kotlin.stdlib.jdk8)
+    implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.kotlinx.collections.immutable)
 
-    implementation(androidx.activity.compose)
-    implementation(androidx.browser)
-    implementation(androidx.navigation.runtime)
-    implementation(androidx.hilt.navigation.compose)
+    implementation(libs.activity.compose)
+    implementation(libs.browser)
+    implementation(libs.navigation.runtime)
+    implementation(libs.hilt.navigation.compose)
 
-    implementation(magic.arrow.core)
+    implementation(libs.arrow.core)
 
-    implementation(platform(androidx.compose.bom))
-    implementation("androidx.compose.foundation:foundation")
-    implementation("androidx.compose.material3:material3")
+    implementation(libs.compose.foundation)
+    implementation(libs.compose.material3)
 
-    implementation("androidx.compose.ui:ui")
-    implementation("androidx.compose.ui:ui-tooling-preview")
-    debugImplementation("androidx.compose.ui:ui-tooling")
+    implementation(libs.compose.ui)
+    implementation(libs.compose.ui.tooling.preview)
+    debugImplementation(libs.compose.ui.tooling)
 
     implementation(project(":core"))
 
-    coreLibraryDesugaring(magic.desugar)
+    coreLibraryDesugaring(libs.desugar)
 }
 
 composeCompiler {

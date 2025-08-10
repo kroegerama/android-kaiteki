@@ -1,38 +1,42 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 
 plugins {
-    id("com.android.library")
-    alias(magic.plugins.kotlin.android)
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.kotlin.android)
     `maven-publish`
 }
 
 android {
-    compileSdk = Android.compileSdk
+    compileSdk = Android.COMPILE_SDK
     namespace = "com.kroegerama.kaiteki"
 
-    compileOptions {
-        isCoreLibraryDesugaringEnabled = true
-    }
     buildFeatures {
         buildConfig = false
         viewBinding = true
     }
 
     defaultConfig {
-        minSdk = Android.minSdk
+        minSdk = Android.MIN_SDK
+        consumerProguardFiles("consumer-proguard-rules.pro")
     }
     testOptions {
-        targetSdk = Android.targetSdk
+        targetSdk = Android.TARGET_SDK
     }
     lint {
-        targetSdk = Android.targetSdk
+        targetSdk = Android.TARGET_SDK
     }
 
     buildTypes {
         release {
             isMinifyEnabled = false
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
+    }
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
+        isCoreLibraryDesugaringEnabled = true
     }
 
     publishing {
@@ -44,36 +48,34 @@ android {
 }
 
 kotlin {
-    val jvmVersion: String by project
-    jvmToolchain {
-        languageVersion = JavaLanguageVersion.of(jvmVersion)
-    }
     compilerOptions {
-        jvmTarget = JvmTarget.fromTarget(jvmVersion)
         moduleName = "android.kaiteki.core"
+        jvmTarget = JvmTarget.JVM_11
+        apiVersion = KotlinVersion.KOTLIN_1_8
+        languageVersion = KotlinVersion.KOTLIN_1_8
     }
+    coreLibrariesVersion = "1.8.0"
 }
 
 dependencies {
-    implementation(magic.kotlin.stdlib.jdk8)
-    implementation(magic.kotlinx.coroutines.android)
+    implementation(libs.kotlin.stdlib.jdk8)
+    implementation(libs.kotlinx.coroutines.android)
 
-    implementation(androidx.bundles.lifecycle)
-    implementation(androidx.bundles.navigation)
+    implementation(libs.bundles.lifecycle)
+    implementation(libs.bundles.navigation)
 
-    implementation(magic.material)
+    implementation(libs.material)
 
-    implementation(androidx.appcompat)
-    implementation(androidx.browser)
-    implementation(androidx.core)
-    implementation(androidx.preference)
-    implementation(androidx.recyclerview)
-    implementation(androidx.exifinterface)
+    implementation(libs.appcompat)
+    implementation(libs.browser)
+    implementation(libs.core)
+    implementation(libs.preference)
+    implementation(libs.recyclerview)
+    implementation(libs.exifinterface)
 
-    implementation(platform(androidx.compose.bom))
-    implementation("androidx.compose.runtime:runtime")
+    implementation(libs.compose.runtime)
 
-    implementation(magic.coil)
+    implementation(libs.coil)
 
-    coreLibraryDesugaring(magic.desugar)
+    coreLibraryDesugaring(libs.desugar)
 }

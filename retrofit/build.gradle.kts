@@ -1,37 +1,41 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 
 plugins {
-    id("com.android.library")
-    alias(magic.plugins.kotlin.android)
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.kotlin.android)
     `maven-publish`
 }
 
 android {
-    compileSdk = Android.compileSdk
+    compileSdk = Android.COMPILE_SDK
     namespace = "com.kroegerama.kaiteki.retrofit"
 
-    compileOptions {
-        isCoreLibraryDesugaringEnabled = true
-    }
     buildFeatures {
         buildConfig = false
     }
 
     defaultConfig {
-        minSdk = Android.minSdk
+        minSdk = Android.MIN_SDK
+        consumerProguardFiles("consumer-proguard-rules.pro")
     }
     testOptions {
-        targetSdk = Android.targetSdk
+        targetSdk = Android.TARGET_SDK
     }
     lint {
-        targetSdk = Android.targetSdk
+        targetSdk = Android.TARGET_SDK
     }
 
     buildTypes {
         release {
             isMinifyEnabled = false
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
+    }
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
+        isCoreLibraryDesugaringEnabled = true
     }
 
     publishing {
@@ -43,36 +47,34 @@ android {
 }
 
 kotlin {
-    val jvmVersion: String by project
-    jvmToolchain {
-        languageVersion = JavaLanguageVersion.of(jvmVersion)
-    }
     compilerOptions {
-        jvmTarget = JvmTarget.fromTarget(jvmVersion)
         moduleName = "android.kaiteki.retrofit"
+        jvmTarget = JvmTarget.JVM_11
+        apiVersion = KotlinVersion.KOTLIN_1_8
+        languageVersion = KotlinVersion.KOTLIN_1_8
     }
+    coreLibrariesVersion = "1.8.0"
 }
 
 dependencies {
-    implementation(magic.kotlin.stdlib.jdk8)
-    implementation(magic.kotlinx.coroutines.android)
+    implementation(libs.kotlin.stdlib.jdk8)
+    implementation(libs.kotlinx.coroutines.android)
 
-    implementation(magic.material)
+    implementation(libs.material)
 
-    implementation(magic.retrofit)
+    implementation(libs.retrofit)
 
-    implementation(androidx.fragment)
-    implementation(androidx.lifecycle.livedata)
-    implementation(androidx.paging.runtime)
+    implementation(libs.fragment)
+    implementation(libs.lifecycle.livedata)
+    implementation(libs.paging.runtime)
 
-    implementation(platform(androidx.compose.bom))
-    implementation("androidx.compose.runtime:runtime")
+    implementation(libs.compose.runtime)
 
-    implementation(magic.bundles.moshi)
+    implementation(libs.bundles.moshi)
 
-    implementation(magic.bundles.arrow)
+    implementation(libs.arrow.core)
 
     implementation(project(":core"))
 
-    coreLibraryDesugaring(magic.desugar)
+    coreLibraryDesugaring(libs.desugar)
 }

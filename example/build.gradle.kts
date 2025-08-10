@@ -1,22 +1,18 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
-    id("com.android.application")
-    alias(magic.plugins.kotlin.android)
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
 }
 
 android {
-    compileSdk = Android.compileSdk
+    compileSdk = Android.COMPILE_SDK
     namespace = "com.kroegerama.kaiteki.example"
-
-    compileOptions {
-        isCoreLibraryDesugaringEnabled = true
-    }
 
     defaultConfig {
         applicationId = "com.kroegerama.kaiteki.example"
-        minSdk = Android.minSdk
-        targetSdk = Android.targetSdk
+        minSdk = Android.MIN_SDK
+        targetSdk = Android.TARGET_SDK
         versionCode = 1
         versionName = "1.0"
     }
@@ -28,44 +24,40 @@ android {
         }
     }
 
-//    lint {
-//        enable += listOf(
-//            "AndroidEntryPointAnnotation", "HiltViewModelAnnotation"
-//        )
-//    }
-
     buildFeatures {
         viewBinding = true
+    }
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
+        isCoreLibraryDesugaringEnabled = true
     }
 }
 
 kotlin {
-    val jvmVersion: String by project
-    jvmToolchain {
-        languageVersion = JavaLanguageVersion.of(jvmVersion)
-    }
     compilerOptions {
-        jvmTarget = JvmTarget.fromTarget(jvmVersion)
+        jvmTarget = JvmTarget.JVM_21
     }
 }
 
 dependencies {
-    implementation(magic.kotlin.stdlib.jdk8)
+    implementation(libs.kotlin.stdlib.jdk8)
 
-    implementation(magic.material)
+    implementation(libs.material)
 
-    implementation(androidx.appcompat)
-    implementation(androidx.core)
-    implementation(androidx.constraintlayout)
-    implementation(androidx.fragment)
-    implementation(androidx.bundles.lifecycle)
+    implementation(libs.appcompat)
+    implementation(libs.core)
+    implementation(libs.constraintlayout)
+    implementation(libs.fragment)
+    implementation(libs.bundles.lifecycle)
 
     implementation(project(":core"))
     implementation(project(":recyclerview"))
     implementation(project(":retrofit"))
     implementation(project(":views"))
 
-    coreLibraryDesugaring(magic.desugar)
+    coreLibraryDesugaring(libs.desugar)
 
 //    debugImplementation(Libs.leakCanary)
 //    lintChecks(project(":lint"))

@@ -1,38 +1,42 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 
 plugins {
-    id("com.android.library")
-    alias(magic.plugins.kotlin.android)
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.kotlin.android)
     `maven-publish`
 }
 
 android {
-    compileSdk = Android.compileSdk
+    compileSdk = Android.COMPILE_SDK
     namespace = "com.kroegerama.kaiteki.views"
 
-    compileOptions {
-        isCoreLibraryDesugaringEnabled = true
-    }
     buildFeatures {
         buildConfig = false
         viewBinding = true
     }
 
     defaultConfig {
-        minSdk = Android.minSdk
+        minSdk = Android.MIN_SDK
+        consumerProguardFiles("consumer-proguard-rules.pro")
     }
     testOptions {
-        targetSdk = Android.targetSdk
+        targetSdk = Android.TARGET_SDK
     }
     lint {
-        targetSdk = Android.targetSdk
+        targetSdk = Android.TARGET_SDK
     }
 
     buildTypes {
         release {
             isMinifyEnabled = false
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
+    }
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
+        isCoreLibraryDesugaringEnabled = true
     }
 
     publishing {
@@ -44,28 +48,27 @@ android {
 }
 
 kotlin {
-    val jvmVersion: String by project
-    jvmToolchain {
-        languageVersion = JavaLanguageVersion.of(jvmVersion)
-    }
     compilerOptions {
-        jvmTarget = JvmTarget.fromTarget(jvmVersion)
         moduleName = "android.kaiteki.views"
+        jvmTarget = JvmTarget.JVM_11
+        apiVersion = KotlinVersion.KOTLIN_1_8
+        languageVersion = KotlinVersion.KOTLIN_1_8
     }
+    coreLibrariesVersion = "1.8.0"
 }
 
 dependencies {
-    implementation(magic.kotlin.stdlib.jdk8)
-    implementation(magic.kotlinx.coroutines.android)
+    implementation(libs.kotlin.stdlib.jdk8)
+    implementation(libs.kotlinx.coroutines.android)
 
-    implementation(androidx.appcompat)
-    implementation(androidx.core)
+    implementation(libs.appcompat)
+    implementation(libs.core)
 
-    implementation(androidx.constraintlayout)
+    implementation(libs.constraintlayout)
 
-    implementation(magic.material)
+    implementation(libs.material)
 
     implementation(project(":core"))
 
-    coreLibraryDesugaring(magic.desugar)
+    coreLibraryDesugaring(libs.desugar)
 }

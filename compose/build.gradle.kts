@@ -5,7 +5,7 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-    `maven-publish`
+    id("kaiteki.publishing-conventions")
 }
 
 android {
@@ -52,15 +52,15 @@ kotlin {
     compilerOptions {
         moduleName = "android.kaiteki.compose"
         jvmTarget = JvmTarget.JVM_11
-        apiVersion = KotlinVersion.KOTLIN_1_9
-        languageVersion = KotlinVersion.KOTLIN_1_9
+        apiVersion = KotlinVersion.KOTLIN_2_0
+        languageVersion = KotlinVersion.KOTLIN_2_0
     }
-    coreLibrariesVersion = "1.9.0"
+    coreLibrariesVersion = "2.0.21"
 }
 
 dependencies {
-    implementation(libs.kotlin.stdlib.jdk8)
-    implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.kotlin.stdlib)
+    implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.collections.immutable)
 
     implementation(libs.activity.compose)

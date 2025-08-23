@@ -1,4 +1,4 @@
-import BuildConfig.createPomAction
+import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 
 plugins {
     alias(libs.plugins.android.application) apply false
@@ -7,9 +7,8 @@ plugins {
     alias(libs.plugins.kotlin.jvm) apply false
     alias(libs.plugins.kotlin.compose) apply false
 
+    alias(libs.plugins.versions)
     alias(libs.plugins.nexus.publish)
-    id("signing")
-    id("maven-publish")
 }
 
 allprojects {
@@ -24,35 +23,6 @@ tasks.wrapper {
 
 val sonatypeUsername: String? by project
 val sonatypePassword: String? by project
-val signingKey: String? by project
-val signingPassword: String? by project
-
-subprojects {
-    if ("example" in name || "lint" in name) return@subprojects
-    apply {
-        plugin("maven-publish")
-        plugin("signing")
-    }
-
-    afterEvaluate {
-        publishing {
-            publications {
-                register<MavenPublication>("release") {
-                    afterEvaluate {
-                        from(components["release"])
-                    }
-                    pom(createPomAction())
-                }
-            }
-        }
-    }
-    signing {
-        sign(publishing.publications)
-        if (signingKey != null && signingPassword != null) {
-            useInMemoryPgpKeys(signingKey, signingPassword)
-        }
-    }
-}
 
 nexusPublishing {
     packageGroup = group.toString()
@@ -64,5 +34,17 @@ nexusPublishing {
             nexusUrl = uri("https://ossrh-staging-api.central.sonatype.com/service/local/")
             snapshotRepositoryUrl = uri("https://central.sonatype.com/repository/maven-snapshots/")
         }
+    }
+}
+
+tasks.withType<DependencyUpdatesTask>().configureEach {
+    gradleReleaseChannel = "current"
+    revision = "release"
+    val nonStableQualifiers = listOf("alpha", "beta", "rc")
+    fun isNonStable(version: String): Boolean = nonStableQualifiers.any { qualifier ->
+        qualifier in version.lowercase()
+    }
+    rejectVersionIf {
+        isNonStable(candidate.version) && !isNonStable(currentVersion)
     }
 }

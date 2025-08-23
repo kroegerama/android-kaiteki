@@ -4,9 +4,4 @@ plugins {
 
 repositories {
     mavenCentral()
-    google()
-}
-
-dependencies {
-    implementation(gradleApi())
 }

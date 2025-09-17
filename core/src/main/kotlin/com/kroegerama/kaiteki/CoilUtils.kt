@@ -11,7 +11,6 @@ import coil.ImageLoader
 import coil.imageLoader
 import coil.load
 import coil.request.ImageRequest
-import com.google.android.material.R
 import com.google.android.material.progressindicator.BaseProgressIndicator
 import java.lang.ref.WeakReference
 
@@ -27,7 +26,7 @@ fun ImageRequest.Builder.progress(view: View): ImageRequest.Builder {
     val progressDrawable = view.context.getIndeterminateProgressDrawable().apply {
         (this as? Animatable)?.start()
 
-        setTint(view.context.getThemeColor(R.attr.colorPrimary))
+        setTint(view.context.getThemeColor(androidx.appcompat.R.attr.colorPrimary))
     }
     val wrapper = GravityDrawable(progressDrawable, Color.TRANSPARENT.toDrawable())
 

@@ -51,7 +51,7 @@ class ReadonlyTextInputView @JvmOverloads constructor(
                 getDrawable(R.styleable.ReadonlyTextInputView_iconFilledText) ?: ContextCompat.getDrawable(context, R.drawable.ic_clear)
         }
 
-        val edit = MaterialAutoCompleteTextView(wrapped, attrs, com.google.android.material.R.attr.autoCompleteTextViewStyle)
+        val edit = MaterialAutoCompleteTextView(wrapped, attrs, androidx.appcompat.R.attr.autoCompleteTextViewStyle)
         addView(edit)
         endIconMode = END_ICON_CUSTOM
         endIconDrawable = if (edit.text.isNullOrEmpty()) iconEmptyText else iconFilledText
@@ -72,7 +72,7 @@ class ReadonlyTextInputView @JvmOverloads constructor(
         edit.inputType = EditorInfo.TYPE_NULL
 
         val colorControlHighlight = TypedValue().run {
-            context.theme.resolveAttribute(com.google.android.material.R.attr.colorControlHighlight, this, true)
+            context.theme.resolveAttribute(androidx.appcompat.R.attr.colorControlHighlight, this, true)
             ContextCompat.getColor(context, resourceId)
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {

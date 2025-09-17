@@ -67,6 +67,7 @@ dependencies {
     implementation(libs.fragment)
     implementation(libs.lifecycle.livedata)
     implementation(libs.paging.runtime)
+    implementation(libs.documentfile)
 
     implementation(libs.compose.runtime)
 

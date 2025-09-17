@@ -15,7 +15,7 @@ private fun CustomTabsIntent.Builder.defaultScheme(context: Context) {
             .setToolbarColor(
                 MaterialColors.getColor(
                     context,
-                    com.google.android.material.R.attr.colorPrimary,
+                    androidx.appcompat.R.attr.colorPrimary,
                     Color.WHITE
                 )
             )

@@ -72,6 +72,7 @@ dependencies {
     implementation(libs.preference)
     implementation(libs.recyclerview)
     implementation(libs.exifinterface)
+    implementation(libs.localbroadcastmanager)
 
     implementation(libs.compose.runtime.annotation)
 

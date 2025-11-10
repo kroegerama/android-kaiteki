@@ -2,8 +2,6 @@ package com.kroegerama.kaiteki.compose.composables
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Face
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -19,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.roundToIntSize
 import androidx.compose.ui.util.fastForEach
 import com.kroegerama.kaiteki.compose.ExperimentalKaitekiComposeApi
+import com.kroegerama.kaiteki.compose.previews.SampleIcon
 
 @ExperimentalKaitekiComposeApi
 @Composable
@@ -82,7 +81,7 @@ private fun ScaleBoxPreview() {
         modifier = Modifier.fillMaxSize()
     ) {
         Icon(
-            imageVector = Icons.Rounded.Face,
+            imageVector = SampleIcon,
             contentDescription = null,
             modifier = Modifier.size(600.dp)
         )

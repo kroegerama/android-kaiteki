@@ -8,8 +8,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Face
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -24,6 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.kroegerama.kaiteki.compose.ExperimentalKaitekiComposeApi
+import com.kroegerama.kaiteki.compose.previews.SampleIcon
 
 @ExperimentalKaitekiComposeApi
 @Composable
@@ -108,7 +107,7 @@ private fun ColumnWithDividersPreview() {
             items(4) {
                 Text("$it")
                 Icon(
-                    imageVector = Icons.Rounded.Face,
+                    imageVector = SampleIcon,
                     contentDescription = null
                 )
             }
@@ -127,7 +126,7 @@ private fun ColumnWithDividersPreview() {
             items(4) {
                 Text("$it")
                 Icon(
-                    imageVector = Icons.Rounded.Face,
+                    imageVector = SampleIcon,
                     contentDescription = null
                 )
             }
@@ -146,7 +145,7 @@ private fun ColumnWithDividersPreview() {
             items(4) {
                 Text("$it")
                 Icon(
-                    imageVector = Icons.Rounded.Face,
+                    imageVector = SampleIcon,
                     contentDescription = null
                 )
             }
@@ -166,7 +165,7 @@ private fun ColumnWithDividersPreview() {
             items(4) {
                 Text("$it")
                 Icon(
-                    imageVector = Icons.Rounded.Face,
+                    imageVector = SampleIcon,
                     contentDescription = null
                 )
             }

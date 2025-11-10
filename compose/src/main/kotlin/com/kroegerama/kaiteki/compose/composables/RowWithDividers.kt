@@ -8,8 +8,6 @@ import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Face
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
@@ -23,6 +21,7 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.kroegerama.kaiteki.compose.ExperimentalKaitekiComposeApi
+import com.kroegerama.kaiteki.compose.previews.SampleIcon
 import com.kroegerama.kaiteki.compose.utils.PreviewLayoutDirection
 
 @ExperimentalKaitekiComposeApi
@@ -104,7 +103,7 @@ private fun RowWithDividersPreview() {
             items(4) {
                 Text("$it")
                 Icon(
-                    imageVector = Icons.Rounded.Face,
+                    imageVector = SampleIcon,
                     contentDescription = null
                 )
             }
@@ -122,7 +121,7 @@ private fun RowWithDividersPreview() {
             items(4) {
                 Text("$it")
                 Icon(
-                    imageVector = Icons.Rounded.Face,
+                    imageVector = SampleIcon,
                     contentDescription = null
                 )
             }
@@ -140,7 +139,7 @@ private fun RowWithDividersPreview() {
             items(4) {
                 Text("$it")
                 Icon(
-                    imageVector = Icons.Rounded.Face,
+                    imageVector = SampleIcon,
                     contentDescription = null
                 )
             }
@@ -159,7 +158,7 @@ private fun RowWithDividersPreview() {
             items(4) {
                 Text("$it")
                 Icon(
-                    imageVector = Icons.Rounded.Face,
+                    imageVector = SampleIcon,
                     contentDescription = null
                 )
             }

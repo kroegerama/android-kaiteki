@@ -75,7 +75,7 @@ dependencies {
 
     implementation(libs.arrow.core)
 
-    implementation(project(":core"))
+    implementation(projects.core)
 
     coreLibraryDesugaring(libs.desugar)
 }

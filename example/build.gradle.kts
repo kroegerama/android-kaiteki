@@ -53,10 +53,10 @@ dependencies {
     implementation(libs.fragment)
     implementation(libs.bundles.lifecycle)
 
-    implementation(project(":core"))
-    implementation(project(":recyclerview"))
-    implementation(project(":retrofit"))
-    implementation(project(":views"))
+    implementation(projects.core)
+    implementation(projects.recyclerview)
+    implementation(projects.retrofit)
+    implementation(projects.views)
 
     coreLibraryDesugaring(libs.desugar)
 

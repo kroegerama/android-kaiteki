@@ -68,7 +68,7 @@ dependencies {
 
     implementation(libs.material)
 
-    implementation(project(":core"))
+    implementation(projects.core)
 
     coreLibraryDesugaring(libs.desugar)
 }

@@ -76,9 +76,9 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.arrow.core)
 
-    implementation(project(":core"))
-    implementation(project(":retrofit"))
-    implementation(project(":recyclerview"))
+    implementation(projects.core)
+    implementation(projects.retrofit)
+    implementation(projects.recyclerview)
 
     coreLibraryDesugaring(libs.desugar)
 }
